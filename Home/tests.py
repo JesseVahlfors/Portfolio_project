@@ -51,3 +51,19 @@ class ProfileViewTests(TestCase):
         response = self.client.get(reverse('home/profile'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "About Me")
+
+    def test_profile_page_correct_template(self):
+        response = self.client.get(reverse('home/profile'))
+        self.assertTemplateUsed(response, 'home/profile.html')
+
+    def test_profile_page_context_data(self):
+        Profile.objects.all().delete()
+
+        profile = Profile.objects.create(name="Jane Doe", bio="Welcome to my portfolio.", email='jane@test.com')
+        response = self.client.get(reverse('home/profile'))
+        self.assertEqual(response.context['profile'], profile)
+    
+    def test_profile_page_displays_placeholder_when_no_profile(self):
+        Profile.objects.all().delete()
+        response = self.client.get(reverse('home/profile'))
+        self.assertContains(response, 'My Name')
