@@ -36,3 +36,18 @@ class MainPageViewTests(TestCase):
         Profile.objects.all().delete()
         response = self.client.get(reverse('home/main_page'))
         self.assertContains(response, 'My Name')
+
+class ProfileViewTests(TestCase):
+
+    def setUp(self):
+        Profile.objects.create(
+            name="Jesse",
+            bio="Hello World!",
+            email="jesse@test.com",
+            phone="555-1234567",
+        )
+
+    def test_profile_page_returns_200(self):
+        response = self.client.get(reverse('home/profile'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "About Me")
