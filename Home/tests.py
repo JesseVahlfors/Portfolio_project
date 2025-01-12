@@ -25,4 +25,14 @@ class MainPageViewTests(TestCase):
         response = self.client.get(reverse('home/main_page'))
         self.assertTemplateUsed(response, 'home/main_page.html')
 
+    def test_main_page_context_data(self):
+        Profile.objects.all().delete()
+
+        profile = Profile.objects.create(name="Jane Doe", bio="Welcome to my portfolio.", email='jane@test.com')
+        response = self.client.get(reverse('home/main_page'))
+        self.assertEqual(response.context['profile'], profile)
     
+    def test_main_page_displays_placeholder_when_no_profile(self):
+        Profile.objects.all().delete()
+        response = self.client.get(reverse('home/main_page'))
+        self.assertContains(response, 'My Name')
