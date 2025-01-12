@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        {% if profile and profile.name %}
+            {{ profile.name }}
+        {% else %}
+            My Portfolio
+        {% endif %}
+        {% endblock %}
+    </title>
+</head>
+<body>
+    <header>
+        <h1>
+            {%if profile.name %}
+                {{ profile.name }}
+            {% else %}
+                My Name
+            {% endif %}
+        </h1>
+        <nav>
+            <a href="{% url 'home/main_page' %}">Home</a>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy;
+            {%if profile.name %}
+                {{ profile.name }}
+            {% else %}
+                My Portfolio
+            {% endif %}</p>
+    </footer>
+</body>
+</html>
