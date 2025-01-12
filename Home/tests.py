@@ -20,3 +20,9 @@ class MainPageViewTests(TestCase):
         response = self.client.get(reverse('home/main_page'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Hello World!")
+
+    def test_main_page_uses_correct_template(self):
+        response = self.client.get(reverse('home/main_page'))
+        self.assertTemplateUsed(response, 'home/main_page.html')
+
+    
