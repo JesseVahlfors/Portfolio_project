@@ -1,21 +1,53 @@
-# Journal Entry - 2025-01-10
+# Journal
 
-## Tasks Done
+## Basic vision
 
-- Initialized the django project.
+- I am making a portfolio website with django that has portfolio projects as django apps
+- I will also make a restful API that uses the same database
+- Make some portfolio projects utilizing React and the API as well
 
-- Setup postgres database.
+## Journal Entry - 2025-01-10
 
-- Created Apps home and JSON_Parser.
+    ### Tasks Done
 
-- Created first test for a basic view and made the view to pass.
+    - Initialized the django project.
 
-## Challenges
+    - Setup postgres database.
 
-- During setup i took a lot of time to configure postgres. Had a hiccup with it when making the first test as well. Needed to find out how to make a test database for the tests.
+    - Created Apps home and JSON_Parser.
 
-## Next Steps
+    - Created first test for a basic view and made the view to pass.
 
-- Now that i should have the project (as far as i know) ready. I should be able to start the next part.
+    ### Challenges
 
-- I will implement a "walking skeleton" technique from TDD. To do that i will implement displaying my projects on the home page. That will include frontend-backend-database.
+    - During setup i took a lot of time to configure postgres. Had a hiccup with it when making the first test as well. Needed to find out how to make a test database for the tests.
+
+    ### Next Steps
+
+    - Now that i should have the project (as far as i know) ready. I should be able to start the next part.
+
+    - I will implement a "walking skeleton" technique from TDD. To do that i will implement displaying my projects on the home page. That will include frontend-backend-database.
+
+## Journal Entry - 2025-01-12
+
+    ### Tasks Done
+
+    - Added Main and Profile views
+
+    - Added tests for both views including the walking skeleton end to end test
+
+    - Added root template base.html for basic structure and home templates main_page and profile for their own views.
+
+    - Added favicon
+
+    - Added Profile model to admin and added my profile info to the database.
+
+    ### Challenges
+    
+    - I had some issues with the file pathing the templates. I had to try a few times till i finally found the correct way to chain them together.
+
+    ### Next Steps
+
+    - Next i will implement the list view for portfolio projects and i need to figure out if i do a detail view or just a link to a new app...
+    
+    - I have a vision of making most projects an app that i can open from the portfolio website
