@@ -16,7 +16,8 @@ class MainPageViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Welcome to My Portfolio")
 
-    def test_main_page_returns_bio_from_database(self):
+    def test_main_page_returns_name_from_database(self):
+        #Walking skeleton
         response = self.client.get(reverse('home/main_page'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Testi mies")
@@ -36,6 +37,7 @@ class MainPageViewTests(TestCase):
         Profile.objects.all().delete()
         response = self.client.get(reverse('home/main_page'))
         self.assertContains(response, 'My Name')
+
 
 class ProfileViewTests(TestCase):
 
@@ -83,6 +85,24 @@ class ProjectListViewTests(TestCase):
         response = self.client.get(reverse('home/projects'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "My Projects")
+    
+    def test_projects_page_correct_template(self):
+        response = self.client.get(reverse('home/projects'))
+        self.assertTemplateUsed(response, 'home/project_list.html')
+
+    def test_projects_page_context_data(self):
+        Project.objects.all().delete()
+
+        project = Project.objects.create(
+            title = "Context data Project",
+            description = "Good project",
+            image = "",
+            link = "www.contexttest.com",
+            date_completed = "2024-01-10"
+            )
+        
+        response = self.client.get(reverse('home/projects'))
+        self.assertIn(project, response.context['projects'])
 
 
 class ProfileModelTests(TestCase):
