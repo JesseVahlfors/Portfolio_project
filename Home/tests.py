@@ -6,9 +6,9 @@ class MainPageViewTests(TestCase):
 
     def setUp(self):
         Profile.objects.create(
-            name="Jesse",
+            name="Testi mies",
             bio="Hello World!",
-            email="jesse@test.com"
+            email="test@test.com",
         )
 
     def test_main_page_returns_200(self):
@@ -19,7 +19,7 @@ class MainPageViewTests(TestCase):
     def test_main_page_returns_bio_from_database(self):
         response = self.client.get(reverse('home/main_page'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Hello World!")
+        self.assertContains(response, "Testi mies")
 
     def test_main_page_uses_correct_template(self):
         response = self.client.get(reverse('home/main_page'))
@@ -41,9 +41,9 @@ class ProfileViewTests(TestCase):
 
     def setUp(self):
         Profile.objects.create(
-            name="Jesse",
+            name="Testi mies",
             bio="Hello World!",
-            email="jesse@test.com",
+            email="test@test.com",
             phone="555-1234567",
         )
 
@@ -67,3 +67,26 @@ class ProfileViewTests(TestCase):
         Profile.objects.all().delete()
         response = self.client.get(reverse('home/profile'))
         self.assertContains(response, 'My Name')
+
+class ProfileModelTests(TestCase):
+
+    def setUp(self):
+        self.profile = Profile.objects.create(
+            name="Testi mies",
+            bio="Hello World!",
+            email="test@test.com",
+            phone="555-1234567",
+        )
+
+    def test_profile_creation(self):
+        self.assertEqual(self.profile.name, "Testi mies")
+        self.assertEqual(self.profile.bio, "Hello World!")
+        self.assertEqual(self.profile.email, "test@test.com")
+        self.assertEqual(self.profile.phone, "555-1234567")
+
+    def test_profile_name_max_length(self):
+        max_length = Profile._meta.get_field('name').max_length
+        self.assertEqual(max_length, 100)
+
+    def test_profile_str(self):
+        self.assertEqual(str(self.profile), "Testi mies")
