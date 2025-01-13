@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import Profile
+from .models import Profile, Project
 
 class MainPageViewTests(TestCase):
 
@@ -67,6 +67,23 @@ class ProfileViewTests(TestCase):
         Profile.objects.all().delete()
         response = self.client.get(reverse('home/profile'))
         self.assertContains(response, 'My Name')
+
+class ProjectListViewTests(TestCase):
+
+    def setUp(self):
+        Project.objects.create(
+            title = "Project1",
+            description = "Nice project",
+            image = "",
+            link = "www.testi.com",
+            date_completed = "2025-01-13",
+        )
+
+    def test_projects_page_returns_200(self):
+        response = self.client.get(reverse('home/projects'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "My Projects")
+
 
 class ProfileModelTests(TestCase):
 
