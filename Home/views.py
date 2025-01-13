@@ -25,3 +25,8 @@ class ProjectsView(ListView):
     template_name = 'home/project_list.html'
     context_object_name = 'projects'
     ordering = ['-date_completed']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["profile"] = Profile.objects.first()
+        return context

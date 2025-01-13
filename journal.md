@@ -51,3 +51,29 @@
     - Next i will implement the list view for portfolio projects and i need to figure out if i do a detail view or just a link to a new app...
     
     - I have a vision of making most projects an app that i can open from the portfolio website
+
+## Journal Entry - 2025-01-13
+
+    ### Tasks Done
+
+    - Made project list page that includes tests, views, template, and a new model for projects
+
+    - Added project to admin so i can easily add new ones.
+
+    - populated profile and project objects with info and pictures so i can style the page after i bring in tailwind css    
+
+    ### Challenges
+    
+    - Struggled a bit with images loading, because they didnt have correct settings defined and a missing character in a template
+    
+    - 6 tests also failed after, because i had an if conditional to check in the template if an image exists. 
+    The condition was "if profile.image.url exists" which would error, because if there is no image you can't check the .url. 
+    Taking out the .url fixed all the failed tests.
+
+    ### Next Steps
+
+    - I think i have the barebones now so i want to style the existing pages
+
+    - With plain css i've had trouble making pages look decent so i want to try another angle
+
+    - I will do a coursera tailwind css course and apply what i learn there after completion
