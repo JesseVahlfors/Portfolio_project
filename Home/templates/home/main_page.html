@@ -5,7 +5,7 @@
 {% block content %}
 <section>
     <h2>Welcome to My Portfolio</h2>
-    <p>Introduction</p>
+    <p>{{ profile.introduction }}</p>
 </section>
 <section>
     <h2>Featured Projects</h2>
@@ -14,7 +14,7 @@
             <li>
                 <a href="{{ project.get_absolute_url }}">
                     <h3>{{ project.title }}</h3>
-                    {% if project.image.url %}
+                    {% if project.image %}
                     <img src="{{ project.image.url }}" alt="{{ project.title }}">
                     {% endif %}
                 </a>

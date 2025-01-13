@@ -5,7 +5,9 @@
 {% block content %}
 <section>
     <h2>About Me</h2>
+    {% if profile.profile_image %}
     <img src="{{profile.profile_image.url }}" alt={{ profile.name }}>
+    {% endif %}
     <p>{{ profile.bio }}
     <p>Email: {{ profile.email }}</p>
     <p>Phone: {{ profile.phone }}</p>

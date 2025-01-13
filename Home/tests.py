@@ -5,10 +5,12 @@ from .models import Profile, Project
 class MainPageViewTests(TestCase):
 
     def setUp(self):
+        Profile.objects.all().delete()
         Profile.objects.create(
             name="Testi mies",
             bio="Hello World!",
             email="test@test.com",
+            introduction="Hello There"
         )
 
     def test_main_page_returns_200(self):
@@ -21,6 +23,11 @@ class MainPageViewTests(TestCase):
         response = self.client.get(reverse('home/main_page'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Testi mies")
+
+    def test_main_page_introduction_displays(self):
+        response = self.client.get(reverse('home/main_page'))
+        self.assertContains(response, "Hello There")
+        self.assertEqual(response.context['profile'].introduction, "Hello There")
 
     def test_main_page_uses_correct_template(self):
         response = self.client.get(reverse('home/main_page'))
@@ -39,9 +46,12 @@ class MainPageViewTests(TestCase):
         self.assertContains(response, 'My Name')
 
 
+
+
 class ProfileViewTests(TestCase):
 
     def setUp(self):
+        Profile.objects.all().delete()
         Profile.objects.create(
             name="Testi mies",
             bio="Hello World!",
@@ -69,6 +79,7 @@ class ProfileViewTests(TestCase):
         Profile.objects.all().delete()
         response = self.client.get(reverse('home/profile'))
         self.assertContains(response, 'My Name')
+    
 
 class ProjectListViewTests(TestCase):
 
