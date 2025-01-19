@@ -146,7 +146,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "theme/static",
 ]
 
 MEDIA_URL = '/media/'
@@ -162,3 +162,4 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"

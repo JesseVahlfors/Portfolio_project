@@ -10,6 +10,7 @@ class MainView(TemplateView):
         context["profile"] = Profile.objects.first()
         context["projects"] = Project.objects.all()[:3]
         return context
+    
 
         
 class ProfileView(DetailView):

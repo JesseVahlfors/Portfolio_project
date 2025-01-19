@@ -13,6 +13,7 @@ module.exports = {
 
         /*  Templates within theme app (<tailwind_app_name>/templates), e.g. base.html. */
         '../templates/**/*.html',
+        './theme/static/**/*.js',
 
         /*
          * Main templates directory of the project (BASE_DIR/templates).
@@ -34,7 +35,6 @@ module.exports = {
         // '!../../**/node_modules',
         /* JS 2: Process all JavaScript files in the project. */
         // '../../**/*.js',
-
         /**
          * Python: If you use Tailwind CSS classes in Python, uncomment the following line
          * and make sure the pattern below matches your project structure.
