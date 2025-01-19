@@ -77,3 +77,20 @@
     - With plain css i've had trouble making pages look decent so i want to try another angle
 
     - I will do a coursera tailwind css course and apply what i learn there after completion
+
+## Journal Entry - 2025-01-19
+
+    ### Tasks Done
+
+    -Initialized Tailwind CSS for django with django-tailwind.
+
+    -Started base.html template styling with header and footer styles including a nav dropdown menu for small screens
+
+    ### Challenges
+    
+    - Installing and setting up django tailwind took a lot of time. A lot of setup and installing node.js for tailwind somehow messed with my python installation so i needed to reinstall it too and reinstall the project requirements from the requirements.txt.
+    After initial struggles the actual styling with tailwind has been a breeze.
+
+    ### Next Steps
+
+    -Next i need to make basic styling to the home, projects and about me templates.
