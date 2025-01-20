@@ -7,7 +7,7 @@
     <section class="py-20 w-full h-screen min-h-8/12 max-h-96 bg-main_bg bg-cover flex flex-col items-center justify-center">
         <h2 class="text-4xl text-center font-bold mb-6 px-8">Hey, I'm {{ profile.name }}</h2>
         <p class="text-lg text-center px-8">{{ profile.introduction }}</p>
-        <button class="bg-sky-900 text-white text-xl font-bold px-16 py-4 rounded-lg mt-8">PROJECTS</button>
+        <button class="bg-sky-900 text-white text-xl font-bold px-16 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400 ">PROJECTS</button>
     </section>
     <section class="flex flex-col gap-16 items-center py-20 px-4">
         <div class="flex flex-col items-center w-11/12">
@@ -21,28 +21,31 @@
         <div class="">
             <h3 class="text-xl font-semibold mb-6">Get to know me!</h3>
             <p>{{ profile.bio }}</p>
-            <button class="bg-sky-900 text-white text-LG font-bold px-10 py-4 rounded-lg mt-8">CONTACT</button>
+            <button class="bg-sky-900 text-white text-LG font-bold px-10 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400">CONTACT</button>
         </div>
         <div>
             <h3 class="text-xl font-semibold mb-6">My Skills</h3>
             <ul class="flex flex-wrap gap-4">
                 {% for skill in skills %}
-                    <li class="bg-sky-900 text-white px-4 py-2 rounded-lg">{{ skill }}</li>
+                    <li class="bg-zinc-200 text-zinc-800 px-4 py-2 rounded-lg">{{ skill }}</li>
+                {% endfor %}
         </div>
     </section>
-    <section class="w-11/12 flex flex-col items-center">
-        <h2 class="text-2xl font-bold mb-6" >Some of my latest Projects</h2>
-        <ul class="flex flex-wrap justify-center gap-4 py-10">
+    <section class="flex flex-col items-center bg-white">
+        <h2 class="text-4xl font-bold mb-6 tracking-wider" >PROJECTS</h2>
+        <span class="h-1 w-8 rounded-xl bg-sky-900"></span>
+        <ul class="flex flex-wrap justify-center gap-8 py-10">
             {% for project in projects %}
-                <li class="border-4 border-sky-300 p-4 rounded-lg shadow-lg max-w-md bg-white">
-                    <a class="flex flex-col" href="{{ project.get_absolute_url }}">
+                <li class="p-4 max-w-md bg-white">
+                    <a class="flex flex-col gap-8 items-center" href="{{ project.get_absolute_url }}">
                         {% if project.image %}
-                        <img class="h-40 rounded-md" src="{{ project.image.url }}" alt="{{ project.title }}">
+                        <img class="h-40 px-10 rounded-md w-full" src="{{ project.image.url }}" alt="{{ project.title }}">
                         {% endif %}
-                        <div class="flex flex-col items-center p-2">
-                            <h3 class="md:text-2xl text-semibold text-center">{{ project.title }}</h3>
+                        <div class="flex flex-col items-center p-2 gap-8">
+                            <h3 class="text-xl font-bold text-center">{{ project.title }}</h3>
                             <p class="text-sm md:text-lg text-sky-800 text-center line-clamp-3">{{ project.description }}</p>
                         </div>
+                        <button class="bg-sky-900 text-white text-md font-bold py-4 rounded-lg px-10 " href="{{ project.get_absolute_url }}">PROJECT INFO</button>
                     </a>
                 </li>
             {% endfor %}
