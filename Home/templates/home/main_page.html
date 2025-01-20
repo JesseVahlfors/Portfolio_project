@@ -3,23 +3,28 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<section>
-    <h2>Welcome to My Portfolio</h2>
-    <p>{{ profile.introduction }}</p>
-</section>
-<section>
-    <h2>Featured Projects</h2>
-    <ul>
-        {% for project in projects %}
-            <li>
-                <a href="{{ project.get_absolute_url }}">
-                    <h3>{{ project.title }}</h3>
-                    {% if project.image %}
-                    <img src="{{ project.image.url }}" alt="{{ project.title }}">
-                    {% endif %}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+<section class="flex flex-col items-center bg-sky-100 text-sky-950">
+    <section class="mt-20">
+        <h2 class="text-3xl text-center font-bold mb-6">Hey, I'm {{ profile.name }}</h2>
+        <p class="text-lg text-center">{{ profile.introduction }}</p>
+    </section>
+    <section class="w-11/12 flex flex-col items-center">
+        <h2 class="text-2xl font-bold mb-6" >Some of my latest Projects</h2>
+        <ul class="flex flex-wrap justify-center gap-4 py-10">
+            {% for project in projects %}
+                <li class="border-4 border-sky-300 p-4 rounded-lg shadow-lg max-w-md bg-white">
+                    <a class="flex flex-col" href="{{ project.get_absolute_url }}">
+                        {% if project.image %}
+                        <img class="h-40 rounded-md" src="{{ project.image.url }}" alt="{{ project.title }}">
+                        {% endif %}
+                        <div class="flex flex-col items-center p-2">
+                            <h3 class="md:text-2xl text-semibold text-center">{{ project.title }}</h3>
+                            <p class="text-sm md:text-lg text-sky-800 text-center line-clamp-3">{{ project.description }}</p>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
 </section>
 {% endblock %}

@@ -94,3 +94,4 @@
     ### Next Steps
 
     -Next i need to make basic styling to the home, projects and about me templates.
+    

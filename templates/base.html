@@ -19,35 +19,40 @@
     </title>
 </head>
 <body >
-    <header class="bg-gradient-to-b from-sky-900 to-sky-500 flex justify-between p-5 border-b-8 border-white border-double items-center">
-        <h1 class="md:pl-10 text-3xl font-bold text-white font-serif">
-            {%if profile.name %}
-                {{ profile.name }}
-            {% else %}
-                My Name
-            {% endif %}
-        </h1>
-        <nav class="text-white gap-5 text-xl hidden md:flex md:pr-10">
-            <a href="{% url 'home/main_page' %}">Home</a>
-            <a href="{% url 'home/projects' %}">Projects</a>
-            <a href="{% url 'home/profile' %}">About Me</a>
-        </nav>
+    <header class="bg-white flex justify-between items-center py-5 gap-5">
+        <img class="w-10 rounded-full ml-5" src="{{ profile.profile_image.url }}" alt="{{ profile.name }}">
+        <section class="flex items-center justify-between w-full">
+            <a href="{% url 'home/main_page' %}">
+            <h1 class="md:pl-10 text-lg font-bold font-serif">
+                {%if profile.name %}
+                    {{ profile.name }}
+                {% else %}
+                    My Name
+                {% endif %}
+            </h1>
+            </a>
+            <nav class=" gap-5 text-xl hidden md:flex md:pr-10">
+                <a href="{% url 'home/main_page' %}">Home</a>
+                <a href="{% url 'home/profile' %}">About</a>
+                <a href="{% url 'home/projects' %}">Projects</a>
+                <a href={% comment %} "{% url 'home/contact' %}" {% endcomment %}>Contact</a>
+            </nav>
+        <section>
         <div class="relative md:hidden">
             <div class="relative inline-block text-left">
                 <div>
-                  <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="menu-button" aria-expanded="true" aria-haspopup="true">
-                    Nav
-                    <svg class="-mr-1 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                      <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                  <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm  hover:bg-gray-50" id="menu-button" aria-expanded="true" aria-haspopup="true">
+                    <svg height="32px" id="Layer_1" style="enable-background:new 0 0 32 32;" version="1.1" viewBox="0 0 32 32" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z"/>
                     </svg>
                   </button>
                 </div>
-                <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                <div class="absolute right-0 z-10 w-screen origin-top-right rounded-md bg-white shadow-lg focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                     <div class="py-1 hidden" role="none" id="menu-content">
                         <!-- Active: "bg-gray-100 text-gray-900 outline-none", Not Active: "text-gray-700" -->
-                        <a class="block px-4 py-2 text-sm text-gray-700" href="{% url 'home/main_page' %}">Home</a>
-                        <a class="block px-4 py-2 text-sm text-gray-700" href="{% url 'home/projects' %}">Projects</a>
-                        <a class="block px-4 py-2 text-sm text-gray-700" href="{% url 'home/profile' %}">About Me</a>
+                        <a class="block px-4 py-2 text-sm text-gray-700 text-end shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}">Home</a>
+                        <a class="block px-4 py-2 text-sm text-gray-700 text-end shadow-sm shadow-gray-200" href="{% url 'home/projects' %}">Projects</a>
+                        <a class="block px-4 py-2 text-sm text-gray-700 text-end shadow-sm shadow-gray-200" href="{% url 'home/profile' %}">About Me</a>
                     </div>
                 </div>
             </div>
@@ -56,12 +61,23 @@
     <main class="flex flex-col flex-grow min-h-screen" >
         {% block content %}{% endblock %}
     </main>
-    <footer class="bg-gradient-to-t from-sky-900 to-sky-500 border-t-8 border-white border-double p-5 text-center h-full sticky b-0">
-        <p class="text-white">&copy;
+    <footer class="text-white bg-black border-t-8 px-5 h-full sticky b-0">
+        <div class="py-16">
+            <div class="pb-12">
+                <h2 class="pb-5 text-xl font-bold">SOCIAL</h2>
+                <h2 class=" text-xl font-bold">in </h2>
+            </div>
+            <div>
+                <h2 class="pb-5 text-xl font-bold">{{ profile.name }}</h2>
+                <p class="text-sm ">{{ profile.introduction }}</p>
+            </div>
+        </div>
+        <p class="text-center text-xs border-t-[1px] border-gray-700 py-5">&copy; 
+            Copyright 2025. Made by
             {%if profile.name %}
-                {{ profile.name }}
+                <span class="underline font-semibold">{{ profile.name }}</span>
             {% else %}
-                My Portfolio
+                My Name
             {% endif %}</p>
     </footer>
     <script src="{% static 'js/dropdown.js' %}" defer></script>
