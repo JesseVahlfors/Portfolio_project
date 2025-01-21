@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     dropdownButton.addEventListener('click', () => {
         dropdownContent.classList.toggle('hidden');
+
+        const isExpanded = dropdownContent.classList.contains("hidden");
+        dropdownButton.setAttribute("aria-expanded", !isExpanded);
     });
 
 });

@@ -4,52 +4,83 @@
 
 {% block content %}
 <section class="flex flex-col items-center bg-zinc-50 text-black">
-    <section class="py-20 w-full h-screen min-h-8/12 max-h-96 bg-main_bg bg-cover flex flex-col items-center justify-center">
-        <h2 class="text-4xl text-center font-bold mb-6 px-8">Hey, I'm {{ profile.name }}</h2>
+    <section class="relative w-full py-40 md:h-screen min-h-8/12 md:max-h-120 bg-main_bg bg-cover flex flex-col items-center justify-center">
+        <h2 class="text-4xl text-center font-bold mb-6 px-8 uppercase">Hey, I'm {{ profile.name }}</h2>
         <p class="text-lg text-center px-8">{{ profile.introduction }}</p>
         <button class="bg-sky-900 text-white text-xl font-bold px-16 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400 ">PROJECTS</button>
+        <div class="absolute bottom-10">   
+            <div class="relative w-8 h-12 border-[3px] border-black rounded-2xl flex items-start justify-center">
+                <div class="absolute w-2 h-2 bg-black rounded-full top-1 transform -translate-x-1/2 -translate-y-8 animate-MouseScroll"></div>
+            </div>
+        </div>
     </section>
-    <section class="flex flex-col gap-16 items-center py-20 px-4">
+    <section id="about" class="flex flex-col gap-16 items-center py-20 px-4 w-11/12 max-w-80">
         <div class="flex flex-col items-center w-11/12">
             <h2 class="text-3xl font-semibold pb-5">About Me</h2>
             <span class="h-1 w-8 rounded-xl bg-sky-900"></span>
             {% comment %}         {% if profile.profile_image %}
             <img src="{{profile.profile_image.url }}" alt={{ profile.name }}>
             {% endif %} {% endcomment %}
-            <p class="text-center pt-5">Here you will find more information about me, what i do, and my current skills mostly in terms of programming and technology</p>
+            <p class="text-center pt-5 max-w-80">Here you will find more information about me, what i do, and my current skills mostly in terms of programming and technology</p>
         </div>
-        <div class="">
-            <h3 class="text-xl font-semibold mb-6">Get to know me!</h3>
-            <p>{{ profile.bio }}</p>
-            <button class="bg-sky-900 text-white text-LG font-bold px-10 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400">CONTACT</button>
-        </div>
-        <div>
-            <h3 class="text-xl font-semibold mb-6">My Skills</h3>
-            <ul class="flex flex-wrap gap-4">
-                {% for skill in skills %}
-                    <li class="bg-zinc-200 text-zinc-800 px-4 py-2 rounded-lg">{{ skill }}</li>
-                {% endfor %}
+        <div class="md:grid md:grid-cols-2 gap-20 px-6">
+            <div class="pb-10">
+                <h3 class="text-xl font-semibold mb-6">Get to know me!</h3>
+                <p>{{ profile.bio }}</p>
+                <button class="bg-sky-900 text-white text-LG font-bold px-10 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400">CONTACT</button>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-6">My Skills</h3>
+                <ul class="flex flex-wrap gap-4">
+                    {% for skill in skills %}
+                        <li class="bg-zinc-200 text-zinc-800 font-semibold px-4 py-2 rounded-lg">{{ skill }}</li>
+                    {% endfor %}
+            </div>
         </div>
     </section>
-    <section class="flex flex-col items-center bg-white">
-        <h2 class="text-4xl font-bold mb-6 tracking-wider" >PROJECTS</h2>
-        <span class="h-1 w-8 rounded-xl bg-sky-900"></span>
-        <ul class="flex flex-wrap justify-center gap-8 py-10">
-            {% for project in projects %}
-                <li class="p-4 max-w-md bg-white">
-                    <a class="flex flex-col gap-8 items-center" href="{{ project.get_absolute_url }}">
+    <section id="projects" class="flex flex-col items-center bg-white w-full p-20">
+        <div class="flex flex-col items-center max-w-80">
+            <h2 class="text-4xl font-bold mb-6 tracking-wider" >PROJECTS</h2>
+            <span class="h-1 w-8 rounded-xl bg-sky-900"></span>
+            <ul class="flex flex-wrap justify-center gap-16 py-10">
+                {% for project in projects %}
+                    <li class="md:grid md:grid-cols-2 gap-20 items-center">
                         {% if project.image %}
-                        <img class="h-40 px-10 rounded-md w-full" src="{{ project.image.url }}" alt="{{ project.title }}">
-                        {% endif %}
-                        <div class="flex flex-col items-center p-2 gap-8">
-                            <h3 class="text-xl font-bold text-center">{{ project.title }}</h3>
-                            <p class="text-sm md:text-lg text-sky-800 text-center line-clamp-3">{{ project.description }}</p>
+                        <div class="max-h-72 mx-auto rounded-md overflow-hidden">
+                            <img class="h-72 w-auto object-cover" src="{{ project.image.url }}" alt="{{ project.title }}">
                         </div>
-                        <button class="bg-sky-900 text-white text-md font-bold py-4 rounded-lg px-10 " href="{{ project.get_absolute_url }}">PROJECT INFO</button>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
+                        {% endif %}
+                        <div class="flex flex-col py-4 gap-8">
+                            <h3 class="text-xl font-bold text-start">{{ project.title }}</h3>
+                            <p class="text-sm md:text-lg text-sky-800 text-start">{{ project.short_description }}</p>
+                            <button class="w-44 bg-sky-900 text-white text-sm font-bold py-4 rounded-lg px-10 " href="">PROJECT INFO</button>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+    <section id="contact" class="flex flex-col items-center bg-zinc-50 text-black py-20 bg-main_bg bg-cover w-full">
+        <div class="flex flex-col items-center max-w-80">
+            <h2 class="text-4xl font-bold mb-6 tracking-wider">CONTACT</h2>
+            <span class="h-1 w-8 rounded-xl bg-sky-900"></span>
+            <p class="text-center pt-5 px-4">If you have any questions or would like to work with me, please feel free to contact me</p>
+            <form class="flex flex-col items-center gap-4 w-10/12 shadow-lg p-8 rounded-lg bg-white text-gray-600 mt-20">
+                <div>
+                    <label for="name" class="text-sm  font-semibold">Name</label>
+                    <input id="name" class="w-full h-12 mt-4 px-4 rounded-lg bg-gray-300 " type="text" placeholder="Enter Your Name">
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input id="email" class="w-full h-12 mt-4 px-4 rounded-lg bg-gray-300 " type="email" placeholder="Enter Your Email">
+                </div>
+                <div>
+                    <label for="message">Message</label>
+                    <textarea id="message" class="w-full h-32 mt-4 px-4 rounded-lg bg-gray-300 " placeholder="Enter Your Message"></textarea>
+                </div>
+                <button class="bg-sky-900 text-white text-lg font-bold w-full py-4 rounded-lg mt-8 shadow-md shadow-zinc-400">SUBMIT</button>
+            </form>
+        </div>
     </section>
 </section>
 {% endblock %}
