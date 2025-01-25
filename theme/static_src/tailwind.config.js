@@ -43,8 +43,20 @@ module.exports = {
     ],
     theme: {
         extend: {
+            colors: {
+                'forest-green': '#2E8B57',
+                'terra-cotta': '#E2725B',
+                'soft-gray': '#808080',
+                'muted-teal': '#5F9EA0',
+                'slate-blue': '#6A5ACD',
+                'steel-blue': '#4682B4',
+                'midnight-blue': '#191970',
+                'navy-blue': '#000080',
+                'dark-slate-blue': '#483D8B',
+                'soft-beige': '#ECE5C7',
+            },
             backgroundImage: {
-                'main_bg': "url('/static/images/bg.jpg')",
+                'main_bg': "url('/static/images/bg3.jpg')",
             },
             maxWidth: {
                 '60': '60rem',
