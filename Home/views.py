@@ -9,7 +9,8 @@ class MainView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["profile"] = Profile.objects.first()
         context["projects"] = Project.objects.all()[:3]
-        context["skills"] = Profile.objects.first().skills.split(',')
+        if Profile.objects.first() and Profile.objects.first().skills:
+            context["skills"] = Profile.objects.first().skills.split(',')
         return context
     
 

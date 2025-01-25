@@ -1,22 +1,43 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from .models import Profile, Project
+from django.core.files.uploadedfile import SimpleUploadedFile
+from tempfile import TemporaryDirectory
 
-class MainPageViewTests(TestCase):
+
+class BaseTestWithTempMedia(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.temp_media_dir = TemporaryDirectory() # Create a temporary directory
+        cls.override = override_settings(MEDIA_ROOT=cls.temp_media_dir.name) # Override the MEDIA_ROOT setting
+        cls.override.enable()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.override.disable() # Disable the override
+        cls.temp_media_dir.cleanup() # Cleanup the temporary directory
+        super().tearDownClass()
+
+
+class MainPageViewTests(BaseTestWithTempMedia):
 
     def setUp(self):
+        profile_image = SimpleUploadedFile(name='test_image.jpg', content=b'', content_type='image/jpeg')
         Profile.objects.all().delete()
         Profile.objects.create(
             name="Testi mies",
             bio="Hello World!",
             email="test@test.com",
-            introduction="Hello There"
+            introduction="Hello There",
+            profile_image=profile_image,
+            skills="Juggling, handstands, coding, cooking, sleeping",
         )
 
     def test_main_page_returns_200(self):
         response = self.client.get(reverse('home/main_page'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Welcome to My Portfolio")
+        self.assertContains(response, "Get to know me!")
 
     def test_main_page_returns_name_from_database(self):
         #Walking skeleton
@@ -33,10 +54,19 @@ class MainPageViewTests(TestCase):
         response = self.client.get(reverse('home/main_page'))
         self.assertTemplateUsed(response, 'home/main_page.html')
 
+    def test_main_page_displays_skills(self):
+        response = self.client.get(reverse('home/main_page'))
+        self.assertContains(response, "Juggling")
+        self.assertContains(response, "handstands")
+        self.assertContains(response, "coding")
+        self.assertContains(response, "cooking")
+        self.assertContains(response, "sleeping")
+    
     def test_main_page_context_data(self):
         Profile.objects.all().delete()
 
-        profile = Profile.objects.create(name="Jane Doe", bio="Welcome to my portfolio.", email='jane@test.com')
+        profile_image = SimpleUploadedFile(name='test_image.jpg', content=b'', content_type='image/jpeg')
+        profile = Profile.objects.create(name="Jane Doe", bio="Welcome to my portfolio.", email='jane@test.com', profile_image=profile_image)
         response = self.client.get(reverse('home/main_page'))
         self.assertEqual(response.context['profile'], profile)
     
@@ -45,18 +75,20 @@ class MainPageViewTests(TestCase):
         response = self.client.get(reverse('home/main_page'))
         self.assertContains(response, 'My Name')
 
+        
 
 
-
-class ProfileViewTests(TestCase):
+class ProfileViewTests(BaseTestWithTempMedia):
 
     def setUp(self):
+        profile_image = SimpleUploadedFile(name='test_image.jpg', content=b'', content_type='image/jpeg')
         Profile.objects.all().delete()
         Profile.objects.create(
             name="Testi mies",
             bio="Hello World!",
             email="test@test.com",
             phone="555-1234567",
+            profile_image=profile_image,
         )
 
     def test_profile_page_returns_200(self):
@@ -71,7 +103,8 @@ class ProfileViewTests(TestCase):
     def test_profile_page_context_data(self):
         Profile.objects.all().delete()
 
-        profile = Profile.objects.create(name="Jane Doe", bio="Welcome to my portfolio.", email='jane@test.com')
+        profile_image = SimpleUploadedFile(name='test_image.jpg', content=b'', content_type='image/jpeg')
+        profile = Profile.objects.create(name="Jane Doe", bio="Welcome to my portfolio.", email='jane@test.com', profile_image=profile_image)
         response = self.client.get(reverse('home/profile'))
         self.assertEqual(response.context['profile'], profile)
     
@@ -81,12 +114,13 @@ class ProfileViewTests(TestCase):
         self.assertContains(response, 'My Name')
     
 
-class ProjectListViewTests(TestCase):
+class ProjectListViewTests(BaseTestWithTempMedia):
 
     def setUp(self):
         Project.objects.create(
             title = "Project1",
             description = "Nice project",
+            short_description = "project",
             image = "",
             link = "www.testi.com",
             date_completed = "2025-01-13",
@@ -107,6 +141,7 @@ class ProjectListViewTests(TestCase):
         project = Project.objects.create(
             title = "Context data Project",
             description = "Good project",
+            short_description = "project",
             image = "",
             link = "www.contexttest.com",
             date_completed = "2024-01-10"
@@ -116,14 +151,17 @@ class ProjectListViewTests(TestCase):
         self.assertIn(project, response.context['projects'])
 
 
-class ProfileModelTests(TestCase):
+class ProfileModelTests(BaseTestWithTempMedia):
 
     def setUp(self):
+        profile_image = SimpleUploadedFile(name='test_image.jpg', content=b'', content_type='image/jpeg')
+
         self.profile = Profile.objects.create(
             name="Testi mies",
             bio="Hello World!",
             email="test@test.com",
             phone="555-1234567",
+            profile_image=profile_image,
         )
 
     def test_profile_creation(self):
@@ -138,3 +176,27 @@ class ProfileModelTests(TestCase):
 
     def test_profile_str(self):
         self.assertEqual(str(self.profile), "Testi mies")
+
+class ProjectModelTests(BaseTestWithTempMedia):
+
+    def setUp(self):
+        self.project = Project.objects.create(
+            title = "Project1",
+            description = "Nice project",
+            image = "",
+            link = "www.testi.com",
+            date_completed = "2025-01-13",
+        )
+
+    def test_project_creation(self):
+        self.assertEqual(self.project.title, "Project1")
+        self.assertEqual(self.project.description, "Nice project")
+        self.assertEqual(self.project.link, "www.testi.com")
+        self.assertEqual(self.project.date_completed, "2025-01-13")
+
+    def test_project_name_max_length(self):
+        max_length = Project._meta.get_field('title').max_length
+        self.assertEqual(max_length, 200)
+
+    def test_project_str(self):
+        self.assertEqual(str(self.project), "Project1")
