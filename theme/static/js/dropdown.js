@@ -9,4 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdownButton.setAttribute("aria-expanded", !isExpanded);
     });
 
+    const successMessage = document.querySelector('.success-message');
+    if (successMessage) {
+        // Scroll to the form when the success message appears
+        document.getElementById('contact').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
 });

@@ -66,7 +66,7 @@
                     <li class=" flex flex-col md:grid md:grid-cols-2 gap-20 items-center">
                         {% if project.image %}
                         <div class="max-h-72 mx-auto rounded-md overflow-hidden">
-                            <img class="h-72 w-auto object-cover" src="{{ project.image.url }}" alt="{{ project.title }}">
+                            <img class="h-72 w-auto object-cover" src="{{ project.image.url }}" alt="{{ project.title }}" loading="lazy">
                         </div>
                         {% endif %}
                         <div class="flex flex-col items-center md:items-start py-4 gap-8">
@@ -84,21 +84,7 @@
             <h2 class="text-4xl font-bold mb-6 tracking-wider">CONTACT</h2>
             <span class="h-1 w-8 rounded-xl bg-navy-blue"></span>
             <p class="text-center pt-5 px-4">If you have any questions or would like to work with me, please feel free to contact me</p>
-            <form class="flex flex-col items-end gap-4 w-10/12 shadow-lg p-8 rounded-lg bg-white text-gray-600 mt-20">
-                <div class="w-full">
-                    <label for="name" class="text-sm  font-semibold">Name</label>
-                    <input id="name" class="w-full h-12 mt-4 px-4 rounded-lg bg-amber-50 " type="text" placeholder="Enter Your Name">
-                </div>
-                <div class="w-full">
-                    <label class="text-sm  font-semibold" for="email">Email</label>
-                    <input  id="email" class="w-full h-12 mt-4 px-4 rounded-lg bg-amber-50 " type="email" placeholder="Enter Your Email">
-                </div>
-                <div class="w-full">
-                    <label class="text-sm  font-semibold" for="message">Message</label>
-                    <textarea  id="message" class="w-full h-32 mt-4 px-4 rounded-lg bg-amber-50 " placeholder="Enter Your Message"></textarea>
-                </div>
-                <button class="bg-navy-blue text-white font-bold px-12 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300 ">SUBMIT</button>
-            </form>
+            {% include "home/contact.html" %}
         </div>
     </section>
 </section>
