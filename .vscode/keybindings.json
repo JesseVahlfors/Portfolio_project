@@ -1,7 +1,0 @@
-[
-    {
-      "key": "ctrl+alt+t",  
-      "command": "workbench.action.tasks.runTask",
-      "args": "Run Tests"  // Replace "Run Tests" with the task label for running tests in your project
-    }
-  ]

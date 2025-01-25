@@ -18,9 +18,6 @@
         <div class="flex flex-col items-center w-11/12">
             <h2 class="text-3xl font-semibold pb-5">About Me</h2>
             <span class="h-1 w-8 rounded-xl bg-sky-900"></span>
-            {% if profile.profile_image %}
-            <img src="{{profile.profile_image.url }}" alt={{ profile.name }}>
-            {% endif %}
             <p class="text-center pt-5 max-w-80">Here you will find more information about me, what i do, and my current skills mostly in terms of programming and technology</p>
         </div>
         <div class="md:grid md:grid-cols-2 gap-20 px-6">

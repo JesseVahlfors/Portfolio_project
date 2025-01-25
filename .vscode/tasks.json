@@ -41,6 +41,16 @@
         "presentation": {
           "reveal": "always"
         }
+      },
+      {
+        "label": "Update model migrations",
+        "type": "shell",
+        "command": "python manage.py makemigrations && python manage.py migrate",
+        "problemMatcher": [],
+        "group": "build",
+        "presentation": {
+          "reveal": "always"
+        }
       }
     ]
   }

@@ -8,6 +8,8 @@ class Profile(models.Model):
     profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
     introduction = models.TextField(null=True)
     skills = models.TextField(null=True)
+    linkedin = models.URLField(null=True)
+    github = models.URLField(null=True)
 
     def __str__(self):
         return self.name
