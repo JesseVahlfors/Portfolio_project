@@ -1,0 +1,20 @@
+{
+    "terminal.integrated.profiles.windows": {
+      "Custom-bash": {
+      "path": "C:\\Program Files\\Git\\bin\\bash.exe",
+      "args": [
+        "--cd=${workspaceFolder}"
+      ]
+      },
+      "Command Prompt": {
+        "path": "C:\\Windows\\System32\\cmd.exe"
+      },
+      "PowerShell": {
+        "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+      }
+    },
+    "terminal.integrated.defaultProfile.windows": "Custom-bash",
+    "terminal.integrated.cwd": "${workspaceFolder}"
+}
+
+  
