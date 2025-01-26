@@ -3,7 +3,7 @@ from django.views.generic import DetailView, TemplateView, ListView
 from .models import Profile, Project
 from .forms import ContactForm
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib import messages
 import environ
 
@@ -59,29 +59,26 @@ class ProjectDetailView(DetailView):
 def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
-        print("POST Data:", request.POST)
         if form.is_valid():
-            print("Form is valid")
-            name = form.cleaned_data['name'].strip()
-            email = form.cleaned_data['email'].strip()
-            message = form.cleaned_data['message'].strip()
-            
-            send_mail(
-                f"Contact Form Submission from {name}",
-                message,
-                email,
-                [env('MY_EMAIL')],
-                fail_silently=False,
-            )
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
 
-            messages.success(request, "Your message has been successfully sent. I'll get back to you soon!")
-            return HttpResponseRedirect('/#contact')
+            # Send email
+            try:
+                send_mail(
+                    f"Contact Form Submission from {name}",
+                    message,
+                    email,  # From email
+                    [env('MY_EMAIL')],  # Replace with your email address or settings
+                    fail_silently=False,
+                ) 
+                return JsonResponse({'message': 'Thanks for contacting me!'})
+            except Exception as e:
+                return JsonResponse({'errors': {'email': str(e)}}, status=500)
         else:
-            print("Form errors:", form.errors)
-            messages.error(request, 'There was an issue with the submission. Please check your inputs and try again.')
-            return HttpResponseRedirect('/#contact')
-    else:
-        form = ContactForm()
-    
+            return JsonResponse({'errors': form.errors}, status=400)
+
+    form = ContactForm()      
     return render(request, 'home/main_page.html', {'form': form})
     

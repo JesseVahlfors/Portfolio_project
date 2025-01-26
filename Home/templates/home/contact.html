@@ -1,18 +1,13 @@
-<form method="post" action="{% url 'contact' %}" class="flex flex-col items-end gap-4 w-10/12 shadow-lg p-8 rounded-lg bg-white text-gray-600 mt-20">
+{% block scripts %}
+<script src="/static/js/contact.js" defer></script>
+{% endblock %}
+<form method="post" id="contactForm" action="{% url 'contact' %}" class="flex flex-col items-end gap-4 w-10/12 shadow-lg p-8 rounded-lg bg-white text-gray-600 mt-20">
     {% csrf_token %}
-    {% if messages %}
-    <div class="message-container">
-        {% for message in messages %}
-            <div class="message {% if message.tags == 'success' %}bg-green-100 text-green-600{% else %}bg-red-100 text-red-600{% endif %} p-4 rounded-lg mb-4">
-                {{ message }}
-            </div>
-        {% endfor %}
-    </div>
-    {% endif %}
+    <div id="message-container" class="message-container" style="display: none;"></div>
     <!-- Name -->
     <div class="w-full">
         <label for="name" class="text-sm  font-semibold">Name</label>
-        <input id="name" name="name" class="w-full h-12 mt-4 px-4 rounded-lg bg-amber-50 " type="text" placeholder="Enter Your Name" value="{{ form.name.value|default:'' }}">
+        <input id="name" name="name" class="w-full h-12 mt-4 px-4 rounded-lg bg-amber-50 " type="text" placeholder="Enter Your Name" value="{{ form.name.value|default:'' }}" required="required">
         {% if form.name.errors %}
             <div class="field-errors text-red-600 mt-2">
                 {% for error in form.name.errors %}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from PIL import Image, UnidentifiedImageError
 import os
 from django.utils.text import slugify
@@ -19,6 +20,15 @@ class Profile(models.Model):
         allowed_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'u', 's', 'a', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'img']
         return bleach.clean(value, tags=allowed_tags)
     
+    def clean(self):
+        # Custom validation for image type
+        if self.profile_image:
+            try:
+                # Check if the uploaded file is an image
+                img = Image.open(self.profile_image)
+                img.verify()  # Verifies if the file is a valid image
+            except (IOError, SyntaxError):
+                raise ValidationError("Invalid image file.")
 
     def save(self, *args, **kwargs):
         if self.bio:
