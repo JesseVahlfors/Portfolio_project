@@ -56,7 +56,7 @@ module.exports = {
                 'soft-beige': '#ECE5C7',
             },
             backgroundImage: {
-                'main_bg': "url('/static/images/bg3.jpg')",
+                'main_bg': "url('/static/images/bg4.jpg')",
                 'mini_bg': "url('/static/images/bg-mini.jpg')",
             },
             maxWidth: {

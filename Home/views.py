@@ -4,6 +4,7 @@ from .models import Profile, Project
 from .forms import ContactForm
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 import environ
 
 env = environ.Env()
@@ -62,6 +63,7 @@ def contact(request):
                 name = form.cleaned_data['name']
                 email = form.cleaned_data['email']
                 message = form.cleaned_data['message']
+                messages.success(request, "Your message has been successfully sent. I'll get back to you soon!")
 
                 send_mail(
                     f"Contact Form Submission from {name}",
@@ -72,6 +74,8 @@ def contact(request):
                 )
 
                 return HttpResponseRedirect('/#contact')
+            else:
+                messages.error(request, 'There was an issue with the submission. Please check your inputs and try again.')
             
         else:
             form = ContactForm()
