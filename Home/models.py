@@ -53,7 +53,14 @@ class Project(models.Model):
     skills = models.TextField(null=True)
     project_github = models.URLField(null=True)
 
+    def clean_html(self, value):
+        allowed_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'u', 's', 'a', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'img']
+        return bleach.clean(value, tags=allowed_tags)
+
     def save(self, *args, **kwargs):
+        if self.description:
+            self.description = self.clean_html(self.description)
+            
         if not self.slug:
             base_slug = slugify(self.title)
             slug = base_slug

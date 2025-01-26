@@ -11,8 +11,8 @@
             <p class="text-xl text-center px-8 mb-10 max-w-60">{{ project.short_description }}</p>
             {% if project.link %}
                 <a href="{{ project.link }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">LIVE LINK</a>
-            {% elif project.github %}
-                <a href="{{ project.github }}" target="_blank" class="bg-gray-300 text-navy-blue text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">GITHUB</a>
+            {% elif project.project_github %}
+                <a href="{{ project.project_github }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">GITHUB</a>
             {% endif %}    
         </section>
 
@@ -34,12 +34,14 @@
                     <!-- Overview -->
                     <div>
                         <h2 class="text-2xl font-bold mb-4">Project Overview</h2>
-                        <p class="text-lg text-sky-800">{{ project.description }}</p>
+                        <div class="text-lg text-sky-800">
+                            {{ project.description|safe }}
+                        </div>
                     </div>
 
                     <!-- Tools Used -->
                     <div>
-                        <h2 class="text-2xl font-bold mb-4">Tools Used</h2>
+                        <h2 class="text-2xl font-bold mb-4">Technologies Used</h2>
                         <ul class="flex flex-wrap gap-4">
                             {% for skill in skills %}
                                 <li class="bg-amber-100 text-navy-blue font-semibold px-4 py-2 rounded-lg">{{ skill }}</li>
@@ -54,8 +56,8 @@
                             {% if project.link %}
                                 <a href="{{ project.link }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">LIVE LINK</a>
                             {% endif %}
-                            {% if project.github %}
-                                <a href="{{ project.github }}" target="_blank" class="bg-gray-300 text-navy-blue text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">GITHUB</a>
+                            {% if project.project_github %}
+                                <a href="{{ project.project_github }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">GITHUB</a>
                             {% endif %}    
                                 <a href="{% url 'home/main_page' %}" class="bg-gray-300 text-navy-blue text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">Go Back</a>
                         </div>
