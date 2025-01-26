@@ -3,7 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<section class="flex flex-col items-center bg-amber-50/50 text-black">
+<section id="home" class="flex flex-col items-center bg-amber-50/50 text-black">
     <section class="relative w-full h-screen md:h-screen min-h-8/12 md:max-h-120 bg-main_bg bg-cover flex flex-col items-center justify-center">
         <div class="hidden absolute top-1/2 left-0 md:flex flex-col p-2 bg-white shadow-[0px_7px_29px_0px] shadow-amber-800/30 rounded-lg transform -translate-y-1/2">
             <a  aria-label="Github link"class="hover:bg-navy-blue/30 p-2 rounded-md" href="{{ profile.github }}">
@@ -24,10 +24,10 @@
                 </svg>
             </a>
         </div>
-        <div class="flex items-center flex-col mx-14">
-            <h1 class="text-4xl text-center font-bold mb-6 px-8 uppercase">Hey, I'm {{ profile.name }}</h1>
-            <p class="text-lg text-center px-8">{{ profile.introduction }}</p>
-            <button class="bg-navy-blue text-white text-xl font-bold px-16 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">PROJECTS</button>
+        <div class="flex items-center flex-col md:mx-14">
+            <h1 class="text-4xl md:text-5xl text-center font-bold mb-6 px-8 uppercase">Hey, I'm {{ profile.name }}</h1>
+            <p class="text-lg md:text-xl text-center px-2 md:px-8 md:max-w-60">{{ profile.introduction }}</p>
+            <a class="bg-navy-blue text-white text-xl font-bold px-16 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300" href="#projects">PROJECTS</a>
         </div>
         <div class="absolute bottom-10">   
             <div class="relative w-8 h-12 border-[3px] border-navy-blue rounded-2xl flex items-start justify-center">
@@ -36,18 +36,21 @@
         </div>
     </section>
     <section id="about" class="flex flex-col gap-32 items-center py-32 px-4 md:w-11/12 max-w-80">
-        <div class="flex flex-col items-center w-11/12">
+        <div class="flex flex-col items-center max-w-80">
             <h2 class="text-4xl tracking-wider font-bold pb-5">ABOUT ME</h2>
             <span class="h-1 w-8 rounded-xl bg-navy-blue"></span>
-            <p class="text-xl pt-5 text-center max-w-60">Here you will find more information about me, what i do, and my current skills mostly in terms of programming and technology</p>
+            <p class="text-md md:text-xl pt-5 text-center md:max-w-60">Here you’ll find more about my background and the skills I’m developing in software development.
+                I’m continually enhancing my programming abilities and exploring new technologies, with a focus on building efficient and innovative systems.</p>
         </div>
         <div class="flex flex-col md:grid md:grid-cols-2 gap-32 md:px-6">
-            <div>
+            <div class="flex flex-col gap-10">
                 <h3 class="text-2xl font-bold mb-6">Get to know me!</h3>
-                <p class="text-lg">{{ profile.bio }}</p>
-                <button class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">CONTACT</button>
+                    <div class="flex flex-col gap-10 text-lg ">
+                        {{ profile.bio|safe }}
+                    </div>
+                <a href="#contact" class="w-44 bg-navy-blue mt-6 text-white text-sm text-center font-bold py-4 rounded-lg px-10 hover:-translate-y-0.5 duration-300">CONTACT</a>
             </div>
-            <div>
+            <div class="flex flex-col gap-10">
                 <h3 class="text-2xl font-bold mb-6">My Skills</h3>
                 <ul class="flex flex-wrap gap-4">
                     {% for skill in skills %}
@@ -56,23 +59,23 @@
             </div>
         </div>
     </section>
-    <section id="projects" class="flex flex-col items-center bg-white w-full py-32 p-4 md:p-20">
-        <div class="flex flex-col items-center max-w-60">
+    <section id="projects" class="flex flex-col items-center bg-white w-full py-32 p-4">
+        <div class="flex flex-col items-center max-w-80">
             <h2 class="text-4xl font-bold mb-6 tracking-wider" >PROJECTS</h2>
             <span class="h-1 w-8 rounded-xl bg-navy-blue mb-6"></span>
-            <p class="text-center mb-16 text-xl max-w-60">Here are some of the projects that I have worked on. Click on the button to get more information about the project</p>
+            <p class="text-center mb-16 text-xl max-w-60">Here are some of the projects that I have worked on. Click on the a to get more information about the project</p>
             <ul class="flex flex-wrap justify-center gap-16 py-10">
                 {% for project in projects %}
-                    <li class=" flex flex-col md:grid md:grid-cols-2 gap-20 items-center">
+                    <li class=" flex flex-col md:grid md:grid-cols-2 gap-20 items-center ">
                         {% if project.image %}
-                        <div class="max-h-72 mx-auto rounded-md overflow-hidden">
-                            <img class="h-72 w-auto object-cover" src="{{ project.image.url }}" alt="{{ project.title }}" loading="lazy">
+                        <div class="mx-auto rounded-md shadow-[0px_0px_20px_4px] shadow-amber-600/20">
+                            <img class="max-h-40 w-auto object-cover" src="{{ project.image.url }}" alt="{{ project.title }}" loading="lazy">
                         </div>
                         {% endif %}
                         <div class="flex flex-col items-center md:items-start py-4 gap-8">
                             <h3 class="text-xl font-bold text-start">{{ project.title }}</h3>
                             <p class="text-sm md:text-lg text-sky-800 text-start">{{ project.short_description }}</p>
-                            <button class="w-44 bg-navy-blue text-white text-sm font-bold py-4 rounded-lg px-10  hover:-translate-y-0.5 duration-300" href="">PROJECT INFO</button>
+                            <a class="w-44 bg-navy-blue text-white text-sm font-bold py-4 rounded-lg px-10  hover:-translate-y-0.5 duration-300" href="{% url 'home/project_detail' slug=project.slug %}">PROJECT INFO</a>
                         </div>
                     </li>
                 {% endfor %}
@@ -83,7 +86,7 @@
         <div class="flex flex-col items-center max-w-80">
             <h2 class="text-4xl font-bold mb-6 tracking-wider">CONTACT</h2>
             <span class="h-1 w-8 rounded-xl bg-navy-blue"></span>
-            <p class="text-center pt-5 px-4">If you have any questions or would like to work with me, please feel free to contact me</p>
+            <p class="text-center text-xl pt-5 px-4 max-w-60">If you have any questions or would like to work with me, please feel free to contact me</p>
             {% include "home/contact.html" %}
         </div>
     </section>

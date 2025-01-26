@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect 
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, TemplateView, ListView
 from .models import Profile, Project
 from .forms import ContactForm
@@ -21,14 +21,6 @@ class MainView(TemplateView):
         return context
     
    
-class ProfileView(DetailView):
-    model = Profile
-    template_name = 'home/profile.html'
-    context_object_name = 'profile'
-
-    def get_object(self):
-        return Profile.objects.first()
-    
 class ProjectsView(ListView):
     model = Project
     template_name = 'home/project_list.html'
@@ -39,6 +31,27 @@ class ProjectsView(ListView):
         context = super().get_context_data(**kwargs)
         context["profile"] = Profile.objects.first()
         return context
+
+
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = 'home/project_detail.html'
+    context_object_name = 'project'
+
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        project = context['project']
+        context["profile"] = Profile.objects.first()
+
+        skills = project.skills
+        if skills:
+            context["skills"] = skills.split(',')
+        else:
+            context["skills"] = None
+        return context
+
+    def get_object(self):
+        return get_object_or_404(Project, slug=self.kwargs['slug'])
     
 def contact(request):
         if request.method == 'POST':

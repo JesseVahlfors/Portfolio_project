@@ -60,11 +60,13 @@ module.exports = {
                 'mini_bg': "url('/static/images/bg-mini.jpg')",
             },
             maxWidth: {
+                '40': '40rem',
                 '60': '60rem',
                 '80': '80rem',
                 '120': '120rem',
             },
             maxHeight: {
+                '40': '40rem',
                 '60': '60rem',
                 '80': '80rem',
                 '120': '120rem',

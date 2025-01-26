@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Project Detail{% endblock %}
+
+{% block content %}
+<section class="text-black py-16">
+    <div class="flex flex-col items-center">
+        <!-- Title and Description Section -->
+        <section class="relative w-full md:max-h-120 bg-main_bg bg-cover flex flex-col gap-12 items-center justify-center py-60">
+            <h1 class="text-6xl text-center font-bold mb-6 px-8 uppercase">{{ project.title }}</h1>
+            <p class="text-xl text-center px-8 mb-10 max-w-60">{{ project.short_description }}</p>
+            {% if project.link %}
+                <a href="{{ project.link }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">LIVE LINK</a>
+            {% elif project.github %}
+                <a href="{{ project.github }}" target="_blank" class="bg-gray-300 text-navy-blue text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">GITHUB</a>
+            {% endif %}    
+        </section>
+
+        <!-- Project Details Section -->
+        <section class="w-11/12 max-w-5xl bg-white px-8 py-20 flex flex-col gap-32 items-center">
+            <!-- Project Image -->
+            <div class="flex justify-center w-full shadow-lg">
+                {% if project.image %}
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="rounded-md max-h-40 object-cover ">
+                {% else %}
+                    <div class="w-full h-80 bg-amber-100 rounded-md flex items-center justify-center">
+                        <p class="text-navy-blue">No Image Available</p>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="w-10/12">
+                <!-- Project Overview and Tools -->
+                <div class="flex flex-col gap-16">
+                    <!-- Overview -->
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">Project Overview</h2>
+                        <p class="text-lg text-sky-800">{{ project.description }}</p>
+                    </div>
+
+                    <!-- Tools Used -->
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">Tools Used</h2>
+                        <ul class="flex flex-wrap gap-4">
+                            {% for skill in skills %}
+                                <li class="bg-amber-100 text-navy-blue font-semibold px-4 py-2 rounded-lg">{{ skill }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <!-- See Live -->
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">See Live</h2>
+                        <div class="flex gap-8">
+                            {% if project.link %}
+                                <a href="{{ project.link }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">LIVE LINK</a>
+                            {% endif %}
+                            {% if project.github %}
+                                <a href="{{ project.github }}" target="_blank" class="bg-gray-300 text-navy-blue text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">GITHUB</a>
+                            {% endif %}    
+                                <a href="{% url 'home/main_page' %}" class="bg-gray-300 text-navy-blue text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">Go Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+{% endblock %}
