@@ -1,11 +1,18 @@
 from django.test import TestCase, override_settings
+from django.core.exceptions import ValidationError
 from django.urls import reverse
 from .models import Profile, Project
+from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.messages import get_messages
 from tempfile import TemporaryDirectory
 from PIL import Image
 from io import BytesIO
+import json
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 
 class BaseTestWithTempMedia(TestCase):
@@ -22,7 +29,7 @@ class BaseTestWithTempMedia(TestCase):
         cls.temp_media_dir.cleanup() # Cleanup the temporary directory
         super().tearDownClass()
 
-
+# Main Page
 class MainPageViewTests(BaseTestWithTempMedia):
 
     def setUp(self):
@@ -87,6 +94,7 @@ class MainPageViewTests(BaseTestWithTempMedia):
         response = self.client.get(reverse('home/main_page'))
         self.assertContains(response, 'My Name')
  
+# ProjectView
 
 class ProjectListViewTests(BaseTestWithTempMedia):
 
@@ -124,6 +132,7 @@ class ProjectListViewTests(BaseTestWithTempMedia):
         response = self.client.get(reverse('home/projects'))
         self.assertIn(project, response.context['projects'])
 
+#ProfileModel
 
 class ProfileModelTests(BaseTestWithTempMedia):
 
@@ -151,12 +160,20 @@ class ProfileModelTests(BaseTestWithTempMedia):
     def test_profile_creation_with_profile_image(self):
         self.assertTrue(self.profile.profile_image)
 
+    def test_profile_invalid_image_upload(self):
+        invalid_image = SimpleUploadedFile("test_image.txt", b"Invalid content", content_type="text/plain")
+        profile = Profile(name="Test", email="test@test.com", profile_image=invalid_image)
+        with self.assertRaises(ValidationError):
+            profile.clean()
+
     def test_profile_name_max_length(self):
         max_length = Profile._meta.get_field('name').max_length
         self.assertEqual(max_length, 100)
 
     def test_profile_str(self):
         self.assertEqual(str(self.profile), "Testi mies")
+
+#ProjectModel
 
 class ProjectModelTests(BaseTestWithTempMedia):
 
@@ -182,6 +199,7 @@ class ProjectModelTests(BaseTestWithTempMedia):
     def test_project_str(self):
         self.assertEqual(str(self.project), "Project1")
 
+#ContactForm
 
 class ContactFormTests(BaseTestWithTempMedia):
 
@@ -194,11 +212,9 @@ class ContactFormTests(BaseTestWithTempMedia):
         response = self.client.post(reverse('contact'), data)
 
         # Check for redirect after successful form submission
-        self.assertRedirects(response, '/#contact')
+        self.assertEqual(response.status_code, 200)
 
-        storage = get_messages(response.wsgi_request)
-        message = list(storage)[0]
-        self.assertEqual(str(message), "Your message has been successfully sent. I'll get back to you soon!")
+        self.assertEqual(response.json()['message'], "Thanks for contacting me!")
     
     def test_contact_form_with_invalid_data(self):
         data = {
@@ -208,21 +224,61 @@ class ContactFormTests(BaseTestWithTempMedia):
         }
         response = self.client.post(reverse('contact'), data)
 
-        self.assertFormError(response, 'form', 'name', 'This field is required.')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('This field is required.', response.json()['errors']['name'])
 
+    def test_contact_form_sends_email(self):
+        data = {
+            'name': 'Testi Mies',
+            'email': 'Testi@testi.fi',
+            'message': 'Hello there!',
+        }
+        response = self.client.post(reverse('contact'), data)
 
+        # Check if an email was sent
+        self.assertEqual(len(mail.outbox), 1)
 
-    # 2. Test the contact form with valid data
-    # Test submitting the contact form with valid data and ensure it is processed correctly (e.g., redirects to success page).
+        # Check email content and recipients
+        email = mail.outbox[0]
+        self.assertEqual(email.subject, "Contact Form Submission from Testi Mies")
+        self.assertEqual(email.body, "Hello there!")
+        self.assertEqual(email.from_email, 'Testi@testi.fi')
 
-    # 3. Test the contact form with invalid data
-    # Test submitting the contact form with invalid or missing data and ensure appropriate validation errors are displayed.
+    def test_contact_form_email_error(self):
+        data = {
+            'name': '',
+            'email': 'Testi@testi.fi',
+            'message': 'Hello there!',
+        }
+        response = self.client.post(reverse('contact'), data)
+        # Check if no email was sent (form is invalid)
+        self.assertEqual(len(mail.outbox), 0)
 
-    # 4. Test the contact form redirects after successful submission
-    # Test that after submitting the form with valid data, the user is redirected to a success page.
+    def test_empty_required_fields(self):
+        data = {
+            'name': '', 
+            'email': 'testi@testi.fi',
+            'message': 'Hello there!',
+        }
+        response = self.client.post(reverse('contact'), data)
 
-    # 5. Test if an email is sent on form submission (if applicable)
-    # Test that when the form is submitted successfully, an email is sent (for example, to the admin email).
+        self.assertEqual(response.status_code, 400)
+        response_data = json.loads(response.content)
 
-    # 6. Test empty fields (Required field validation)
-    # Test that when the form is submitted with empty required fields, validation errors are shown.
+        self.assertIn('name', response_data['errors'])
+        self.assertEqual(response_data['errors']['name'][0], 'This field is required.')
+
+    def test_ajax_error_message(self):
+        # Test the behavior of AJAX error messages (e.g., for invalid form submission)
+        response = self.client.post(reverse('contact'), {'name': '', 'email': 'invalidemail', 'message': 'Hello'})
+        
+        self.assertEqual(response.status_code, 400)
+
+        response_data = json.loads(response.content)
+        # Check that the error for the 'name' field is present
+        self.assertIn('name', response_data['errors'])
+        self.assertEqual(response_data['errors']['name'][0], 'This field is required.')
+
+        # Check if the error for the 'email' field is present
+        self.assertIn('email', response_data['errors'])
+        self.assertEqual(response_data['errors']['email'][0], 'Enter a valid email address.')
