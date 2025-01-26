@@ -8,23 +8,43 @@
             </div>
         {% endfor %}
     </div>
-{% endif %}
+    {% endif %}
     <!-- Name -->
     <div class="w-full">
         <label for="name" class="text-sm  font-semibold">Name</label>
-        <input id="name" name="name" class="w-full h-12 mt-4 px-4 rounded-lg bg-amber-50 " type="text" placeholder="Enter Your Name">
+        <input id="name" name="name" class="w-full h-12 mt-4 px-4 rounded-lg bg-amber-50 " type="text" placeholder="Enter Your Name" value="{{ form.name.value|default:'' }}">
+        {% if form.name.errors %}
+            <div class="field-errors text-red-600 mt-2">
+                {% for error in form.name.errors %}
+                    <p class="error">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
     <!-- Email -->
     <div class="w-full">
         <label class="text-sm  font-semibold" for="email">Email</label>
-        <input  id="email" name="email" class="w-full h-12 mt-4 px-4 rounded-lg bg-amber-50 " type="email" placeholder="Enter Your Email">
+        <input  id="email" name="email" class="w-full h-12 mt-4 px-4 rounded-lg bg-amber-50 " type="email" placeholder="Enter Your Email" value="{{ form.email.value|default:'' }}" required="required">
+        {% if form.email.errors %}
+            <div class="field-errors text-red-600 mt-2">
+                {% for error in form.email.errors %}
+                    <p class="error">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
     <!-- message -->
     <div class="w-full">
         <label class="text-sm  font-semibold" for="message">Message</label>
-        <textarea name="message" id="message" class="w-full h-32 mt-4 px-4 rounded-lg bg-amber-50 " placeholder="Enter Your Message"></textarea>
+        <textarea name="message" id="message" class="w-full h-32 mt-4 px-4 rounded-lg bg-amber-50 " placeholder="Enter Your Message" required="required">{{ form.message.value|default:'' }}</textarea>
+        {% if form.message.errors %}
+            <div class="field-errors text-red-600 mt-2">
+                {% for error in form.message.errors %}
+                    <p class="error">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
-
     <button type="submit" class="bg-navy-blue text-white font-bold px-12 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300 ">SUBMIT</button>
 
 </form>

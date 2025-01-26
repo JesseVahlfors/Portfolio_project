@@ -57,27 +57,31 @@ class ProjectDetailView(DetailView):
         return get_object_or_404(Project, slug=self.kwargs['slug'])
     
 def contact(request):
-        if request.method == 'POST':
-            form = ContactForm(request.POST)
-            if form.is_valid():
-                name = form.cleaned_data['name']
-                email = form.cleaned_data['email']
-                message = form.cleaned_data['message']
-                messages.success(request, "Your message has been successfully sent. I'll get back to you soon!")
-
-                send_mail(
-                    f"Contact Form Submission from {name}",
-                    message,
-                    email,
-                    [env('MY_EMAIL')],
-                    fail_silently=False,
-                )
-
-                return HttpResponseRedirect('/#contact')
-            else:
-                messages.error(request, 'There was an issue with the submission. Please check your inputs and try again.')
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        print("POST Data:", request.POST)
+        if form.is_valid():
+            print("Form is valid")
+            name = form.cleaned_data['name'].strip()
+            email = form.cleaned_data['email'].strip()
+            message = form.cleaned_data['message'].strip()
             
+            send_mail(
+                f"Contact Form Submission from {name}",
+                message,
+                email,
+                [env('MY_EMAIL')],
+                fail_silently=False,
+            )
+
+            messages.success(request, "Your message has been successfully sent. I'll get back to you soon!")
+            return HttpResponseRedirect('/#contact')
         else:
-            form = ContactForm()
-        return render(request, 'home/main_page.html', {'form': form})
+            print("Form errors:", form.errors)
+            messages.error(request, 'There was an issue with the submission. Please check your inputs and try again.')
+            return HttpResponseRedirect('/#contact')
+    else:
+        form = ContactForm()
+    
+    return render(request, 'home/main_page.html', {'form': form})
     

@@ -1,5 +1,5 @@
 from django.db import models
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import os
 from django.utils.text import slugify
 import bleach
@@ -34,10 +34,14 @@ class Profile(models.Model):
         super(Profile, self).save(*args, **kwargs)
 
         if self.profile_image:
-            if self.profile_image.path:
-                img = Image.open(self.profile_image.path)
-                img.thumbnail((240, 240))
-                img.save(self.profile_image.path)
+            try:
+                if self.profile_image.path and os.path.exists(self.profile_image.path):
+                    img = Image.open(self.profile_image.path)
+                    img.thumbnail((240, 240))
+                    img.save(self.profile_image.path)
+            except (UnidentifiedImageError, OSError) as e:
+                # Handle the exception, log it, or ignore it during tests
+                print(f"Error resizing image: {e}")
 
     def __str__(self):
         return self.name
@@ -60,7 +64,7 @@ class Project(models.Model):
     def save(self, *args, **kwargs):
         if self.description:
             self.description = self.clean_html(self.description)
-            
+
         if not self.slug:
             base_slug = slugify(self.title)
             slug = base_slug
