@@ -1,4 +1,6 @@
 from django.db import models
+from PIL import Image
+import os
 
 class Profile(models.Model):
     name = models.CharField(max_length=100)
@@ -10,6 +12,22 @@ class Profile(models.Model):
     skills = models.TextField(null=True)
     linkedin = models.URLField(null=True)
     github = models.URLField(null=True)
+
+    def save(self, *args, **kwargs):
+        if self.profile_image:
+            if self.pk:
+                old_profile = Profile.objects.get(pk=self.pk)
+                if old_profile.profile_image and old_profile.profile_image != self.profile_image:
+                    if os.path.isfile(old_profile.profile_image.path):
+                        os.remove(old_profile.profile_image.path)
+
+        super(Profile, self).save(*args, **kwargs)
+
+        if self.profile_image:
+            if self.profile_image.path:
+                img = Image.open(self.profile_image.path)
+                img.thumbnail((240, 240))
+                img.save(self.profile_image.path)
 
     def __str__(self):
         return self.name

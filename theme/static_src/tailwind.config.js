@@ -57,6 +57,7 @@ module.exports = {
             },
             backgroundImage: {
                 'main_bg': "url('/static/images/bg3.jpg')",
+                'mini_bg': "url('/static/images/bg-mini.jpg')",
             },
             maxWidth: {
                 '60': '60rem',
