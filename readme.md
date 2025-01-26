@@ -1,7 +1,7 @@
 # Portfolio Website
 
 This project is a personal portfolio website built to showcase my past and current projects. It provides an accessible and easy-to-navigate platform where visitors can explore my work and understand my development skills.
-It is heavily inspired by Ram Maheshwari's Dopefolio project. Check him out at https://www.rammaheshwari.com/
+The Design is heavily inspired by Ram Maheshwari's Dopefolio project. Check him out at https://www.rammaheshwari.com/
 
 ## Table of Contents
 
