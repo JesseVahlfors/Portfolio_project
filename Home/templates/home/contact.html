@@ -1,22 +1,21 @@
 <form method="post" action="{% url 'contact' %}" class="flex flex-col items-end gap-4 w-10/12 shadow-lg p-8 rounded-lg bg-white text-gray-600 mt-20">
     {% csrf_token %}
-    {% if success %}
-        <p>{{ success }}</p>
-    {% endif %}
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
+    <!-- Name -->
     <div class="w-full">
         <label for="name" class="text-sm  font-semibold">Name</label>
         <input id="name" name="name" class="w-full h-12 mt-4 px-4 rounded-lg bg-amber-50 " type="text" placeholder="Enter Your Name">
     </div>
+    <!-- Email -->
     <div class="w-full">
         <label class="text-sm  font-semibold" for="email">Email</label>
         <input  id="email" name="email" class="w-full h-12 mt-4 px-4 rounded-lg bg-amber-50 " type="email" placeholder="Enter Your Email">
     </div>
+    <!-- message -->
     <div class="w-full">
         <label class="text-sm  font-semibold" for="message">Message</label>
         <textarea name="message" id="message" class="w-full h-32 mt-4 px-4 rounded-lg bg-amber-50 " placeholder="Enter Your Message"></textarea>
     </div>
+
     <button type="submit" class="bg-navy-blue text-white font-bold px-12 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300 ">SUBMIT</button>
+
 </form>

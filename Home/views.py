@@ -18,6 +18,7 @@ class MainView(TemplateView):
         context["projects"] = Project.objects.all()[:3]
         if Profile.objects.first() and Profile.objects.first().skills:
             context["skills"] = Profile.objects.first().skills.split(',')
+        context["is_main_page"] = True
         return context
     
    
@@ -42,6 +43,7 @@ class ProjectDetailView(DetailView):
         context =  super().get_context_data(**kwargs)
         project = context['project']
         context["profile"] = Profile.objects.first()
+        context["is_main_page"] = False
 
         skills = project.skills
         if skills:

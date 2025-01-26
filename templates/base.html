@@ -2,7 +2,7 @@
 {% load static tailwind_tags %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html class="scroll-smooth" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,10 +36,17 @@
                 </h1>
                 </a>
                 <nav class="gap-16 text-md font-bold hidden md:flex tracking-wider">
-                    <a href="#home">HOME</a>
-                    <a href="#about">ABOUT</a>
-                    <a href="#projects">PROJECTS</a>
-                    <a href="#contact">CONTACT</a>
+                    {% if is_main_page %}
+                        <a href="#home">HOME</a>
+                        <a href="#about">ABOUT</a>
+                        <a href="#projects">PROJECTS</a>
+                        <a href="#contact">CONTACT</a>
+                    {% else %}
+                        <a href="{% url 'home/main_page' %}#home">HOME</a>
+                        <a href="{% url 'home/main_page' %}#about">ABOUT</a>
+                        <a href="{% url 'home/main_page' %}#projects">PROJECTS</a>
+                        <a href="{% url 'home/main_page' %}#contact">CONTACT</a>
+                    {% endif %}
                 </nav>
             </section>
             <div class="relative md:hidden">
@@ -58,11 +65,17 @@
                         class="absolute right-0 z-10 w-screen origin-top-right rounded-md bg-white shadow-lg focus:outline-none" 
                         role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                         <div class="py-1 hidden" role="none" id="menu-content">
-                            <!-- Active: "bg-gray-100 text-gray-900 outline-none", Not Active: "text-gray-700" -->
-                            <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="#home">Home</a>
-                            <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="#about">About</a>
-                            <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="#projects">Projects</a>
-                            <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="#contact">Contact</a>
+                            {% if is_main_page %}
+                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="#home">Home</a>
+                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="#about">About</a>
+                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="#projects">Projects</a>
+                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="#contact">Contact</a>
+                            {% else %}
+                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#home">Home</a>
+                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#about">About</a>
+                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#projects">Projects</a>
+                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#contact">Contact</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
