@@ -94,4 +94,28 @@
     ### Next Steps
 
     -Next i need to make basic styling to the home, projects and about me templates.
-    
+
+## Journal Entry - 2025-01-19
+
+    ### Tasks Done
+
+    - Styled the main_page
+
+    - Implemented the email contact form 
+
+    - Added a profile image resizing to reduce image size. Helps the page load faster not having a huge high resolution picture rendering in a small element.
+
+    - Added some missing descriptions and aria labels to html elements to stisfy some lighthouse accessibility and SEO suggestions. 
+
+    ### Challenges
+
+    - While implementing the email form had some struggles on making it all work like it should. in the end it was mostly a missing action on the form html tag and the address i needed the page to return to after submitting the form.
+
+    - Also styling has taken time exploring how to make eveything look fine.
+
+    ### Next Steps
+
+    - I need to think about if i want to improve the email contact form by making it asynchronous so it wouldnt trigger a full page reload. It would need a ajax implementation and a bunch of code. 
+    I'll add it as a toDo and think about it after get the full website built.
+
+    - I need to make the project detail page next. this should be the last view i need for now. I have a projectlist view as well, but i wont need that until i have more than 4 projects.
