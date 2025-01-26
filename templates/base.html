@@ -23,7 +23,7 @@
     <header class="bg-white fixed w-full z-50 px-5 md:px-14 py-2 md:py-4 shadow-md shadow-amber-200/20 ">
         <div class="flex justify-between items-center">
             {%if profile.profile_image %}
-            <img class="w-10 md:w-14 rounded-full" src="{{ profile.profile_image.url }}" alt="{{ profile.name }}">
+            <img class="w-10 h-10 md:w-14 md:h-14 rounded-full" src="{{ profile.profile_image.url }}" alt="{{ profile.name }}">
             {% endif %}
             <section class="flex items-center justify-between w-full ml-2 md:ml-4">
                 <a href="{% url 'home/main_page' %}">
@@ -85,7 +85,7 @@
     <main class="flex flex-col flex-grow min-h-screen" >
         {% block content %}{% endblock %}
     </main>
-    <footer class="text-white bg-black px-5 h-full sticky b-0">
+    <footer class="text-white bg-black px-5 h-full sticky b-0 ">
         <div class="py-16 md:px-6 md:flex md:justify-between">
             <div class="pb-12 md:order-2">
                 <h2 class="pb-5 text-xl font-bold">SOCIAL</h2>
@@ -114,14 +114,16 @@
                 <p class="text-sm ">{{ profile.introduction }}</p>
             </div>
         </div>
-        <p class="text-center text-xs border-t-[1px] border-gray-700 py-5">Heavily inspired by <a class="underline" href="https://www.rammaheshwari.com/">RAM MAHESWARI</a>'s Dopefolio</p>
-        <p class="text-center text-xs border-gray-700">&copy; 
-            Copyright 2025. Made by
-            {%if profile.name %}
-                <span class="underline font-semibold">{{ profile.name }}</span>
-            {% else %}
-                My Name
-            {% endif %}</p>
+        <div class="flex flex-col items-center gap-2 py-10 border-t-[1px] border-gray-700">
+            <p class="text-center text-xs">Heavily inspired by <a class="underline" href="https://www.rammaheshwari.com/">RAM MAHESWARI</a>'s Dopefolio</p>
+            <p class="text-center text-xs">&copy; 
+                Copyright 2025. Made by
+                {%if profile.name %}
+                    <span class="underline font-semibold">{{ profile.name }}</span>
+                {% else %}
+                    My Name
+                {% endif %}</p>
+        </div>
     </footer>
     <script src="/static/js/dropdown.js" defer></script>
 </body>
