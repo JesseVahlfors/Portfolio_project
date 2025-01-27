@@ -51,6 +51,47 @@
         "presentation": {
           "reveal": "always"
         }
-      }
+      },
+      {
+        "label": "Collect Static",
+        "type": "shell",
+        "command": "python manage.py collectstatic",
+        "problemMatcher": [],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      },
+      {
+        "label": "Tailwind Build",
+        "type": "shell",
+        "command": "python manage.py tailwind build",
+        "problemMatcher": [],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      },
+      {
+        "label": "Migrate Database",
+        "type": "shell",
+        "command": "python manage.py migrate",
+        "problemMatcher": [],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      },
+      {
+        "label": "Deployment Commands",
+        "type": "shell",
+        "command": "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py tailwind build",
+        "problemMatcher": [],
+        "group": "build",
+        "presentation": {
+          "reveal": "always"
+        }
+      },
+
     ]
   }

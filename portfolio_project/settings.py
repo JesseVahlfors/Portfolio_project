@@ -49,8 +49,6 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'tailwind',
     'theme',
-    'debug_toolbar',
-    'django_browser_reload',
 ]
 
 TAILWIND_APP_NAME = 'theme'
@@ -65,10 +63,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.gzip.GZipMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
+    'django.middleware.gzip.GZipMiddleware',  
 ]
+
+if DEBUG: # only add debug toolbar when in debug mode
+    INSTALLED_APPS.append('debug_toolbar')
+    INSTALLED_APPS.append('django_browser_reload')
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    MIDDLEWARE.append('django_browser_reload.middleware.BrowserReloadMiddleware')
 
 if os.getenv('RENDER') == 'true':  # Check if running on Render
     CORS_ALLOWED_ORIGINS = [
@@ -183,12 +185,20 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+# TailwindCSS settings
+
+if DEBUG:
+    NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"  
+else:
+    NPM_BIN_PATH = None  
+
 
 #Email settings
+if os.getenv('RENDER') == 'true':  # Check if running on Render
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
@@ -219,3 +229,15 @@ LOGGING = {
         },
     },
 }
+
+#Additional security settings
+
+if os.getenv('RENDER') == 'true':
+    SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
+    SESSION_COOKIE_SECURE = True  # Ensure secure cookies
+    CSRF_COOKIE_SECURE = True  # Ensure secure CSRF cookies
+
+    # Set HSTS (HTTP Strict Transport Security) settings for secure HTTPS connections
+    SECURE_HSTS_SECONDS = 31536000  # One year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Enforce HSTS on subdomains
+    SECURE_HSTS_PRELOAD = True  # Preload HSTS policy to browsers
