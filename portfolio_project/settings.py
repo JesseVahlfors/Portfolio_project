@@ -74,7 +74,7 @@ if DEBUG: # only add debug toolbar when in debug mode
 
 if os.getenv('RENDER') == 'true':  # Check if running on Render
     CORS_ALLOWED_ORIGINS = [
-        'portfolio-project-jn1z.onrender.com',
+        'https://portfolio-project-jn1z.onrender.com',
     ]
 else:
     CORS_ALLOWED_ORIGINS = [
