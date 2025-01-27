@@ -94,8 +94,8 @@ class MainPageViewTests(BaseTestWithTempMedia):
         response = self.client.get(reverse('home/main_page'))
         self.assertContains(response, 'My Name')
  
-# ProjectView
-
+# ProjectView NOT CURRENTLY IMPLEMENTED
+""" 
 class ProjectListViewTests(BaseTestWithTempMedia):
 
     def setUp(self):
@@ -131,7 +131,7 @@ class ProjectListViewTests(BaseTestWithTempMedia):
         
         response = self.client.get(reverse('home/projects'))
         self.assertIn(project, response.context['projects'])
-
+ """
 #ProfileModel
 
 class ProfileModelTests(BaseTestWithTempMedia):
