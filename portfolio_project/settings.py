@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'Home.apps.HomeConfig',
+    'home.apps.HomeConfig',
     'tailwind',
     'theme',
 ]
