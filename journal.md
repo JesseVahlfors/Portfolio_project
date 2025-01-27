@@ -95,7 +95,7 @@
 
     -Next i need to make basic styling to the home, projects and about me templates.
 
-## Journal Entry - 2025-01-19
+## Journal Entry - 2025-01-25
 
     ### Tasks Done
 

@@ -12,6 +12,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=15, blank = True, null=True)
     profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
     introduction = models.TextField(null=True)
+    about_me_intro = models.TextField(null=True)
     skills = models.TextField(null=True)
     linkedin = models.URLField(null=True)
     github = models.URLField(null=True)

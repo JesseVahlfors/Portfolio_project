@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import RedirectView
 from .views import ProjectDetailView, MainView, ProjectsView, contact
 from django.conf import settings
 from django.conf.urls.static import static
@@ -6,9 +7,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', MainView.as_view(), name='home/main_page'),
-    path('projects/', ProjectsView.as_view(), name='home/projects'),
     path('contact/', contact, name='contact'),
-    path('<slug:slug>/', ProjectDetailView.as_view(), name='home/project_detail')
+    path('projects/', RedirectView.as_view(url='/', permanent=True)),
+    #path('projects/', ProjectsView.as_view(), name='home/projects'), 
+    path('projects/<slug:slug>/', ProjectDetailView.as_view(), name='home/project_detail'),
 ]
     
 if settings.DEBUG:

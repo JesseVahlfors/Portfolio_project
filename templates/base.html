@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Welcome to my portfolio. I am a web developer with expertise in front-end and back-end technologies. Browse my projects and skills to see what I can create.">
+    <meta name="description" content="This is my software development portfolio">
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <script src="/static/js/dropdown.js" defer></script>
     {% block scripts %}{% endblock %}
@@ -120,11 +120,7 @@
             <p class="text-center text-xs">Heavily inspired by <a class="underline" href="https://www.rammaheshwari.com/">RAM MAHESWARI</a>'s Dopefolio</p>
             <p class="text-center text-xs">&copy; 
                 Copyright 2025. Made by
-                {%if profile.name %}
-                    <span class="underline font-semibold">{{ profile.name }}</span>
-                {% else %}
-                    My Name
-                {% endif %}</p>
+                    <span class="underline font-semibold">Jesse Vahlfors</span></p>
         </div>
     </footer>
     
