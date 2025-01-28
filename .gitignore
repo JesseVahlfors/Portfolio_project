@@ -173,3 +173,6 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Allow css/dist to be committed
+!staticfiles/css/dist/
