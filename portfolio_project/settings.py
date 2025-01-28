@@ -164,8 +164,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
+if os.getenv('RENDER') == 'True':
+    STATIC_ROOT = '/opt/render/project/src/staticfiles'
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     BASE_DIR / "theme/static",
 ]
