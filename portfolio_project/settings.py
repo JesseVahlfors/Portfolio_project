@@ -187,12 +187,14 @@ if os.getenv('RENDER') == 'true':
 
     # Media files
     MEDIA_URL = f'https://{B2_CUSTOM_DOMAIN}/media/'
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    DEFAULT_FILE_STORAGE = "storages.backends.s3.S3Storage"
 
     # Additional settings
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
+
+    AWS_QUERYSTRING_AUTH = False
 
 else:
     MEDIA_URL = '/media/'
