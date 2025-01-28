@@ -32,7 +32,7 @@ DEBUG = env.bool('DEBUG', default=False)
 
 
 if os.getenv('RENDER') == 'true':  # Check if running on Render
-    ALLOWED_HOSTS = ['portfolio-project-jn1z.onrender.com']
+    ALLOWED_HOSTS = ['portfolio-project-jn1z.onrender.com', 'www.jessevahlfors.com']
 else:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -75,6 +75,7 @@ if DEBUG: # only add debug toolbar when in debug mode
 if os.getenv('RENDER') == 'true':  # Check if running on Render
     CORS_ALLOWED_ORIGINS = [
         'https://portfolio-project-jn1z.onrender.com',
+        'https://www.jessevahlfors.com',
     ]
 else:
     CORS_ALLOWED_ORIGINS = [
@@ -192,7 +193,7 @@ if os.getenv('RENDER') == 'true':
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
-    AWS_QUERYSTRING_AUTH = False
+
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
