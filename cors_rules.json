@@ -1,0 +1,10 @@
+[
+    {
+        "corsRuleName": "allowRender",
+        "allowedOrigins": ["https://portfolio-project-jn1z.onrender.com"],
+        "allowedHeaders": ["*"],
+        "allowedOperations": ["GET", "HEAD"],
+        "exposeHeaders": ["x-bz-file-name", "x-bz-content-sha1", "x-bz-info-src_last_modified_millis"],
+        "maxAgeSeconds": 3600
+    }
+]

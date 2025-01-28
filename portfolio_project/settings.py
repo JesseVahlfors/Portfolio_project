@@ -176,24 +176,23 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 #storage for media files
 
 if os.getenv('RENDER') == 'true':
-    # AWS S3 settings
-    AWS_ACCESS_KEY_ID = os.getenv('B2_APPLICATION_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('B2_APPLICATION_KEY')
-    AWS_STORAGE_BUCKET_NAME = os.getenv('B2_BUCKET_NAME')
-    AWS_S3_REGION_NAME = os.getenv('B2_REGION_NAME', 'us-west-2')  # Default region
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.backblazeb2.com'
-    AWS_DEFAULT_ACL = None  # Ensure files are private by default
-    AWS_S3_ENDPOINT_URL ='s3.eu-central-003.backblazeb2.com'
+    # Backblaze B2 settings
+    B2_APPLICATION_KEY_ID = os.getenv('B2_APPLICATION_KEY_ID')
+    B2_APPLICATION_KEY = os.getenv('B2_APPLICATION_KEY')
+    B2_BUCKET_NAME = os.getenv('B2_BUCKET_NAME')
+    B2_REGION_NAME = os.getenv('B2_REGION_NAME', 'us-west-2')  # Default region
+    B2_CUSTOM_DOMAIN = f'{B2_BUCKET_NAME}.s3.{B2_REGION_NAME}.backblazeb2.com'
+    B2_ENDPOINT_URL = f'https://s3.{B2_REGION_NAME}.backblazeb2.com'
 
     # Media files
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+    MEDIA_URL = f'https://{B2_CUSTOM_DOMAIN}/media/'
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
     # Additional settings
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
-    AWS_QUERYSTRING_AUTH = True  # Set to False if your S3 bucket is public
+    AWS_QUERYSTRING_AUTH = True
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -254,7 +253,7 @@ LOGGING = {
 
 #Additional security settings
 
-if os.getenv('RENDER') == 'true':
+if os.getenv('RENDER') == 'false':
     SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
     SESSION_COOKIE_SECURE = True  # Ensure secure cookies
     CSRF_COOKIE_SECURE = True  # Ensure secure CSRF cookies
@@ -263,3 +262,14 @@ if os.getenv('RENDER') == 'true':
     SECURE_HSTS_SECONDS = 31536000  # One year
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Enforce HSTS on subdomains
     SECURE_HSTS_PRELOAD = True  # Preload HSTS policy to browsers
+
+#loggers
+import logging
+
+logger = logging.getLogger(__name__)
+
+# Log the AWS S3 settings
+logger.debug(f"B2_APPLICATION_KEY_ID: {B2_APPLICATION_KEY_ID}")
+logger.debug(f"B2_BUCKET_NAME: {B2_BUCKET_NAME}")
+logger.debug(f"B2_REGION_NAME: {B2_REGION_NAME}")
+logger.debug(f"B2_ENDPOINT_URL: {B2_ENDPOINT_URL}")
