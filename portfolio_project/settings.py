@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'tailwind',
     'theme',
+    'storages',
 ]
 
 
