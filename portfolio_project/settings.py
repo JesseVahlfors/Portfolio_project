@@ -181,7 +181,7 @@ if os.getenv('RENDER') == 'true':
     AWS_SECRET_ACCESS_KEY = os.getenv('B2_APPLICATION_KEY')
     AWS_STORAGE_BUCKET_NAME = os.getenv('B2_BUCKET_NAME')
     AWS_S3_REGION_NAME = os.getenv('B2_REGION_NAME', 'us-west-2')  # Default region
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.backblazeb2.com'
     AWS_DEFAULT_ACL = None  # Ensure files are private by default
     AWS_S3_ENDPOINT_URL ='s3.eu-central-003.backblazeb2.com'
 
