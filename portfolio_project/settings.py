@@ -163,17 +163,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-if os.getenv('RENDER') == 'true':
-    STATIC_ROOT = BASE_DIR / "staticfiles"
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     BASE_DIR / "theme/static",
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+if os.getenv('RENDER') == 'True':
+    # In production (on Render)
+    MEDIA_ROOT = '/opt/render/project/src/media'
+else:
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
