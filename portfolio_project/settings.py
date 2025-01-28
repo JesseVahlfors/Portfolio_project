@@ -188,7 +188,7 @@ if os.getenv('RENDER') == 'true':
 
     # Media files
     MEDIA_URL = f'https://{B2_CUSTOM_DOMAIN}/media/'
-    DEFAULT_FILE_STORAGE = "storages.backends.s3.S3Storage"
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
     # Additional settings
     AWS_S3_OBJECT_PARAMETERS = {
@@ -257,7 +257,7 @@ LOGGING = {
 
 #Additional security settings
 
-if os.getenv('RENDER') == 'false':
+if os.getenv('RENDER') == 'True':
     SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
     SESSION_COOKIE_SECURE = True  # Ensure secure cookies
     CSRF_COOKIE_SECURE = True  # Ensure secure CSRF cookies
@@ -267,13 +267,14 @@ if os.getenv('RENDER') == 'false':
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Enforce HSTS on subdomains
     SECURE_HSTS_PRELOAD = True  # Preload HSTS policy to browsers
 
+if os.getenv('RENDER') == 'true':
 #loggers
-import logging
+    import logging
 
-logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
 
-# Log the AWS S3 settings
-logger.debug(f"B2_APPLICATION_KEY_ID: {B2_APPLICATION_KEY_ID}")
-logger.debug(f"B2_BUCKET_NAME: {B2_BUCKET_NAME}")
-logger.debug(f"B2_REGION_NAME: {B2_REGION_NAME}")
-logger.debug(f"B2_ENDPOINT_URL: {B2_ENDPOINT_URL}")
+    # Log the AWS S3 settings
+    logger.debug(f"B2_APPLICATION_KEY_ID: {B2_APPLICATION_KEY_ID}")
+    logger.debug(f"B2_BUCKET_NAME: {B2_BUCKET_NAME}")
+    logger.debug(f"B2_REGION_NAME: {B2_REGION_NAME}")
+    logger.debug(f"B2_ENDPOINT_URL: {B2_ENDPOINT_URL}")
