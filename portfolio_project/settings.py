@@ -195,7 +195,7 @@ INTERNAL_IPS = [
 if DEBUG:
     NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"  
 else:
-    NPM_BIN_PATH = None  
+    NPM_BIN_PATH = '/usr/local/bin/npm'  
 
 
 #Email settings
