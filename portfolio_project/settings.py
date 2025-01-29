@@ -175,21 +175,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "theme/static",
 ]
 
-import boto3
-from botocore.config import Config
-
 STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-        "OPTIONS": {
-            "config": Config(
-                s3={
-                    'use_accelerate_endpoint': False,
-                    'use_dualstack_endpoint': False,
-                    'checksum_algorithm': None,
-                }
-            )
-        }
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
@@ -197,20 +185,26 @@ STORAGES = {
 }
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-#storage for media files
-
-
 # Backblaze B2 settings
 AWS_ACCESS_KEY_ID = os.getenv("B2_APPLICATION_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("B2_APPLICATION_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("B2_BUCKET_NAME")
-AWS_S3_REGION_NAME = os.getenv("B2_REGION_NAME", "us-west-002")  # Default to 'us-west-002'
+AWS_S3_REGION_NAME = os.getenv("B2_REGION_NAME", "us-west-002")
 AWS_S3_ENDPOINT_URL = f"https://s3.{AWS_S3_REGION_NAME}.backblazeb2.com"
-AWS_S3_ADDRESSING_STYLE = "virtual"  # Needed for B2
-AWS_QUERYSTRING_AUTH = False  # No signed URLs
+AWS_S3_ADDRESSING_STYLE = "virtual"
+AWS_QUERYSTRING_AUTH = False
 
+from boto3 import session
+from botocore.config import Config
 
+AWS_REQUEST_CHECKSUM_CALCULATION = os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED")
+AWS_RESPONSE_CHECKSUM_VALIDATION = os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED")
+
+boto3_session = session.Session()
+boto3_session._session.set_config_variable('s3', {
+    'checksum_calculation': AWS_REQUEST_CHECKSUM_CALCULATION,
+    'checksum_validation': AWS_RESPONSE_CHECKSUM_VALIDATION,
+})
 
 # Media files
 AWS_LOCATION = "media/"
