@@ -180,21 +180,21 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 #storage for media files
 
 # Backblaze B2 settings
-B2_APPLICATION_KEY_ID = os.getenv('B2_APPLICATION_KEY_ID')
-B2_APPLICATION_KEY = os.getenv('B2_APPLICATION_KEY')
-B2_BUCKET_NAME = os.getenv('B2_BUCKET_NAME')
-B2_REGION_NAME = os.getenv('B2_REGION_NAME', 'us-west-2')  # Default region
-B2_CUSTOM_DOMAIN = f'{B2_BUCKET_NAME}.s3.{B2_REGION_NAME}.backblazeb2.com'
-B2_ENDPOINT_URL = f'https://s3.eu-central-003.backblazeb2.com'
-
+access_key = os.getenv('B2_APPLICATION_KEY_ID')
+secret_key = os.getenv('B2_APPLICATION_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('B2_BUCKET_NAME')
+AWS_S3_REGION_NAME = os.getenv('B2_REGION_NAME', 'us-west-2')  # Default region
+AWS_S3_ENDPOINT = 's3.${AWS_S3_REGION_NAME}.backblazeb2.com'
+endpoint_url = f'https://{AWS_S3_ENDPOINT}'
 # Media files
-MEDIA_URL = 'https://portfolio-storage.s3.eu-central-003.backblazeb2.com/media/'
-DEFAULT_FILE_STORAGE = 'portfolio_project.storage_backends.BackblazeMediaStorage'
+MEDIA_URL = f'https://{AWS_S3_ENDPOINT}/media/'
+DEFAULT_FILE_STORAGE = "storages.backends.s3.S3Storage"
 
 # Additional settings
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
+signature_version = 's3'
 
 AWS_QUERYSTRING_AUTH = False
 
