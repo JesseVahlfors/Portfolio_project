@@ -175,9 +175,21 @@ STATICFILES_DIRS = [
     BASE_DIR / "theme/static",
 ]
 
+import boto3
+from botocore.config import Config
+
 STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "config": Config(
+                s3={
+                    'use_accelerate_endpoint': False,
+                    'use_dualstack_endpoint': False,
+                    'checksum_algorithm': None,
+                }
+            )
+        }
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
@@ -187,8 +199,7 @@ STORAGES = {
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 #storage for media files
-import boto3
-from botocore.config import Config
+
 
 # Backblaze B2 settings
 AWS_ACCESS_KEY_ID = os.getenv("B2_APPLICATION_KEY_ID")
@@ -199,13 +210,7 @@ AWS_S3_ENDPOINT_URL = f"https://s3.{AWS_S3_REGION_NAME}.backblazeb2.com"
 AWS_S3_ADDRESSING_STYLE = "virtual"  # Needed for B2
 AWS_QUERYSTRING_AUTH = False  # No signed URLs
 
-# Custom boto3 configuration to disable unsupported headers
-BOTO3_CONFIG = Config(
-    s3={
-        'use_accelerate_endpoint': False,
-        'use_dualstack_endpoint': False,
-    }
-)
+
 
 # Media files
 AWS_LOCATION = "media/"
@@ -214,8 +219,6 @@ AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/{AWS_LOCATION}"
 MEDIA_ROOT = "/media/"
 
-# Apply the custom boto3 configuration
-boto3.client('s3', config=BOTO3_CONFIG)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
