@@ -186,18 +186,21 @@ AWS_STORAGE_BUCKET_NAME = os.getenv('B2_BUCKET_NAME')
 AWS_S3_REGION_NAME = os.getenv('B2_REGION_NAME', 'us-west-2')  # Default region
 AWS_S3_ENDPOINT = f's3.{AWS_S3_REGION_NAME}.backblazeb2.com'
 AWS_S3_ENDPOINT_URL = f'https://{AWS_S3_ENDPOINT}'
+
+# Static files
+AWS_LOCATION = 'static'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT}/"
+
 # Media files
-MEDIA_URL = f'https://{AWS_S3_ENDPOINT}/media/'
-DEFAULT_FILE_STORAGE = "storages.backends.s3.S3Storage"
+MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT}/media/'
+DEFAULT_FILE_STORAGE = 'portfolio_project.storage_backends.MediaStorage'
 
 # Additional settings
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
-AWS_S3_SIGNATURE_VERSION = 's3'
-
-AWS_QUERYSTRING_AUTH = False
-
+AWS_QUERYSTRING_AUTH = False 
 
 
 # Default primary key field type
