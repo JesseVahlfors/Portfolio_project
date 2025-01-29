@@ -184,7 +184,7 @@ access_key = os.getenv('B2_APPLICATION_KEY_ID')
 secret_key = os.getenv('B2_APPLICATION_KEY')
 AWS_STORAGE_BUCKET_NAME = os.getenv('B2_BUCKET_NAME')
 AWS_S3_REGION_NAME = os.getenv('B2_REGION_NAME', 'us-west-2')  # Default region
-AWS_S3_ENDPOINT = 's3.${AWS_S3_REGION_NAME}.backblazeb2.com'
+AWS_S3_ENDPOINT = f's3.{AWS_S3_REGION_NAME}.backblazeb2.com'
 endpoint_url = f'https://{AWS_S3_ENDPOINT}'
 # Media files
 MEDIA_URL = f'https://{AWS_S3_ENDPOINT}/media/'
