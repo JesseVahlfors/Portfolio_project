@@ -4,6 +4,12 @@ from PIL import Image, UnidentifiedImageError
 import os
 from django.utils.text import slugify
 import bleach
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import logging
+from io import BytesIO
+logger = logging.getLogger("django")
+logger.debug("This is a test debug message for file uploads.")
 
 class Profile(models.Model):
     name = models.CharField(max_length=100)
@@ -32,27 +38,44 @@ class Profile(models.Model):
                 raise ValidationError("Invalid image file.")
 
     def save(self, *args, **kwargs):
+        logger.debug(f"Uploading file: {self.profile_image.name} using {default_storage}")
+        file_url = default_storage.url(self.profile_image.name)
+        logger.debug(f"File uploaded to: {file_url}")
+        
         if self.bio:
             self.bio = self.clean_html(self.bio)
 
-        if self.profile_image:
-            if self.pk:
-                old_profile = Profile.objects.get(pk=self.pk)
-                if old_profile.profile_image and old_profile.profile_image != self.profile_image:
-                    if os.path.isfile(old_profile.profile_image.path):
-                        os.remove(old_profile.profile_image.path)
+        if self.pk and self.profile_image:
+            old_profile = Profile.objects.get(pk=self.pk)
+            if old_profile.profile_image and old_profile.profile_image != self.profile_image:
+                if default_storage.exists(old_profile.profile_image.name):
+                    default_storage.delete(old_profile.profile_image.name)  # Delete old image from cloud storage
+
+        if default_storage.exists(self.profile_image.name):
+            logger.debug("File already exists in storage!")
+            
 
         super(Profile, self).save(*args, **kwargs)
 
         if self.profile_image:
             try:
-                if self.profile_image.path and os.path.exists(self.profile_image.path):
-                    img = Image.open(self.profile_image.path)
+                with default_storage.open(self.profile_image.name, 'rb') as f:
+                    img = Image.open(f)
                     img.thumbnail((240, 240))
-                    img.save(self.profile_image.path)
+
+                    # Save the resized image in memory
+                    buffer = BytesIO()
+                    img.save(buffer, format='JPEG')
+
+                    # Overwrite the existing image in storage
+                    default_storage.save(self.profile_image.name, ContentFile(buffer.getvalue()))
+
             except (UnidentifiedImageError, OSError) as e:
                 # Handle the exception, log it, or ignore it during tests
+                logger.error(f"Error resizing image: {e}")
                 print(f"Error resizing image: {e}")
+        
+        logger.debug(f"File uploaded to: {self.profile_image.url}")
 
     def __str__(self):
         return self.name

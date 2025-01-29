@@ -14,6 +14,7 @@ from pathlib import Path
 import environ
 import os
 import dj_database_url
+import logging
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -80,6 +81,7 @@ if os.getenv('RENDER') == 'true':  # Check if running on Render
     ]
 else:
     CORS_ALLOWED_ORIGINS = [
+        'http://localhost:8000',
         'http://localhost:8000',
         'http://127.0.0.1:9000',
     ]
@@ -177,29 +179,26 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 #storage for media files
 
-if os.getenv('RENDER') == 'true':
-    # Backblaze B2 settings
-    B2_APPLICATION_KEY_ID = os.getenv('B2_APPLICATION_KEY_ID')
-    B2_APPLICATION_KEY = os.getenv('B2_APPLICATION_KEY')
-    B2_BUCKET_NAME = os.getenv('B2_BUCKET_NAME')
-    B2_REGION_NAME = os.getenv('B2_REGION_NAME', 'us-west-2')  # Default region
-    B2_CUSTOM_DOMAIN = f'{B2_BUCKET_NAME}.s3.{B2_REGION_NAME}.backblazeb2.com'
-    B2_ENDPOINT_URL = f'https://s3.{B2_REGION_NAME}.backblazeb2.com'
+# Backblaze B2 settings
+B2_APPLICATION_KEY_ID = os.getenv('B2_APPLICATION_KEY_ID')
+B2_APPLICATION_KEY = os.getenv('B2_APPLICATION_KEY')
+B2_BUCKET_NAME = os.getenv('B2_BUCKET_NAME')
+B2_REGION_NAME = os.getenv('B2_REGION_NAME', 'us-west-2')  # Default region
+B2_CUSTOM_DOMAIN = f'{B2_BUCKET_NAME}.s3.{B2_REGION_NAME}.backblazeb2.com'
+B2_ENDPOINT_URL = f'https://s3.eu-central-003.backblazeb2.com'
 
-    # Media files
-    MEDIA_URL = f'https://{B2_CUSTOM_DOMAIN}/media/'
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# Media files
+MEDIA_URL = 'https://portfolio-storage.s3.eu-central-003.backblazeb2.com/media/'
+DEFAULT_FILE_STORAGE = 'portfolio_project.storage_backends.BackblazeMediaStorage'
 
-    # Additional settings
-    AWS_S3_OBJECT_PARAMETERS = {
-        'CacheControl': 'max-age=86400',
-    }
+# Additional settings
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
 
-    AWS_QUERYSTRING_AUTH = False
+AWS_QUERYSTRING_AUTH = False
 
-else:
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -238,19 +237,49 @@ EMAIL_TIMEOUT = 30
 
 ADMINS = [('Admin', env('MY_EMAIL'))]  # List of admin email addresses
 
+#Logging settings
+
+import boto3
+boto3.set_stream_logger(name="boto3", level=logging.DEBUG)
+
+logging.basicConfig(level=logging.DEBUG)
+
 LOGGING = {
     'version': 1,
+    "disable_existing_loggers": False,
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',  # Log errors only
             'class': 'django.utils.log.AdminEmailHandler',
         },
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": "file_uploads.log",
+            "formatter": "detailed",
+        },
+    },
+    'formatters': {
+        "detailed": {
+            "format": "{asctime} {levelname} {name} {message}",
+            "style": "{",
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',  # Only send error-level logs to admins
+            'handlers': ['mail_admins', 'file'],
+            'level': 'DEBUG' if DEBUG else 'ERROR',  # Only send error-level logs to admins
             'propagate': True,
+        },
+        "boto3": {  # Logs B2 API calls
+            "handlers": ["file"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+        "storages.backends.s3boto3": {  # Logs django-storages operations
+            "handlers": ["file"],
+            "level": "DEBUG",
+            "propagate": False,
         },
     },
 }
@@ -267,14 +296,3 @@ if os.getenv('RENDER') == 'True':
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Enforce HSTS on subdomains
     SECURE_HSTS_PRELOAD = True  # Preload HSTS policy to browsers
 
-if os.getenv('RENDER') == 'true':
-#loggers
-    import logging
-
-    logger = logging.getLogger(__name__)
-
-    # Log the AWS S3 settings
-    logger.debug(f"B2_APPLICATION_KEY_ID: {B2_APPLICATION_KEY_ID}")
-    logger.debug(f"B2_BUCKET_NAME: {B2_BUCKET_NAME}")
-    logger.debug(f"B2_REGION_NAME: {B2_REGION_NAME}")
-    logger.debug(f"B2_ENDPOINT_URL: {B2_ENDPOINT_URL}")
