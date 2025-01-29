@@ -166,8 +166,56 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
+from boto3 import session
+from botocore.config import Config
 
+if os.getenv('RENDER') == 'true':
+    # Production settings (Render)
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_ACCESS_KEY_ID = os.getenv("B2_APPLICATION_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.getenv("B2_APPLICATION_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.getenv("B2_BUCKET_NAME")
+    AWS_S3_REGION_NAME = os.getenv("B2_REGION_NAME", "us-west-002")
+    AWS_S3_ENDPOINT_URL = f"https://s3.{AWS_S3_REGION_NAME}.backblazeb2.com"
+    AWS_S3_ADDRESSING_STYLE = "virtual"
+    AWS_QUERYSTRING_AUTH = False
+
+    AWS_REQUEST_CHECKSUM_CALCULATION = os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED")
+    AWS_RESPONSE_CHECKSUM_VALIDATION = os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED")
+
+    boto3_session = session.Session()
+    boto3_session._session.set_config_variable('s3', {
+        'checksum_calculation': AWS_REQUEST_CHECKSUM_CALCULATION,
+        'checksum_validation': AWS_RESPONSE_CHECKSUM_VALIDATION,
+    })
+
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+else:
+    # Local development settings
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.1/howto/static-files/
+
+STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -175,43 +223,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "theme/static",
 ]
 
-STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
-
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-# Backblaze B2 settings
-AWS_ACCESS_KEY_ID = os.getenv("B2_APPLICATION_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("B2_APPLICATION_KEY")
-AWS_STORAGE_BUCKET_NAME = os.getenv("B2_BUCKET_NAME")
-AWS_S3_REGION_NAME = os.getenv("B2_REGION_NAME", "us-west-002")
-AWS_S3_ENDPOINT_URL = f"https://s3.{AWS_S3_REGION_NAME}.backblazeb2.com"
-AWS_S3_ADDRESSING_STYLE = "virtual"
-AWS_QUERYSTRING_AUTH = False
-
-from boto3 import session
-from botocore.config import Config
-
-AWS_REQUEST_CHECKSUM_CALCULATION = os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED")
-AWS_RESPONSE_CHECKSUM_VALIDATION = os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED")
-
-boto3_session = session.Session()
-boto3_session._session.set_config_variable('s3', {
-    'checksum_calculation': AWS_REQUEST_CHECKSUM_CALCULATION,
-    'checksum_validation': AWS_RESPONSE_CHECKSUM_VALIDATION,
-})
-
-# Media files
-AWS_LOCATION = "media/"
-AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
-
-MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/{AWS_LOCATION}"
-MEDIA_ROOT = "/media/"
 
 
 # Default primary key field type

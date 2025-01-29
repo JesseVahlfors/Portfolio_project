@@ -8,7 +8,7 @@
         <!-- Title and Description Section -->
         <section class="relative w-full md:max-h-120 bg-main_bg bg-cover flex flex-col gap-12 items-center justify-center py-60">
             <h1 class="text-6xl text-center font-bold mb-6 px-8 uppercase">{{ project.title }}</h1>
-            <p class="text-xl text-center px-8 mb-10 max-w-60">{{ project.short_description }}</p>
+            <p class="text-xl text-center px-8 mb-10 max-w-60">This page contains the case study of my {{project.title}}, which includes the Project Overview, Technologies Used, and plans for future updates to enhance functionality and features.</p>
             {% if project.link %}
                 <a href="{{ project.link }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">LIVE LINK</a>
             {% elif project.project_github %}
@@ -17,9 +17,9 @@
         </section>
 
         <!-- Project Details Section -->
-        <section class="w-11/12 max-w-5xl bg-white px-8 py-20 flex flex-col gap-32 items-center">
+        <section class="md:w-11/12 max-w-5xl bg-white md:px-8 px-4 py-20 flex flex-col gap-32 items-center">
             <!-- Project Image -->
-            <div class="flex justify-center w-full shadow-lg">
+            <div class="flex justify-center w-full shadow-[0px_0px_20px_4px] shadow-amber-600/20">
                 {% if project.image %}
                     <img src="{{ project.image.url }}" alt="{{ project.title }}" class="rounded-md max-h-40 object-cover ">
                 {% else %}
@@ -28,7 +28,7 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="w-10/12">
+            <div class="md:w-10/12">
                 <!-- Project Overview -->
                 <div class="flex flex-col gap-16">
                     <!-- Overview -->
@@ -52,14 +52,14 @@
                     <!-- See Live -->
                     <div>
                         <h2 class="text-2xl font-bold mb-4">See Live</h2>
-                        <div class="flex gap-8">
+                        <div class="flex md:gap-8 gap-4">
                             {% if project.link %}
-                                <a href="{{ project.link }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">LIVE LINK</a>
+                                <a href="{{ project.link }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold md:px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">LIVE LINK</a>
                             {% endif %}
                             {% if project.project_github %}
-                                <a href="{{ project.project_github }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">GITHUB</a>
+                                <a href="{{ project.project_github }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold md:px-10 px-4 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">GITHUB</a>
                             {% endif %}    
-                                <a href="{% url 'home/main_page' %}#projects" class="bg-gray-300 text-navy-blue text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">Go Back</a>
+                                <a href="{% url 'home/main_page' %}#projects" class="bg-gray-300 text-navy-blue text-lg font-bold md:px-10 px-4 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">Go Back</a>
                         </div>
                     </div>
                 </div>
