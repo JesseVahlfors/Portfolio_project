@@ -175,7 +175,14 @@ STATICFILES_DIRS = [
     BASE_DIR / "theme/static",
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 #storage for media files
 
@@ -190,7 +197,6 @@ AWS_DEFAULT_ACL = 'public-read'
 
 # Media files
 AWS_LOCATION = 'media/'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # Additional settings
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',

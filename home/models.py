@@ -37,7 +37,7 @@ class Profile(models.Model):
             except (IOError, SyntaxError):
                 raise ValidationError("Invalid image file.")
 
-    def save(self, *args, **kwargs):
+    """ def save(self, *args, **kwargs):
         logger.debug(f"Uploading file: {self.profile_image.name} using {default_storage}")
         file_url = default_storage.url(self.profile_image.name)
         logger.debug(f"File uploaded to: {file_url}")
@@ -75,7 +75,7 @@ class Profile(models.Model):
                 logger.error(f"Error resizing image: {e}")
                 print(f"Error resizing image: {e}")
         
-        logger.debug(f"File uploaded to: {self.profile_image.url}")
+        logger.debug(f"File uploaded to: {self.profile_image.url}") """
 
     def __str__(self):
         return self.name
