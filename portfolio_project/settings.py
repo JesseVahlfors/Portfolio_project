@@ -179,29 +179,28 @@ STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
     },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
 }
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 #storage for media files
 
 # Backblaze B2 settings
-AWS_ACCESS_KEY_ID = os.getenv('B2_APPLICATION_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('B2_APPLICATION_KEY')
-AWS_STORAGE_BUCKET_NAME = os.getenv('B2_BUCKET_NAME')
-AWS_S3_REGION_NAME = os.getenv('B2_REGION_NAME', 'us-west-2')  # Default region
-AWS_S3_ENDPOINT = f's3.{AWS_S3_REGION_NAME}.backblazeb2.com'
-AWS_S3_ENDPOINT_URL = f'https://{AWS_S3_ENDPOINT}'
-AWS_DEFAULT_ACL = 'public-read'
+AWS_ACCESS_KEY_ID = env("B2_APPLICATION_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("B2_APPLICATION_KEY")
+AWS_STORAGE_BUCKET_NAME = env("B2_BUCKET_NAME")
+AWS_S3_REGION_NAME = env("B2_REGION_NAME", "us-west-002")  # Default to 'us-west-002'
+AWS_S3_ENDPOINT_URL = f"https://s3.{AWS_S3_REGION_NAME}.backblazeb2.com"
+AWS_S3_ADDRESSING_STYLE = "virtual"  # Needed for B2
+AWS_QUERYSTRING_AUTH = False  # No signed URLs
 
 # Media files
-AWS_LOCATION = 'media/'
-# Additional settings
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
-AWS_QUERYSTRING_AUTH = False 
+AWS_LOCATION = "media/"
+AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+
+MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/{AWS_LOCATION}"
+MEDIA_ROOT = "/media/"
+
 
 
 # Default primary key field type
@@ -259,7 +258,7 @@ LOGGING = {
         "file": {
             "level": "DEBUG",
             "class": "logging.FileHandler",
-            "filename": "file_uploads.log",
+            "filename": BASE_DIR / "logs/file_uploads.log",
             "formatter": "detailed",
         },
     },
@@ -288,15 +287,4 @@ LOGGING = {
     },
 }
 
-#Additional security settings
-
-if os.getenv('RENDER') == 'True':
-    SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
-    SESSION_COOKIE_SECURE = True  # Ensure secure cookies
-    CSRF_COOKIE_SECURE = True  # Ensure secure CSRF cookies
-
-    # Set HSTS (HTTP Strict Transport Security) settings for secure HTTPS connections
-    SECURE_HSTS_SECONDS = 31536000  # One year
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Enforce HSTS on subdomains
-    SECURE_HSTS_PRELOAD = True  # Preload HSTS policy to browsers
 
