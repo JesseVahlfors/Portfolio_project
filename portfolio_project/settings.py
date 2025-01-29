@@ -186,10 +186,10 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 #storage for media files
 
 # Backblaze B2 settings
-AWS_ACCESS_KEY_ID = env("B2_APPLICATION_KEY_ID")
-AWS_SECRET_ACCESS_KEY = env("B2_APPLICATION_KEY")
-AWS_STORAGE_BUCKET_NAME = env("B2_BUCKET_NAME")
-AWS_S3_REGION_NAME = env("B2_REGION_NAME", "us-west-002")  # Default to 'us-west-002'
+AWS_ACCESS_KEY_ID = os.getenv("B2_APPLICATION_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("B2_APPLICATION_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("B2_BUCKET_NAME")
+AWS_S3_REGION_NAME = os.getenv("B2_REGION_NAME", "us-west-002")  # Default to 'us-west-002'
 AWS_S3_ENDPOINT_URL = f"https://s3.{AWS_S3_REGION_NAME}.backblazeb2.com"
 AWS_S3_ADDRESSING_STYLE = "virtual"  # Needed for B2
 AWS_QUERYSTRING_AUTH = False  # No signed URLs
