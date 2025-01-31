@@ -325,7 +325,7 @@ if os.getenv('RENDER') == 'true':
 
             s3 = boto3.client('s3')
             try:
-                s3.head_object(Bucket=env('B2_TEST_BUCKET_NAME'), Key=f'profile_images/{profile.profile_image.name}')
+                s3.head_object(Bucket=env('B2_TEST_BUCKET_NAME'), Key=f'media/profile_images/{profile.profile_image.name}')
                 image_exists = True
             except NoCredentialsError:
                 self.fail("B2 credentials not provided")
