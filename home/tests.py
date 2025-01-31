@@ -301,6 +301,13 @@ if os.getenv('RENDER') == 'true':
         )
 
         def test_profile_upload_to_b2(self):
+            
+            boto3_session = boto3.Session()
+            boto3_session._session.set_config_variable('s3', {
+            'checksum_calculation': os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED"),
+            'checksum_validation': os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
+            })
+
             img = Image.new('RGB', (100, 100), color='blue')
             img_io = BytesIO()
             img.save(img_io, 'JPEG')
