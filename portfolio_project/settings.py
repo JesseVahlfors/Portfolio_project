@@ -326,6 +326,10 @@ else:
                 "filename": "file_uploads.log",
                 "formatter": "detailed",
             },
+             'console': {
+                'level': 'INFO',  # Set to INFO to reduce verbosity
+                'class': 'logging.StreamHandler',
+            },
         },
         'formatters': {
             "detailed": {
@@ -348,6 +352,11 @@ else:
                 "handlers": ["file"],
                 "level": "DEBUG",
                 "propagate": False,
+            },
+            'django.utils.autoreload': {
+                'handlers': ['console'],
+                'level': 'INFO',  # Set to INFO to reduce verbosity
+                'propagate': False,
             },
         },
     }

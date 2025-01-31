@@ -300,13 +300,16 @@ if os.getenv('RENDER') == 'true':
             AWS_RESPONSE_CHECKSUM_VALIDATION = os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
         )
 
-        def test_profile_upload_to_b2(self):
-            
-            boto3_session = boto3.Session()
-            boto3_session._session.set_config_variable('s3', {
-            'checksum_calculation': os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED"),
-            'checksum_validation': os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
+        def setUp(self):
+            self.boto3_session = boto3.Session()
+            self.boto3_session._session.set_config_variable('s3', {
+                'checksum_calculation': os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED"),
+                'checksum_validation': os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
             })
+            self.s3 = self.boto3_session.client('s3')
+            self.bucket_name = os.getenv('B2_TEST_BUCKET_NAME')
+
+        def test_profile_upload_to_b2(self):
 
             img = Image.new('RGB', (100, 100), color='blue')
             img_io = BytesIO()
@@ -322,7 +325,7 @@ if os.getenv('RENDER') == 'true':
 
             s3 = boto3.client('s3')
             try:
-                s3.head_object(Bucket=env('B2_TEST_BUCKET_NAME'), Key=f'media/profile_images/{profile.profile_image.name}')
+                s3.head_object(Bucket=env('B2_TEST_BUCKET_NAME'), Key=f'profile_images/{profile.profile_image.name}')
                 image_exists = True
             except NoCredentialsError:
                 self.fail("B2 credentials not provided")
@@ -330,3 +333,11 @@ if os.getenv('RENDER') == 'true':
                 image_exists = False
 
             self.assertTrue(image_exists, "The image was not uploaded to B2")
+
+            self.s3.delete_object(Bucket=self.bucket_name, Key=f'profile_images/{profile.profile_image.name}')
+
+        def tearDown(self):
+            try:
+                self.s3.delete_object(Bucket=self.bucket_name, Key=f'profile_images/test_image.jpg')
+            except self.s3.exceptions.NoSuchKey:
+                pass
