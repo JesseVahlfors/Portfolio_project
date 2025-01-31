@@ -8,8 +8,11 @@ from django.contrib.messages import get_messages
 from tempfile import TemporaryDirectory
 from PIL import Image
 from io import BytesIO
+import boto3
+from botocore.exceptions import NoCredentialsError
 import json
 import environ
+import os
 
 env = environ.Env()
 environ.Env.read_env()
@@ -282,3 +285,39 @@ class ContactFormTests(BaseTestWithTempMedia):
         # Check if the error for the 'email' field is present
         self.assertIn('email', response_data['errors'])
         self.assertEqual(response_data['errors']['email'][0], 'Enter a valid email address.')
+
+
+# Cloud storage tests
+if os.getenv('RENDER') == 'true':
+    class CloudStorageTests(BaseTestWithTempMedia):
+
+        @override_settings(
+            DEFAULT_FILE_STORAGE='storages.backends.s3boto3.S3botoStorage',
+            AWS_ACCESS_KEY_ID = os.getenv('B2_APPLICATION_KEY_ID'),
+            AWS_SECRET_ACCESS_KEY = os.getenv('B2_APPLICATION_KEY'),
+            AWS_STORAGE_BUCKET_NAME = os.getenv('B2_TEST_BUCKET_NAME'),
+        )
+
+        def test_profile_upload_to_b2(self):
+            img = Image.new('RGB', (100, 100), color='blue')
+            img_io = BytesIO()
+            img.save(img_io, 'JPEG')
+            img_io.seek(0)
+            profile_image = SimpleUploadedFile("test_image.jpg", img_io.read(), content_type='image/jpeg')
+
+            profile = Profile.objects.create(
+                name="Testi mies",
+                bio="Hello World!",
+                profile_image=profile_image,
+            )
+
+            s3 = boto3.client('s3')
+            try:
+                s3.head_object(Bucket=env('B2_TEST_BUCKET_NAME'), Key=f'media/profile_images/{profile.profile_image.name}')
+                image_exists = True
+            except NoCredentialsError:
+                self.fail("B2 credentials not provided")
+            except s3.exceptions.NoSuchKey:
+                image_exists = False
+
+            self.assertTrue(image_exists, "The image was not uploaded to B2")

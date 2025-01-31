@@ -68,15 +68,15 @@
                         role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                         <div class="py-1 hidden" role="none" id="menu-content">
                             {% if is_main_page %}
-                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="#home">Home</a>
-                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="#about">About</a>
-                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="#projects">Projects</a>
-                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="#contact">Contact</a>
+                                <a class="block p-8 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="#home">Home</a>
+                                <a class="block p-8 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="#about">About</a>
+                                <a class="block p-8 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="#projects">Projects</a>
+                                <a class="block p-8 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="#contact">Contact</a>
                             {% else %}
-                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#home">Home</a>
-                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#about">About</a>
-                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#projects">Projects</a>
-                                <a class="block px-4 py-4 text-sm text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#contact">Contact</a>
+                                <a class="block px-4 py-4 text-md text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#home">Home</a>
+                                <a class="block px-4 py-4 text-md text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#about">About</a>
+                                <a class="block px-4 py-4 text-md text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#projects">Projects</a>
+                                <a class="block px-4 py-4 text-md text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#contact">Contact</a>
                             {% endif %}
                         </div>
                     </div>
