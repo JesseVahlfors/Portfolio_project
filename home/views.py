@@ -65,11 +65,13 @@ def contact(request):
             email = form.cleaned_data['email']
             message = form.cleaned_data['message']
 
+            email_body = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}"
+
             # Send email
             try:
                 send_mail(
                     f"Contact Form Submission from {name}",
-                    message,
+                    email_body,
                     email,  # From email
                     [env('MY_EMAIL')],  # Replace with your email address or settings
                     fail_silently=False,
