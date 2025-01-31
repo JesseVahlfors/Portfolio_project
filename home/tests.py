@@ -334,10 +334,10 @@ if os.getenv('RENDER') == 'true':
 
             self.assertTrue(image_exists, "The image was not uploaded to B2")
 
-            self.s3.delete_object(Bucket=self.bucket_name, Key=f'profile_images/{profile.profile_image.name}')
+            #self.s3.delete_object(Bucket=self.bucket_name, Key=f'profile_images/{profile.profile_image.name}')
 
-        def tearDown(self):
+        """ def tearDown(self):
             try:
                 self.s3.delete_object(Bucket=self.bucket_name, Key=f'profile_images/test_image.jpg')
             except self.s3.exceptions.NoSuchKey:
-                pass
+                pass """

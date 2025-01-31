@@ -20,6 +20,7 @@ class MainView(TemplateView):
         if Profile.objects.first() and Profile.objects.first().skills:
             context["skills"] = Profile.objects.first().skills.split(',')
         context["is_main_page"] = True
+        context["form"] = ContactForm()
         return context
     
    
