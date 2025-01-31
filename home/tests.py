@@ -296,6 +296,8 @@ if os.getenv('RENDER') == 'true':
             AWS_ACCESS_KEY_ID = os.getenv('B2_APPLICATION_KEY_ID'),
             AWS_SECRET_ACCESS_KEY = os.getenv('B2_APPLICATION_KEY'),
             AWS_STORAGE_BUCKET_NAME = os.getenv('B2_TEST_BUCKET_NAME'),
+            AWS_REQUEST_CHECKSUM_CALCULATION = os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED"),
+            AWS_RESPONSE_CHECKSUM_VALIDATION = os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
         )
 
         def test_profile_upload_to_b2(self):

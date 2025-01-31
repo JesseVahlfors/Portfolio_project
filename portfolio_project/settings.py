@@ -270,44 +270,86 @@ boto3.set_stream_logger(name="boto3", level=logging.DEBUG)
 
 logging.basicConfig(level=logging.DEBUG)
 
-LOGGING = {
-    'version': 1,
-    "disable_existing_loggers": False,
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',  # Log errors only
-            'class': 'django.utils.log.AdminEmailHandler',
+if os.getenv('RENDER') == 'true':
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'level': 'ERROR',
+                'class': 'logging.StreamHandler',
+            },
+            'mail_admins': {
+                'level': 'ERROR',
+                'class': 'django.utils.log.AdminEmailHandler',
+            },
         },
-        "file": {
-            "level": "DEBUG",
-            "class": "logging.FileHandler",
-            "filename": "file_uploads.log",
-            "formatter": "detailed",
+        'root': {
+            'handlers': ['console', 'mail_admins'],
+            'level': 'ERROR',
         },
-    },
-    'formatters': {
-        "detailed": {
-            "format": "{asctime} {levelname} {name} {message}",
-            "style": "{",
+        'loggers': {
+            'django': {
+                'handlers': ['console', 'mail_admins'],
+                'level': 'ERROR',
+                'propagate': True,
+            },
+            'django.request': {
+                'handlers': ['console', 'mail_admins'],
+                'level': 'ERROR',
+                'propagate': False,
+            },
+            'django.security': {
+                'handlers': ['console', 'mail_admins'],
+                'level': 'ERROR',
+                'propagate': False,
+            },
         },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['mail_admins', 'file'],
-            'level': 'DEBUG' if DEBUG else 'ERROR',  # Only send error-level logs to admins
-            'propagate': True,
+    }
+else:
+    import boto3
+    boto3.set_stream_logger(name="boto3", level=logging.DEBUG)
+
+    logging.basicConfig(level=logging.DEBUG)
+
+    LOGGING = {
+        'version': 1,
+        "disable_existing_loggers": False,
+        'handlers': {
+            'mail_admins': {
+                'level': 'ERROR',  # Log errors only
+                'class': 'django.utils.log.AdminEmailHandler',
+            },
+            "file": {
+                "level": "DEBUG",
+                "class": "logging.FileHandler",
+                "filename": "file_uploads.log",
+                "formatter": "detailed",
+            },
         },
-        "boto3": {  # Logs B2 API calls
-            "handlers": ["file"],
-            "level": "DEBUG",
-            "propagate": False,
+        'formatters': {
+            "detailed": {
+                "format": "{asctime} {levelname} {name} {message}",
+                "style": "{",
+            },
         },
-        "storages.backends.s3boto3": {  # Logs django-storages operations
-            "handlers": ["file"],
-            "level": "DEBUG",
-            "propagate": False,
+        'loggers': {
+            'django': {
+                'handlers': ['mail_admins', 'file'],
+                'level': 'DEBUG' if DEBUG else 'ERROR',  # Only send error-level logs to admins
+                'propagate': True,
+            },
+            "boto3": {  # Logs B2 API calls
+                "handlers": ["file"],
+                "level": "DEBUG",
+                "propagate": False,
+            },
+            "storages.backends.s3boto3": {  # Logs django-storages operations
+                "handlers": ["file"],
+                "level": "DEBUG",
+                "propagate": False,
+            },
         },
-    },
-}
+    }
 
 
