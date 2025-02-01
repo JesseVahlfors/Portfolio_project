@@ -20,6 +20,7 @@ For this project, I carefully selected the following technologies based on their
 - **Django**: After completing university courses on Python, I was eager to apply my growing proficiency with the language. Django was selected for its robust backend structure, which allows easy management of future projects and scaling. Django’s security features and admin panel also make it ideal for managing content.
 - **Tailwind CSS**: I learned Tailwind specifically for this project. Its utility-first approach to styling allowed me to write concise, reusable classes directly within the HTML templates. This made it simple to rapidly develop and customize the layout.
 - **PostgreSQL**: Chosen for its strong support for relational data and seamless integration with Django’s ORM, PostgreSQL allowed me to efficiently set up the backend for data storage and scalability.
+- **Backblaze B2**: Used for cloud storage of media files. Backblaze B2 provides a cost-effective and scalable solution for storing and serving media files, integrated with Django using the `django-storages` library.
 
 ## Development Process & Challenges
 
@@ -28,6 +29,7 @@ During the development of this project, I faced several challenges, each of whic
 1. **Database Setup & Permissions**: I had to learn about database structure and user permissions to effectively work with PostgreSQL and Django’s ORM. This involved reading extensive documentation and troubleshooting errors.
 2. **Django-Tailwind Setup**: Setting up the integration between Django and Tailwind took time, particularly dealing with installation conflicts between Node.js and Python. Reinstalling Python and project dependencies resolved these issues.
 3. **Email Contact Form**: Setting up the email form required troubleshooting missing configurations, such as form actions and redirects, along with configuring the email sending process.
+4. **Cloud Storage with Backblaze B2**: Integrating Backblaze B2 for media storage involved configuring the `django-storages` library and ensuring that media files are correctly uploaded and served from the cloud storage.
 
 These challenges helped me refine my problem-solving skills and gain a deeper understanding of Django’s systems.
 
@@ -36,6 +38,7 @@ These challenges helped me refine my problem-solving skills and gain a deeper un
 - Built with HTML, Tailwind CSS, and minimal JavaScript for optimal performance.
 - Fully responsive design to provide seamless user experiences on both mobile and desktop.
 - Database-driven backend using PostgreSQL to store and manage future projects and their data.
+- Cloud storage for media files using Backblaze B2, ensuring scalable and cost-effective storage solutions.
 
 ## Future Enhancements
 
@@ -52,7 +55,8 @@ I chose to work on this project because I needed a platform to showcase my work 
 
 1. Clone this repository:
 
-   git clone https://github.com/your-username/portfolio-website.git
+   bash
+   git clone https://github.com/JesseVahlfors/portfolio-website.git
 
 2. Navigate to the project directory:
 
@@ -66,13 +70,19 @@ I chose to work on this project because I needed a platform to showcase my work 
 
     python manage.py migrate
 
-5. Start the development server:
+5. Configure environment variables for Backblaze B2:
+    export B2_APPLICATION_KEY_ID=your_application_key_id
+    export B2_APPLICATION_KEY=your_application_key
+    export B2_BUCKET_NAME=your_bucket_name
+    export B2_REGION_NAME=your_region_name
+
+6. Start the development server:
 
     python manage.py runserver
 
-6. Visit http://127.0.0.1:8000/ in your browser to view the portfolio.
+7. Visit http://127.0.0.1:8000/ in your browser to view the portfolio.
 
-Usage
+## Usage
 
 This portfolio website will automatically display your projects in a grid layout, showcasing each project with basic descriptions. You can add or modify your projects through Django’s admin panel after setting up the database.
 
