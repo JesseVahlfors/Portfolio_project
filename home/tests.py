@@ -294,7 +294,7 @@ class CloudStorageTests(BaseTestWithTempMedia):
         DEFAULT_FILE_STORAGE='storages.backends.s3boto3.S3Boto3Storage',
         AWS_ACCESS_KEY_ID = os.getenv('B2_APPLICATION_KEY_ID'),
         AWS_SECRET_ACCESS_KEY = os.getenv('B2_APPLICATION_KEY'),
-        AWS_STORAGE_BUCKET_NAME = os.getenv('B2_TEST_BUCKET_NAME'),
+        AWS_STORAGE_BUCKET_NAME = os.getenv('B2_BUCKET_NAME'),
         AWS_REQUEST_CHECKSUM_CALCULATION = os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED"),
         AWS_RESPONSE_CHECKSUM_VALIDATION = os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
         AWS_S3_ENDPOINT_URL = f"https://s3.{os.getenv('B2_REGION_NAME', 'us-west-002')}.backblazeb2.com",
@@ -310,7 +310,7 @@ class CloudStorageTests(BaseTestWithTempMedia):
             'checksum_validation': os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
         })
         self.s3 = self.boto3_session.client('s3', endpoint_url=f"https://s3.eu-central-003.backblazeb2.com")
-        self.bucket_name = os.getenv('B2_TEST_BUCKET_NAME')
+        self.bucket_name = os.getenv('B2_BUCKET_NAME')
 
     def test_profile_upload_to_b2(self):
         img = Image.new('RGB', (100, 100), color='blue')
