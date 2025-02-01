@@ -297,15 +297,20 @@ class CloudStorageTests(BaseTestWithTempMedia):
         AWS_STORAGE_BUCKET_NAME = os.getenv('B2_TEST_BUCKET_NAME'),
         AWS_REQUEST_CHECKSUM_CALCULATION = os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED"),
         AWS_RESPONSE_CHECKSUM_VALIDATION = os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
+        AWS_S3_ENDPOINT_URL=f"https://s3.{os.getenv('B2_REGION_NAME')}.backblazeb2.com",
     )
 
     def setUp(self):
-        self.boto3_session = boto3.Session()
+        super().setUp()
+        self.boto3_session = boto3.Session(
+            aws_access_key_id=os.getenv('B2_APPLICATION_KEY_ID'),
+            aws_secret_access_key=os.getenv('B2_APPLICATION_KEY')
+        )
         self.boto3_session._session.set_config_variable('s3', {
             'checksum_calculation': os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED"),
             'checksum_validation': os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
         })
-        self.s3 = self.boto3_session.client('s3')
+        self.s3 = self.boto3_session.client('s3', endpoint_url=f"https://s3.eu-central-003.backblazeb2.com")
         self.bucket_name = os.getenv('B2_TEST_BUCKET_NAME')
 
     def test_profile_upload_to_b2(self):
@@ -322,13 +327,12 @@ class CloudStorageTests(BaseTestWithTempMedia):
             profile_image=profile_image,
         )
 
-        s3 = boto3.client('s3')
         try:
-            s3.head_object(Bucket=env('B2_TEST_BUCKET_NAME'), Key=f'media/profile_images/{profile.profile_image.name}')
+            self.s3.head_object(Bucket=self.bucket_name, Key=f'{profile.profile_image.name}')
             image_exists = True
-        #except NoCredentialsError:
-            #self.fail("B2 credentials not provided")
-        except s3.exceptions.NoSuchKey:
+        except NoCredentialsError:
+            self.fail("B2 credentials not provided")
+        except self.s3.exceptions.NoSuchKey:
             image_exists = False
 
         self.assertTrue(image_exists, "The image was not uploaded to B2")
