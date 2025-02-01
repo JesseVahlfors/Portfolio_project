@@ -1,9 +1,8 @@
 # ToDo's
 
 ## Tests
-
-    - I need to check the tests if all work like they should after backblaze b2 integration
-    - make a test/tests for b2 storage
+    - make a test/tests for b2 storage.
+    - storage works in test but assertion is still not working
 
 ## Mobile view in project view
 

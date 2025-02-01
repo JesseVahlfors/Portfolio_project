@@ -340,7 +340,7 @@ else:
         'loggers': {
             'django': {
                 'handlers': ['mail_admins', 'file'],
-                'level': 'DEBUG' if DEBUG else 'ERROR',  # Only send error-level logs to admins
+                'level': 'ERROR',  # Only send error-level logs to admins
                 'propagate': True,
             },
             "boto3": {  # Logs B2 API calls

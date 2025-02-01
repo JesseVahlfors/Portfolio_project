@@ -244,7 +244,7 @@ class ContactFormTests(BaseTestWithTempMedia):
         # Check email content and recipients
         email = mail.outbox[0]
         self.assertEqual(email.subject, "Contact Form Submission from Testi Mies")
-        self.assertEqual(email.body, "Hello there!")
+        self.assertEqual(email.body, "Name: Testi Mies\nEmail: Testi@testi.fi\n\nMessage:\nHello there!")
         self.assertEqual(email.from_email, 'Testi@testi.fi')
 
     def test_contact_form_email_error(self):
@@ -288,56 +288,55 @@ class ContactFormTests(BaseTestWithTempMedia):
 
 
 # Cloud storage tests
-if os.getenv('RENDER') == 'true':
-    class CloudStorageTests(BaseTestWithTempMedia):
+class CloudStorageTests(BaseTestWithTempMedia):
 
-        @override_settings(
-            DEFAULT_FILE_STORAGE='storages.backends.s3boto3.S3botoStorage',
-            AWS_ACCESS_KEY_ID = os.getenv('B2_APPLICATION_KEY_ID'),
-            AWS_SECRET_ACCESS_KEY = os.getenv('B2_APPLICATION_KEY'),
-            AWS_STORAGE_BUCKET_NAME = os.getenv('B2_TEST_BUCKET_NAME'),
-            AWS_REQUEST_CHECKSUM_CALCULATION = os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED"),
-            AWS_RESPONSE_CHECKSUM_VALIDATION = os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
+    @override_settings(
+        DEFAULT_FILE_STORAGE='storages.backends.s3boto3.S3botoStorage',
+        AWS_ACCESS_KEY_ID = os.getenv('B2_APPLICATION_KEY_ID'),
+        AWS_SECRET_ACCESS_KEY = os.getenv('B2_APPLICATION_KEY'),
+        AWS_STORAGE_BUCKET_NAME = os.getenv('B2_TEST_BUCKET_NAME'),
+        AWS_REQUEST_CHECKSUM_CALCULATION = os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED"),
+        AWS_RESPONSE_CHECKSUM_VALIDATION = os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
+    )
+
+    def setUp(self):
+        self.boto3_session = boto3.Session()
+        self.boto3_session._session.set_config_variable('s3', {
+            'checksum_calculation': os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED"),
+            'checksum_validation': os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
+        })
+        self.s3 = self.boto3_session.client('s3')
+        self.bucket_name = os.getenv('B2_TEST_BUCKET_NAME')
+
+    def test_profile_upload_to_b2(self):
+
+        img = Image.new('RGB', (100, 100), color='blue')
+        img_io = BytesIO()
+        img.save(img_io, 'JPEG')
+        img_io.seek(0)
+        profile_image = SimpleUploadedFile("test_image.jpg", img_io.read(), content_type='image/jpeg')
+
+        profile = Profile.objects.create(
+            name="Testi mies",
+            bio="Hello World!",
+            profile_image=profile_image,
         )
 
-        def setUp(self):
-            self.boto3_session = boto3.Session()
-            self.boto3_session._session.set_config_variable('s3', {
-                'checksum_calculation': os.getenv("AWS_REQUEST_CHECKSUM_CALCULATION", "WHEN_REQUIRED"),
-                'checksum_validation': os.getenv("AWS_RESPONSE_CHECKSUM_VALIDATION", "WHEN_REQUIRED"),
-            })
-            self.s3 = self.boto3_session.client('s3')
-            self.bucket_name = os.getenv('B2_TEST_BUCKET_NAME')
+        s3 = boto3.client('s3')
+        try:
+            s3.head_object(Bucket=env('B2_TEST_BUCKET_NAME'), Key=f'media/profile_images/{profile.profile_image.name}')
+            image_exists = True
+        #except NoCredentialsError:
+            #self.fail("B2 credentials not provided")
+        except s3.exceptions.NoSuchKey:
+            image_exists = False
 
-        def test_profile_upload_to_b2(self):
+        self.assertTrue(image_exists, "The image was not uploaded to B2")
 
-            img = Image.new('RGB', (100, 100), color='blue')
-            img_io = BytesIO()
-            img.save(img_io, 'JPEG')
-            img_io.seek(0)
-            profile_image = SimpleUploadedFile("test_image.jpg", img_io.read(), content_type='image/jpeg')
+        #self.s3.delete_object(Bucket=self.bucket_name, Key=f'profile_images/{profile.profile_image.name}')
 
-            profile = Profile.objects.create(
-                name="Testi mies",
-                bio="Hello World!",
-                profile_image=profile_image,
-            )
-
-            s3 = boto3.client('s3')
-            try:
-                s3.head_object(Bucket=env('B2_TEST_BUCKET_NAME'), Key=f'media/profile_images/{profile.profile_image.name}')
-                image_exists = True
-            except NoCredentialsError:
-                self.fail("B2 credentials not provided")
-            except s3.exceptions.NoSuchKey:
-                image_exists = False
-
-            self.assertTrue(image_exists, "The image was not uploaded to B2")
-
-            #self.s3.delete_object(Bucket=self.bucket_name, Key=f'profile_images/{profile.profile_image.name}')
-
-        """ def tearDown(self):
-            try:
-                self.s3.delete_object(Bucket=self.bucket_name, Key=f'profile_images/test_image.jpg')
-            except self.s3.exceptions.NoSuchKey:
-                pass """
+    """ def tearDown(self):
+        try:
+            self.s3.delete_object(Bucket=self.bucket_name, Key=f'profile_images/test_image.jpg')
+        except self.s3.exceptions.NoSuchKey:
+            pass """
