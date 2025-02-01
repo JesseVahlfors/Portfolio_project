@@ -304,6 +304,16 @@ if os.getenv('RENDER') == 'true':
                 'level': 'ERROR',
                 'propagate': False,
             },
+            'boto3': {
+                'handlers': ['console'],
+                'level': 'WARNING',  # Change to WARNING to reduce verbosity
+                'propagate': False,
+            },
+            'botocore': {
+                'handlers': ['console'],
+                'level': 'WARNING',  # Change to WARNING to reduce verbosity
+                'propagate': False,
+            },
         },
     }
 else:
