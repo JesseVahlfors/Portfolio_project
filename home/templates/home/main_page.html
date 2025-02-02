@@ -5,8 +5,8 @@
 {% block content %}
 <!-- Hero -->
 <section id="home" class="flex flex-col items-center bg-amber-50/50 text-black">
-    <section class="relative w-full h-screen md:h-screen min-h-8/12 md:max-h-120 bg-main_bg bg-cover flex flex-col items-center justify-center">
-        <div class="hidden absolute top-1/2 left-0 md:flex flex-col p-2 bg-white shadow-[0px_7px_29px_0px] shadow-amber-800/30 rounded-lg transform -translate-y-1/2">
+    <section class="relative w-full h-screen md:pt-10 md:h-screen min-h-8/12 md:max-h-120 bg-main_bg bg-cover flex flex-col items-center justify-center">
+        <div class="hidden absolute top-1/2 left-0 lg:flex flex-col p-2 bg-white shadow-[0px_7px_29px_0px] shadow-amber-800/30 rounded-lg transform -translate-y-1/2">
             <a aria-label="Github link"class="hover:bg-navy-blue/30 p-2 rounded-md" href="{{ profile.github|default:'#' }}">
                 <svg  width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M24.0432 0.179932C10.8147 0.179932 0.0876465 11.0878 0.0876465 24.5445C0.0876465 35.3096 6.95165 44.4426 16.4699 47.6643C17.6671 47.8899 18.1067 47.1358 18.1067 46.4922C18.1067 45.9112 18.0845 43.9919 18.0742 41.956C11.4097 43.4299 10.0034 39.0812 10.0034 39.0812C8.9137 36.265 7.34358 35.5161 7.34358 35.5161C5.17009 34.0039 7.50742 34.035 7.50742 34.035C9.91297 34.2065 11.1796 36.5458 11.1796 36.5458C13.3162 40.2707 16.7837 39.1938 18.1507 38.5712C18.3657 36.9969 18.9866 35.9212 19.6716 35.3132C14.3508 34.6971 8.7574 32.6079 8.7574 23.2719C8.7574 20.6118 9.6932 18.4383 11.2256 16.732C10.9769 16.1179 10.1569 13.6402 11.4577 10.2841C11.4577 10.2841 13.4693 9.62928 18.0472 12.7816C19.9581 12.2418 22.0074 11.971 24.0432 11.9618C26.0791 11.971 28.13 12.2418 30.0444 12.7816C34.6167 9.62928 36.6256 10.2841 36.6256 10.2841C37.9295 13.6402 37.1091 16.1179 36.8604 16.732C38.3964 18.4383 39.3259 20.6118 39.3259 23.2719C39.3259 32.6301 33.7218 34.6906 28.3874 35.2938C29.2467 36.0499 30.0123 37.5327 30.0123 39.8059C30.0123 43.0655 29.9845 45.6893 29.9845 46.4922C29.9845 47.1406 30.4157 47.9003 31.63 47.6611C41.1431 44.4357 47.9984 35.3059 47.9984 24.5445C47.9984 11.0878 37.273 0.179932 24.0432 0.179932Z" fill="black"/>
@@ -25,35 +25,35 @@
                 </svg>
             </a>
         </div>
-        <div class="flex items-center flex-col md:mx-14">
-            <h1 class="text-4xl md:text-5xl text-center font-bold mb-6 px-8 uppercase">Hey, I'm {{ profile.name }}</h1>
-            <p class="text-lg md:text-xl text-center px-2 md:px-8 md:max-w-60">{{ profile.introduction }}</p>
-            <a class="bg-navy-blue text-white text-xl font-bold px-16 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300" href="#projects">PROJECTS</a>
+        <div class="flex items-center flex-col gap-8 md:gap-4 lg:gap-8 md:mx-14">
+            <h1 class="text-4xl lg:text-5xl text-center font-bold px-8 uppercase">Hey, I'm {{ profile.name }}</h1>
+            <p class="text-lg md:text-xl text-center px-2 lg:px-8 md:max-w-60">{{ profile.introduction }}</p>
+            <a class="bg-navy-blue text-white text-lg lg:text-xl font-bold px-12 lg:px-16 py-3 lg:py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300" href="#projects">PROJECTS</a>
         </div>
         <!-- Mouse scroll animation -->
-        <div class="absolute bottom-10">   
+        <div class="absolute bottom-6 md:bottom-4 lg:bottom-10">   
             <div class="relative w-8 h-12 border-[3px] border-navy-blue rounded-2xl flex items-start justify-center">
                 <div class="absolute w-2 h-2 bg-navy-blue rounded-full top-1 transform -translate-x-1/2 -translate-y-8 animate-MouseScroll"></div>
             </div>
         </div>
     </section>
     <!-- About Me -->
-    <section id="about" class="flex flex-col gap-32 items-center py-32 px-4 md:w-11/12 max-w-80">
+    <section id="about" class="flex flex-col gap-12 lg:gap-32 items-center py-12 lg:py-32 px-4 md:w-11/12 max-w-80">
         <div class="flex flex-col items-center max-w-80">
-            <h2 class="text-4xl tracking-wider font-bold pb-5">ABOUT ME</h2>
+            <h2 class="text-3xl lg:text-4xl tracking-wider font-bold pb-5">ABOUT ME</h2>
             <span class="h-1 w-8 rounded-xl bg-navy-blue"></span>
-            <p class="text-lg md:text-xl pt-5 text-center md:max-w-60">{{profile.about_me_intro}}</p>
+            <p class="text-lg md:text-base lg:text-xl font-semibold pt-5 text-center md:max-w-60">{{profile.about_me_intro}}</p>
         </div>
-        <div class="flex flex-col md:grid md:grid-cols-2 gap-32 md:px-6">
-            <div class="flex flex-col gap-10">
-                <h3 class="text-2xl font-bold mb-6">Get to know me!</h3>
-                    <div class="flex flex-col gap-10 text-lg ">
+        <div class="flex flex-col md:grid md:grid-cols-2 gap-12 lg:gap-32 lg:px-6">
+            <div class="flex flex-col gap-4 lg:gap-10">
+                <h3 class="text-2xl md:text-xl lg:text-2xl font-bold mb-6">Get to know me!</h3>
+                    <div class="flex flex-col gap-10 text-lg md:text-base lg:text-xl ">
                         {{ profile.bio|safe }}
                     </div>
                 <a href="#contact" class="w-44 bg-navy-blue mt-6 text-white text-sm text-center font-bold py-4 rounded-lg px-10 hover:-translate-y-0.5 duration-300">CONTACT</a>
             </div>
-            <div class="flex flex-col gap-10">
-                <h3 class="text-2xl font-bold mb-6">My Skills</h3>
+            <div class="flex flex-col gap-4 lg:gap-10">
+                <h3 class="text-2xl md:text-xl lg:text-2xl font-bold mb-6">My Skills</h3>
                 <ul class="flex flex-wrap gap-4">
                     {% for skill in skills %}
                         <li class="bg-amber-100 text-navy-blue font-semibold px-4 py-2 rounded-lg">{{ skill }}</li>
@@ -62,12 +62,12 @@
         </div>
     </section>
     <!-- Projects -->
-    <section id="projects" class="flex flex-col items-center bg-white w-full py-32 p-4">
+    <section id="projects" class="flex flex-col items-center bg-white w-full py-12 lg:py-32 p-4">
         <div class="flex flex-col items-center max-w-80">
-            <h2 class="text-4xl font-bold mb-6 tracking-wider" >PROJECTS</h2>
+            <h2 class="text-3xl lg:text-4xl font-bold mb-6 tracking-wider" >PROJECTS</h2>
             <span class="h-1 w-8 rounded-xl bg-navy-blue mb-6"></span>
-            <p class="text-center mb-16 text-xl max-w-60">Here are some of the projects that I have worked on. Click on the a to get more information about the project</p>
-            <ul class="flex flex-wrap justify-center gap-16 py-10">
+            <p class="text-center font-semibold text-lg lg:text-xl mb-16 md:mb-8 lg:mb-16 max-w-60">Here are some of the projects that I have worked on.</p>
+            <ul class="flex flex-wrap justify-center gap-16 py-10 md:py-4 lg:py-10">
                 {% for project in projects %}
                     <li class=" flex flex-col md:grid md:grid-cols-2 gap-20 items-center ">
                         {% if project.image %}
@@ -77,7 +77,7 @@
                         {% endif %}
                         <div class="flex flex-col items-center md:items-start py-4 gap-8">
                             <h3 class="text-xl font-bold text-start">{{ project.title }}</h3>
-                            <p class="text-md md:text-lg text-sky-800 text-start">{{ project.short_description }}</p>
+                            <p class="text-md lg:text-lg text-sky-800 text-start">{{ project.short_description }}</p>
                             <a class="w-44 bg-navy-blue text-white text-sm font-bold py-4 rounded-lg px-10  hover:-translate-y-0.5 duration-300" href="{% url 'home/project_detail' slug=project.slug %}">PROJECT INFO</a>
                         </div>
                     </li>
@@ -86,11 +86,11 @@
         </div>
     </section>
     <!-- Contact -->
-    <section id="contact" class="flex flex-col items-center bg-zinc-50 text-black py-32 bg-mini_bg bg-cover w-full">
+    <section id="contact" class="flex flex-col items-center bg-zinc-50 text-black py-12 lg:py-32 bg-mini_bg bg-cover w-full">
         <div class="flex flex-col items-center max-w-80">
-            <h2 class="text-4xl font-bold mb-6 tracking-wider">CONTACT</h2>
+            <h2 class="text-3xl lg:text-4xl font-bold mb-6 tracking-wider">CONTACT</h2>
             <span class="h-1 w-8 rounded-xl bg-navy-blue"></span>
-            <p class="text-center text-xl pt-5 px-4 max-w-60">If you have any questions or would like to work with me, please feel free to contact me</p>
+            <p class="text-center text-lg lg:text-xl font-semibold pt-5 px-4 max-w-60">If you have any questions or would like to work with me, please feel free to contact me</p>
             {% include "home/contact.html" %}
         </div>
     </section>

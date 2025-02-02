@@ -1192,11 +1192,11 @@ select {
 }
 
 .bg-main_bg {
-  background-image: url('/static/images/bg4.jpg');
+  background-image: url("/static/images/bg4.bffba1a4f098.jpg");
 }
 
 .bg-mini_bg {
-  background-image: url('/static/images/bg-mini.jpg');
+  background-image: url("/static/images/bg-mini.b4136666db80.jpg");
 }
 
 .bg-cover {

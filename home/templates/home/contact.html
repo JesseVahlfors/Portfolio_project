@@ -18,7 +18,7 @@
     </div>
     <!-- Email -->
     <div class="w-full">
-        <label class="text-sm  font-semibold" for="email">Email</label>
+        <label class="text-sm font-semibold" for="email">Email</label>
         <input  id="email" name="email" class="w-full h-12 mt-4 px-4 rounded-lg bg-amber-50 " type="email" placeholder="Enter Your Email" value="{{ form.email.value|default:'' }}" required="required">
         {% if form.email.errors %}
             <div class="field-errors text-red-600 mt-2">
