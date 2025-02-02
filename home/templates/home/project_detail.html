@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Project Detail{% endblock %}
+{% block title %}
+{{ project.title }} | {{ profile.name }} | Software Developer
+{% endblock %}
+
+{% block description %}
+    {{ project.description }} - A project by Jesse Vahlfors.
+{% endblock %}
 
 {% block content %}
 <section class="text-black py-16">

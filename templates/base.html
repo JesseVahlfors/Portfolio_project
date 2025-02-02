@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="This is my software development portfolio">
+    <meta name="description" content="{% block description %}Welcome to the portfolio of Jesse Vahlfors, a software developer.{% endblock %}">
     <meta name="google-site-verification" content="Mt9GIdDl6vUesMfz4O-fPekGV14pPgZO1K8LtC7yYmk" />
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <script src="{% static 'js/dropdown.js' %}" defer></script>
@@ -14,11 +14,7 @@
     {% tailwind_css %}
     <title>
         {% block title %}
-        {% if profile and profile.name %}
-            {{ profile.name }}
-        {% else %}
-            My Portfolio
-        {% endif %}
+            {{profile.name}} | Software Developer
         {% endblock %}
     </title>
 </head>
