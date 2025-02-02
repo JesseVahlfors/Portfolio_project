@@ -1,9 +1,5 @@
 # ToDo's
 
-## Tests
-    - make a test/tests for b2 storage.
-    - storage works in test but assertion is still not working
-
 ## Mobile view in project view
 
     - The dropdown menu is not aligned. Need to make it span the whole screen.
