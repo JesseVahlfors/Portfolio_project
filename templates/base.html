@@ -19,7 +19,7 @@
     </title>
 </head>
 <body >
-    <header class="bg-white fixed w-full z-50 px-5 lg:px-14 py-2 lg:py-4 shadow-md shadow-amber-200/20 ">
+    <header class="bg-white fixed w-full z-50 pl-5 lg:px-14 py-2 lg:py-4 shadow-md shadow-amber-200/20 ">
         <div class="flex justify-between items-center">
             {%if profile.profile_image %}
             <img class="w-10 h-10 lg:w-14 lg:h-14 rounded-full" src="{{ profile.profile_image.url }}" alt="{{ profile.name }}">
@@ -49,31 +49,40 @@
                 </nav>
             </section>
             <div class="relative lg:hidden">
-                <div class="relative inline-block text-left">
+                <div class="relative inline-block text-left pr-5">
                     <div>
                     <button 
                     type="button" 
-                    class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm  hover:bg-gray-50" 
+                    class=" w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm  hover:bg-gray-50" 
                     id="menu-button" aria-expanded="false" aria-haspopup="true" aria-label="Toggle dropdown menu">
                         <svg height="32px" id="Layer_1" style="enable-background:new 0 0 32 32;" version="1.1" viewBox="0 0 32 32" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z"/>
+                        </svg>
+                    </button>
+                    <button 
+                    type="button" 
+                    class="hidden w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm  hover:bg-gray-50" 
+                    id="close-button" aria-expanded="true" aria-haspopup="true" aria-label="Toggle dropdown menu">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 8L24 24" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 24L24 8" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
                     </div>
                     <div 
                         class="absolute right-0 z-10 w-screen origin-top-right rounded-md bg-white shadow-lg focus:outline-none" 
                         role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-                        <div class="py-1 hidden" role="none" id="menu-content">
+                        <div class="hidden" role="none" id="menu-content">
                             {% if is_main_page %}
-                                <a class="block p-8 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="#home">Home</a>
-                                <a class="block p-8 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="#about">About</a>
-                                <a class="block p-8 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="#projects">Projects</a>
-                                <a class="block p-8 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="#contact">Contact</a>
+                                <a class="block px-10 py-4 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200 border-t-[1px]" href="#home">Home</a>
+                                <a class="block px-10 py-4 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="#about">About</a>
+                                <a class="block px-10 py-4 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="#projects">Projects</a>
+                                <a class="block px-10 py-4 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="#contact">Contact</a>
                             {% else %}
-                                <a class="block px-4 py-4 text-md text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#home">Home</a>
-                                <a class="block px-4 py-4 text-md text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#about">About</a>
-                                <a class="block px-4 py-4 text-md text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#projects">Projects</a>
-                                <a class="block px-4 py-4 text-md text-gray-700 text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#contact">Contact</a>
+                                <a class="block px-10 py-4 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200 border-t-[1px]" href="{% url 'home/main_page' %}#home">Home</a>
+                                <a class="block px-10 py-4 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#about">About</a>
+                                <a class="block px-10 py-4 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#projects">Projects</a>
+                                <a class="block px-10 py-4 text-md text-gray-700 tracking-wider text-end font-bold shadow-sm shadow-gray-200" href="{% url 'home/main_page' %}#contact">Contact</a>
                             {% endif %}
                         </div>
                     </div>
