@@ -1,10 +1,11 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.urls import reverse
+from django.utils.text import slugify
+from django.core.files.base import ContentFile
 from PIL import Image, UnidentifiedImageError
 import os
-from django.utils.text import slugify
 import bleach
-from django.core.files.base import ContentFile
 import logging
 from io import BytesIO
 logger = logging.getLogger("django")
@@ -85,6 +86,9 @@ class Project(models.Model):
     slug = models.SlugField(unique=True, null=True, max_length=200)
     skills = models.TextField(null=True)
     project_github = models.URLField(null=True)
+
+    def get_absolute_url(self):
+        return reverse('home/project_detail', args=[str(self.id)])
 
     def clean_html(self, value):
         allowed_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'u', 's', 'a', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'img']
