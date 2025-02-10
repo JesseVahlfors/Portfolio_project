@@ -10,11 +10,11 @@
 
 {% block content %}
 <section class="text-black py-16">
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col items-center w-full">
         <!-- Title and Description Section -->
-        <section class="relative w-full md:max-h-120 bg-main_bg bg-cover flex flex-col gap-12 items-center justify-center py-60">
-            <h1 class="text-6xl text-center font-bold mb-6 px-8 uppercase">{{ project.title }}</h1>
-            <p class="text-xl text-center px-8 mb-10 max-w-60">This page contains the case study of my {{project.title}}, which includes the Project Overview, Technologies Used, and plans for future updates to enhance functionality and features.</p>
+        <section class="relative w-full md:max-h-120 bg-main_bg bg-cover flex flex-col gap-8 md:gap-4 lg:gap-12 items-center justify-center py-60 md:py-16 lg:py-60">
+            <h1 class="text-4xl lg:text-6xl text-center font-bold px-6 uppercase">{{ project.title }}</h1>
+            <p class="text-lg md:text-xl text-center px-8 max-w-60">This page contains the case study of my {{project.title}}, which includes the Project Overview, Technologies Used, and plans for future updates to enhance functionality and features.</p>
             {% if project.link %}
                 <a href="{{ project.link }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">LIVE LINK</a>
             {% elif project.project_github %}

@@ -1,10 +1,5 @@
 # ToDo's
 
-## Mobile view in project view
-
-    - The dropdown menu is not aligned. Need to make it span the whole screen.
-    - Mobile view when looked at horizontal is off. especially the hero section. Probably should change text size for mobile view as well.
-
 ## Journal
 
     - Update journal
