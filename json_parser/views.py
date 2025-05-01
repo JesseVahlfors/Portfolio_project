@@ -20,8 +20,8 @@ class ParseJSONAjaxView(View):
 
         try:
             if json_file:
-                if validate_json_file(json_file):
-                    json_str = json_file.read().decode('utf-8')
+                validate_json_file(json_file)
+                json_str = json_file.read().decode('utf-8')
             elif raw_json:
                 json_str = raw_json
             else:
@@ -31,11 +31,12 @@ class ParseJSONAjaxView(View):
 
             return JsonResponse({'status': 'success', 'data': parsed_data})
         
+        except ValueError as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        except ValidationError as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
         except Exception as e:
-            return JsonResponse({
-                'status': 'error',
-                'message': str(e)
-                },  status=400)
+            return JsonResponse({'status': 'error','message': 'An unexpected error occurred.'}, status=500)
         
 def validate_json_file(file):
     if not file.name.endswith('.json'):
