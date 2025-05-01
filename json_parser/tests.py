@@ -1,5 +1,5 @@
 from django.test import TestCase
-from jv_parser.services.json_parser import parse
+from json_parser.services.json_parser import parse
 import os
 import json
 from pathlib import Path
@@ -111,19 +111,19 @@ class JsonParserTestCase(TestCase):
             return f.read()
         
     def test_json_parser_step1_invalid(self):
-        file = "jv_parser/tests/step1/invalid.json"
+        file = "json_parser/tests/step1/invalid.json"
         json_string = self.read_file(file)
         with self.assertRaises(Exception) as context:
             parse(json_string)
         self.assertEqual(str(context.exception), "Invalid JSON: Input is empty or contains only whitespace.")
 
     def test_json_parser_step1_valid(self):
-        file = "jv_parser/tests/step1/valid.json"
+        file = "json_parser/tests/step1/valid.json"
         json_string = self.read_file(file)
         self.assertEqual(parse(json_string), {})
 
     def test_json_parser_step2_invalid(self):
-        file = "jv_parser/tests/step2/invalid.json"
+        file = "json_parser/tests/step2/invalid.json"
         json_string = self.read_file(file)
         with self.assertRaises(Exception) as context:
             parse(json_string)
@@ -131,31 +131,31 @@ class JsonParserTestCase(TestCase):
         self.assertTrue("Invalid JSON: Unexpected trailing comma" in str(context.exception))
 
     def test_json_parser_step2_valid(self):
-        file = "jv_parser/tests/step2/valid.json"
+        file = "json_parser/tests/step2/valid.json"
         json_string = self.read_file(file)
         self.assertEqual(parse(json_string), {"key": "value"})
     
     def test_json_parser_step2_invalid2(self):
-        file = "jv_parser/tests/step2/invalid2.json"
+        file = "json_parser/tests/step2/invalid2.json"
         json_string = self.read_file(file)
         with self.assertRaises(Exception) as context:
             parse(json_string)
         self.assertTrue("Unexpected keyword: key2 at line 3." in str(context.exception))
 
     def test_json_parser_step2_valid2(self):
-        file = "jv_parser/tests/step2/valid2.json"
+        file = "json_parser/tests/step2/valid2.json"
         json_string = self.read_file(file)
         self.assertEqual(parse(json_string), {"key": "value", "key2": "value"})
 
     def test_json_parser_step3_invalid(self):
-        file = "jv_parser/tests/step3/invalid.json"
+        file = "json_parser/tests/step3/invalid.json"
         json_string = self.read_file(file)
         with self.assertRaises(Exception) as context:
             parse(json_string)
         self.assertTrue("Unexpected keyword: False at line 3. Keywords must be 'true', 'false', or 'null'" in str(context.exception))
 
     def test_json_parser_step3_valid(self):
-        file = "jv_parser/tests/step3/valid.json"
+        file = "json_parser/tests/step3/valid.json"
         json_string = self.read_file(file)
         self.assertEqual(parse(json_string), { 
                                             "key1": True,
@@ -166,14 +166,14 @@ class JsonParserTestCase(TestCase):
                                             })
         
     def test_json_parser_step4_invalid(self):
-        file = "jv_parser/tests/step4/invalid.json"
+        file = "json_parser/tests/step4/invalid.json"
         json_string = self.read_file(file)
         with self.assertRaises(Exception) as context:
             parse(json_string)
         self.assertTrue("Unexpected character: ' at line 7." in str(context.exception))
 
     def test_json_parser_step4_valid(self):
-        file = "jv_parser/tests/step4/valid.json"
+        file = "json_parser/tests/step4/valid.json"
         json_string = self.read_file(file)
         self.assertEqual(parse(json_string), {
                                             "key": "value",
@@ -183,7 +183,7 @@ class JsonParserTestCase(TestCase):
                                             })
 
     def test_json_parser_step4_valid2(self):
-        file = "jv_parser/tests/step4/valid2.json"
+        file = "json_parser/tests/step4/valid2.json"
         json_string = self.read_file(file)
         self.assertEqual(parse(json_string), {
                                             "key": "value",
@@ -196,7 +196,7 @@ class JsonParserTestCase(TestCase):
 
     #json.org test cases
     def test_json_parser_json_org_test_cases(self):
-        TEST_DIR = Path("jv_parser/tests/json.org_tests/test").resolve()
+        TEST_DIR = Path("json_parser/tests/json.org_tests/test").resolve()
         print(f"Test directory: {TEST_DIR}")
 
         for filename in os.listdir(TEST_DIR):

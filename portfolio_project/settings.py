@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'storages',
+    'json_parser',
 ]
 
 
