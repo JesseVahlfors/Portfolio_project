@@ -36,7 +36,7 @@ class ParseJSONAjaxView(View):
         except ValidationError as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
         except Exception as e:
-            return JsonResponse({'status': 'error','message': 'An unexpected error occurred.'}, status=500)
+            return JsonResponse({'status': 'error','message': str(e)}, status=400)
         
 def validate_json_file(file):
     if not file.name.endswith('.json'):
