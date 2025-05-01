@@ -3,6 +3,7 @@ from django.views.generic import TemplateView, View
 from home.models import Profile
 from django.http import JsonResponse
 from .services import parse
+from django.core.exceptions import ValidationError
 
 class ParserDemoView(TemplateView):
     template_name = 'json_parser/json_parser.html'
@@ -19,7 +20,8 @@ class ParseJSONAjaxView(View):
 
         try:
             if json_file:
-                json_str = json_file.read().decode('utf-8')
+                if validate_json_file(json_file):
+                    json_str = json_file.read().decode('utf-8')
             elif raw_json:
                 json_str = raw_json
             else:
@@ -34,3 +36,9 @@ class ParseJSONAjaxView(View):
                 'status': 'error',
                 'message': str(e)
                 },  status=400)
+        
+def validate_json_file(file):
+    if not file.name.endswith('.json'):
+        raise ValidationError("File is not a valid JSON file.")
+    if file.size > 5 * 1024 * 1024:
+        raise ValidationError("File size exceeds 5MB limit.")
