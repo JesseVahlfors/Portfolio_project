@@ -102,7 +102,7 @@ def parse(json_string: str) -> JSONValue:
             case TokenType.NULL:
                 return consume(scanner, TokenType.NULL).value
             case _:
-                return error(token, f"Unexpected input at line {scanner.line}.")
+                return error(token, f"Unexpected input.")
             
     result = parse_value(scanner)
 

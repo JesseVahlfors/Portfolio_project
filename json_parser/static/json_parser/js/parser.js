@@ -1,6 +1,8 @@
 const form = document.getElementById('json-form');
 const result = document.getElementById('result');
 
+// form submission 
+
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -43,6 +45,8 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
+// file input handling
+
 document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('json-file');
     const fileNameDisplay = document.getElementById('file-name-display');
@@ -57,4 +61,20 @@ document.addEventListener('DOMContentLoaded', () => {
         fileInput.value = '';
         fileNameDisplay.textContent = 'No file selected';
     });
+});
+
+// dropdown option handling
+
+document.addEventListener('DOMContentLoaded', () => {
+    const dropdown = document.getElementById('json-dropdown');
+    const textArea = document.getElementById('json-input');
+
+    dropdown.addEventListener('change', (event) => {
+        const selectedValue = event.target.value;
+        if (selectedValue) {
+            textArea.value = selectedValue;
+        } else {
+            textArea.value = '';
+        }
+    }); 
 });

@@ -4,63 +4,77 @@
 {% block title %}JSON Parser{% endblock %}
 
 {% block content %}
-<div class="px-4 py-8 pt-24 bg-main_bg bg-cover flex items-center justify-center min-h-screen">  
+<div class="px-4 py-8 pt-24 bg-main_bg bg-cover flex items-center justify-center min-h-screen flex-col gap-8">  
     <div class="bg-white shadow-lg shadow-amber-600/20 rounded-2xl p-6 w-full max-w-2xl">
-      <h1 class="text-3xl font-semibold text-gray-800 mb-6">Try the JSON Parser</h1>
-  
-      <form id="json-form" class="space-y-6" action="{% url 'parse_json' %}" method="post" enctype="multipart/form-data">
-        <!-- JSON Text Input -->
-        <div>
-          <label for="json-input" class="block text-gray-700 font-medium mb-2">Paste JSON:</label>
-          <textarea
-            id="json-input"
-            name="json_input"
-            rows="8"
-            class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
-            placeholder='{"example": "value"}'
-          ></textarea>
-        </div>
-  
-        <!-- File Upload -->
-        <div>
-            <label for="json-file" class="block text-gray-700 font-medium mb-2">Or upload a JSON file:</label>
-            <span id="file-name-display" class="text-sm text-gray-600 italic">No file selected</span>
-            <input
-                type="file"
-                id="json-file"
-                name="json_file"
-                accept=".json"
-                class="hidden"
-            />
-        </div>
-        <label
-            for="json-file"
-            class="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-4 py-2 rounded shadow-sm transition"
-        >
-            Upload JSON
-        </label>
+      <h1 class="text-3xl font-semibold text-gray-800 mb-6">Try the JSON Parser</h1> 
+        <form id="json-form" class="space-y-6" action="{% url 'parse_json' %}" method="post" enctype="multipart/form-data">
+            <!-- JSON Text Input -->
+            <div>
+            <label for="json-input" class="block text-gray-700 font-medium mb-2">Paste JSON:</label>
+            <textarea
+                id="json-input"
+                name="json_input"
+                rows="8"
+                class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
+                placeholder='{"example": "value"}'
+            ></textarea>
+            </div>
+    
+            <!-- File Upload -->
+            <div>
+                <label for="json-file" class="block text-gray-700 font-medium mb-2">Upload a JSON file:</label>
+                <span id="file-name-display" class="text-sm text-gray-600 italic">No file selected</span>
+                <input
+                    type="file"
+                    id="json-file"
+                    name="json_file"
+                    accept=".json"
+                    class="hidden"
+                />
+            </div>
+            <label
+                for="json-file"
+                class="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-4 py-2 rounded shadow-sm transition"
+            >
+                Upload JSON
+            </label>
 
-        
-        <button
-            type="button"
-            id="clear-button"
-            class="text-sm text-blue-600 hover:underline"
-        >
-            Clear file
-        </button>
-  
-        <!-- Submit Button -->
-        <div>
-          <button
-            type="submit"
-            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md transition duration-150 ease-in-out"
-          >
-            Parse
-          </button>
+            
+            <button
+                type="button"
+                id="clear-button"
+                class="text-sm text-blue-600 hover:underline"
+            >
+                Clear file
+            </button>
+
+            <!-- premade JSON options-->
+            
+            <label for="json-dropdown" class="block text-gray-700 font-medium mb-2">Or select a JSON to Try:</label>
+            <select id="json-dropdown" name="json_input" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">-- Select an example --</option>
+                <option value='{"name": "John", "age": 30, "city": "New York"}'>Valid JSON 1 (Simple)</option>
+                <option value='{"company": "TechCorp", "employees": [{"name": "Alice", "role": "Developer"}, {"name": "Bob", "role": "Manager"}]}'>Valid JSON 2 (Array & Nested Objects)</option>
+                <option value='{"name": "John", "age": 30, "city": "New York",}'>Invalid JSON 1 (Trailing comma)</option>
+                <option value='{"name": "John", age: 30, "city": "New York"}'>Invalid JSON 2 (Missing quotes)</option>
+                <option value='{"name": "John" "age": 30, "city": "New York"}'>Invalid JSON 3 (Missing comma)</option>
+                <option value='{"name": "John", "age": 30, "city": "New York" \}'>Invalid JSON 4 (Unescaped character)</option>
+                <option value='{"name": "John", "age": 30, "city": , "New York"}'>Invalid JSON 5 (Extra comma)</option>
+            </select>
+    
+            <!-- Submit Button -->
+            <div>
+            <button
+                type="submit"
+                class="bg-navy-blue hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300"
+            >
+                Parse
+            </button>
+            </div>
+            </form>
+            <div>
+            <!-- Result Output -->
         </div>
-        </form>
-        
-        <!-- Result Output -->
         <pre
         id="result"
         class="language-json mt-8 hidden bg-gray-100 border border-gray-300 rounded-xl p-4 text-sm font-mono text-gray-800 whitespace-pre-wrap"
@@ -68,6 +82,7 @@
             <code class="language-json"></code>
         </pre>
     </div>
+    <a href="{% url 'home/project_detail' slug='JSON-Parser' %}" class="bg-gray-300 text-navy-blue text-lg font-bold md:px-10 px-4 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">Go Back</a>
   </div>
   <script>
     const csrfToken = '{{ csrf_token }}';
