@@ -1,32 +1,74 @@
-{% load static %}
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}JSON Parser{% endblock %}
 
 {% block content %}
-<div class="container mx-auto p-4 max-w-2xl">
-    <h1 class="text-2xl font-bold mb-4">Try the JSON Parser</h1>
-
-    <form id="json-form" class="space-y-4">
+<div class="max-w-3xl mx-auto px-4 py-8 pt-24">
+    <div class="bg-white shadow-lg shadow-amber-600/20 rounded-2xl p-6">
+      <h1 class="text-3xl font-semibold text-gray-800 mb-6">Try the JSON Parser</h1>
+  
+      <form id="json-form" class="space-y-6" action="{% url 'parse_json' %}" method="post" enctype="multipart/form-data">
+        <!-- JSON Text Input -->
         <div>
-            <label for="json-input" class="block font-medium">Paste JSON:</label>
-            <textarea id="json-input" name="json_input" rows="10" class="w-full p-2 border rounded"></textarea>
+          <label for="json-input" class="block text-gray-700 font-medium mb-2">Paste JSON:</label>
+          <textarea
+            id="json-input"
+            name="json_input"
+            rows="8"
+            class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
+            placeholder='{"example": "value"}'
+          ></textarea>
         </div>
-
+  
+        <!-- File Upload -->
         <div>
-            <label for="json-file" class="block font-medium">Or upload a JSON file:</label>
-            <input type="file" id="json-file" name="json_file" accept=".json" class="block mt-1">
+            <label for="json-file" class="block text-gray-700 font-medium mb-2">Or upload a JSON file:</label>
+            <span id="file-name-display" class="text-sm text-gray-600 italic">No file selected</span>
+            <input
+                type="file"
+                id="json-file"
+                name="json_file"
+                accept=".json"
+                class="hidden"
+            />
         </div>
+        <label
+            for="json-file"
+            class="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-4 py-2 rounded shadow-sm transition"
+        >
+            Upload JSON
+        </label>
 
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Parse
+        
+        <button
+            type="button"
+            id="clear-button"
+            class="text-sm text-blue-600 hover:underline"
+        >
+            Clear file
         </button>
-    </form>
-
-    <div id="result" class="mt-6 bg-gray-100 p-4 rounded text-sm whitespace-pre-wrap font-mono hidden"></div>
-</div>
-<script>
+  
+        <!-- Submit Button -->
+        <div>
+          <button
+            type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md transition duration-150 ease-in-out"
+          >
+            Parse
+          </button>
+        </div>
+      </form>
+  
+      <!-- Result Output -->
+      <div
+        id="result"
+        class="mt-8 hidden bg-gray-100 border border-gray-300 rounded-xl p-4 text-sm font-mono text-gray-800 whitespace-pre-wrap"
+      ></div>
+    </div>
+  </div>
+  <script>
     const csrfToken = '{{ csrf_token }}';
-</script>
+  </script>
 <script src="{% static 'json_parser/js/parser.js' %}"></script>
 {% endblock %}

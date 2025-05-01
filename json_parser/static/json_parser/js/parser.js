@@ -12,15 +12,15 @@ form.addEventListener('submit', async (e) => {
         const response = await fetch(form.action, {
             method: 'POST',
             headers:  {
-                'X-CSFRFToken': csrfToken,
+                'X-CSRFToken': csrfToken,
             },
             body: formData,
         });
 
         const data = await response.json();
 
-        if (data.success) {
-            result.textContent = JSON.stringify(data.parsed, null, 2);
+        if (data.status === 'success') {
+            result.textContent = JSON.stringify(data.data, null, 2);
             result.classList.remove('hidden', 'bg-red-100');
             result.classList.add('bg-gray-100');
         } else {
@@ -33,4 +33,20 @@ form.addEventListener('submit', async (e) => {
         result.classList.remove('hidden');
         result.classList.add('bg-red-100');
     }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('json-file');
+    const fileNameDisplay = document.getElementById('file-name-display');
+    const clearButton = document.getElementById('clear-button');
+
+    fileInput.addEventListener('change', (event) => {
+        const fileName = event.target.files[0]?.name || 'No file selected';
+        fileNameDisplay.textContent = fileName;
+    });
+
+    clearButton.addEventListener('click', () => {
+        fileInput.value = '';
+        fileNameDisplay.textContent = 'No file selected';
+    });
 });

@@ -1,9 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, View
-from .models import Profile
+from home.models import Profile
 from django.http import JsonResponse
-from .services import parse_json
-# Create your views here.
+from .services import parse
 
 class ParserDemoView(TemplateView):
     template_name = 'json_parser/json_parser.html'
@@ -26,7 +25,7 @@ class ParseJSONAjaxView(View):
             else:
                 raise ValueError("No JSON input provided.")
 
-            parsed_data = parse_json(json_str)
+            parsed_data = parse(json_str)
 
             return JsonResponse({'status': 'success', 'data': parsed_data})
         
