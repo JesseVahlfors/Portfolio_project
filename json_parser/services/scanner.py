@@ -39,7 +39,7 @@ class Scanner:
         MAX_DEPTH = 20
         self.current_depth += 1
         if self.current_depth >= MAX_DEPTH:
-            raise Exception(f"Maximum depth exceeded. Maximum depth is 20. Current depth is at {self.current_depth} at line {self.line} and index {self.current_position}, token type: {self.tokens[self.current_position].token_type}")
+            raise Exception(f"Invalid JSON: Maximum depth exceeded. Maximum depth is 20. Current depth is at {self.current_depth} at line {self.line} and index {self.current_position}, token type: {self.tokens[self.current_position].token_type}")
 
     def decrease_depth(self):
         self.current_depth -= 1
@@ -92,7 +92,7 @@ class Scanner:
                 elif char.isalpha():
                     self.add_keyword()
                 else:
-                    raise Exception(f"Unexpected character: {char} at line {self.line}.")
+                    raise Exception(f"Invalid JSON: Unexpected character: {char} at line {self.line}.")
 
              
     def advance(self) -> str:
@@ -199,7 +199,7 @@ class Scanner:
             token_type = TokenType.BOOLEAN if value in ("true", "false") else TokenType.NULL
             self.tokens.append(Token(token_type, keywords[value]))
         else:
-            raise Exception(f"Unexpected keyword: {value} at line {self.line}. Keywords must be 'true', 'false', or 'null'.")
+            raise Exception(f"Invalid JSON: Unexpected keyword: {value} at line {self.line}. Keywords must be 'true', 'false', or 'null'.")
         
 
     def peek(self) -> str:

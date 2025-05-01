@@ -17,19 +17,27 @@ form.addEventListener('submit', async (e) => {
             body: formData,
         });
 
-        const data = await response.json();
+        const responseText = await response.text();
+        let data;
+
+        try {
+            data = JSON.parse(responseText);
+        } catch (parseError) {
+            throw new Error("Invalid JSON response from server:\n" + responseText);
+        }
 
         if (data.status === 'success') {
-            result.textContent = JSON.stringify(data.data, null, 2);
-            result.classList.remove('hidden', 'bg-red-100');
-            result.classList.add('bg-gray-100');
+            const codeBlock = document.getElementById('result');
+            codeBlock.textContent = JSON.stringify(data.data, null, 2);
+            result.classList.remove('hidden');
+            Prism.highlightElement(codeBlock);
         } else {
-            result.textContent = "Error: " + data.error;
+            result.textContent = (data.message || "Unknown error");
             result.classList.remove('hidden', 'bg-gray-100');
             result.classList.add('bg-red-100');
         }
     } catch (error) {
-        result.textContent = "Unexpected error occurred ";
+        result.textContent = `Invalid JSON: ${error.message || error}`;
         result.classList.remove('hidden');
         result.classList.add('bg-red-100');
     }

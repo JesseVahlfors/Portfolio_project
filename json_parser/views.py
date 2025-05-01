@@ -29,5 +29,8 @@ class ParseJSONAjaxView(View):
 
             return JsonResponse({'status': 'success', 'data': parsed_data})
         
-        except ValueError as e:
-            return JsonResponse({'status': 'error', 'message': str(e)})
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+                },  status=400)
