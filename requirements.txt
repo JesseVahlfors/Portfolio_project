@@ -25,8 +25,10 @@ django-tailwind==3.8.0
 djangorestframework==3.15.2
 djangorestframework_simplejwt==5.4.0
 docutils==0.21.2
+drf-yasg==1.21.10
 gunicorn==23.0.0
 idna==3.10
+inflection==0.5.1
 Jinja2==3.1.5
 jmespath==1.0.1
 logfury==1.0.1
@@ -43,6 +45,7 @@ Pygments==2.19.1
 PyJWT==2.10.1
 python-dateutil==2.9.0.post0
 python-slugify==8.0.4
+pytz==2025.2
 PyYAML==6.0.2
 requests==2.32.3
 rich==13.9.4
@@ -56,6 +59,7 @@ tqdm==4.67.1
 types-python-dateutil==2.9.0.20241206
 typing_extensions==4.12.2
 tzdata==2024.2
+uritemplate==4.1.1
 urllib3==2.3.0
 webencodings==0.5.1
 whitenoise==6.8.2
