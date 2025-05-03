@@ -24,4 +24,5 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path('JSON_parser/', include("json_parser.urls")),
     path('api/', include("api.urls")),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
