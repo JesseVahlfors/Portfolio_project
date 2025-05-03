@@ -23,4 +23,5 @@ urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
     path('JSON_parser/', include("json_parser.urls")),
+    path('api/', include("api.urls")),
 ]
