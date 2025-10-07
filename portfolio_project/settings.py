@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'storages',
     'json_parser',
     'api',
+    'drf_yasg',
 ]
 
 
