@@ -11,6 +11,12 @@
             <!-- JSON Text Input -->
             <div>
             <label for="json-input" class="block text-gray-700 font-medium mb-2">Paste JSON:</label>
+            <p id="input-warning" class="hidden text-sm text-red-600 mb-2 italic">
+                A file is currently selected.<br>
+                <span class="text-gray-700">Press <strong>“Parse”</strong> to parse the file, <br>or</span>
+                <br>
+                <span class="text-gray-700"><strong>Clear file</strong> to use the text input or examples.</span>
+            </p>
             <textarea
                 id="json-input"
                 name="json_input"
@@ -51,7 +57,7 @@
             <!-- premade JSON options-->
             
             <label for="json-dropdown" class="block text-gray-700 font-medium mb-2">Or select a JSON to Try:</label>
-            <select id="json-dropdown" name="json_input" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <select id="json-dropdown" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 <option value="">-- Select an example --</option>
                 <option value='{"name": "John", "age": 30, "city": "New York"}'>Valid JSON 1 (Simple)</option>
                 <option value='{"company": "TechCorp", "employees": [{"name": "Alice", "role": "Developer"}, {"name": "Bob", "role": "Manager"}]}'>Valid JSON 2 (Array & Nested Objects)</option>
