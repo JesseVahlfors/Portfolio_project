@@ -1,14 +1,24 @@
 const form = document.getElementById('json-form');
 const result = document.getElementById('result');
+const fileInput = document.getElementById('json-file');
+const textArea = document.getElementById('json-input');
+const inputWarning = document.getElementById('input-warning')
 
 // form submission 
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const formData = new FormData(form);
+    
     result.classList.add('hidden');
     result.textContent = "Parsing...";
+    
+    const formData = new FormData();
+    if (fileInput.files.length > 0) {
+        formData.append('json_file', fileInput.files[0]);
+    } else {
+        formData.append('json_input', textArea.value);
+    }
+
 
     try  {
         const response = await fetch(form.action, {
@@ -21,7 +31,6 @@ form.addEventListener('submit', async (e) => {
 
         const responseText = await response.text();
         let data;
-
         try {
             data = JSON.parse(responseText);
         } catch (parseError) {
@@ -55,11 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
     fileInput.addEventListener('change', (event) => {
         const fileName = event.target.files[0]?.name || 'No file selected';
         fileNameDisplay.textContent = fileName;
+        inputWarning.classList.remove('hidden')
+        textArea.classList.add('hidden')
     });
 
     clearButton.addEventListener('click', () => {
         fileInput.value = '';
         fileNameDisplay.textContent = 'No file selected';
+        inputWarning.classList.add('hidden')
+        textArea.classList.remove('hidden')
     });
 });
 
@@ -67,14 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const dropdown = document.getElementById('json-dropdown');
-    const textArea = document.getElementById('json-input');
+    if (fileInput.files.length > 0) {
 
-    dropdown.addEventListener('change', (event) => {
-        const selectedValue = event.target.value;
-        if (selectedValue) {
-            textArea.value = selectedValue;
-        } else {
-            textArea.value = '';
-        }
-    }); 
+    } else {
+        dropdown.addEventListener('change', (event) => {
+            textArea.value = event.target.value || '';
+        }); 
+    }
 });
