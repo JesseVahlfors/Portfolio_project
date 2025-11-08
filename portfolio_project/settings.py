@@ -266,6 +266,11 @@ EMAIL_TIMEOUT = 30
 
 ADMINS = [('Admin', env('MY_EMAIL'))]  # List of admin email addresses
 
+# recaptcha settings
+
+RECAPTCHA_PUBLIC_KEY  = env("RECAPTCHA_SITE_KEY")
+RECAPTCHA_PRIVATE_KEY = env("RECAPTCHA_SECRET_KEY")
+
 #Logging settings
 
 import boto3

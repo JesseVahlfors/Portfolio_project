@@ -3,6 +3,7 @@
 {% endblock %}
 <form method="post" id="contactForm" action="{% url 'contact' %}" class="flex flex-col items-end gap-4 w-10/12 shadow-lg p-8 rounded-lg bg-white text-gray-600 mt-20">
     {% csrf_token %}
+    
     <div id="message-container" class="message-container" style="display: none;"></div>
     <!-- Name -->
     <div class="w-full">
@@ -40,6 +41,15 @@
             </div>
         {% endif %}
     </div>
-    <button type="submit" class="bg-navy-blue text-white font-bold px-12 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300 ">SUBMIT</button>
+    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+    <button type="submit" data-sitekey="{{ RECAPTCHA_PUBLIC_KEY }}" 
+        data-callback='onSubmit' 
+        data-action='submit' 
+        class="g-recaptcha bg-navy-blue text-white font-bold px-12 py-4 rounded-lg mt-8 shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300 ">
+        SUBMIT
+    </button>
 
 </form>
+
+<div id="message-container" style="display:none;"></div>
+<script src="https://www.google.com/recaptcha/api.js" defer></script>

@@ -5,6 +5,7 @@ from .forms import ContactForm
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib import messages
+from django.conf import settings
 import environ
 
 env = environ.Env()
@@ -21,6 +22,7 @@ class MainView(TemplateView):
             context["skills"] = Profile.objects.first().skills.split(',')
         context["is_main_page"] = True
         context["form"] = ContactForm()
+        context["RECAPTCHA_PUBLIC_KEY"] = settings.RECAPTCHA_PUBLIC_KEY
         return context
     
    
@@ -82,6 +84,6 @@ def contact(request):
         else:
             return JsonResponse({'errors': form.errors}, status=400)
 
-    form = ContactForm()      
+    form = ContactForm()  
     return render(request, 'home/main_page.html', {'form': form})
     
