@@ -270,6 +270,7 @@ ADMINS = [('Admin', env('MY_EMAIL'))]  # List of admin email addresses
 
 RECAPTCHA_PUBLIC_KEY  = env("RECAPTCHA_SITE_KEY")
 RECAPTCHA_PRIVATE_KEY = env("RECAPTCHA_SECRET_KEY")
+RECAPTCHA_REQUIRED_SCORE = 0.7
 
 #Logging settings
 
