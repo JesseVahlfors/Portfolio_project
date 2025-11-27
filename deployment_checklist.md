@@ -5,6 +5,28 @@ Follow this to avoid common deployment issues with migrations, static files, and
 
 ---
 
+## 0. If working on a feature branch — merge it before deploy
+
+Make sure your feature branch is fully merged into `main` before pushing to production.
+
+1. Switch to main:
+
+        git switch main
+
+2. Pull the latest changes:
+
+        git pull
+
+3. Merge your feature branch into main:
+
+        git merge feature/your-branch-name
+
+4. Push main to GitHub:
+
+        git push
+
+After this, continue with the normal deployment steps below.
+
 ## 1. Update Virtual Environment (optional)
 
 If you installed or updated dependencies:
@@ -80,10 +102,9 @@ Ensure you included:
 - Migration files  
 - Template changes  
 - Static files (if tracked)  
-- Tailwind build output (if tracked)  
+- Tailwind build output (if tracked) 
 
 ---
-
 ## 7. Deploy to Production (Render)
 
 Render will:
