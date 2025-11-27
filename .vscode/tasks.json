@@ -4,7 +4,13 @@
       {
         "label": "Run Tailwind Watch",
         "type": "shell",
-        "command": "python manage.py tailwind start",
+        "command": "python",
+        "args": ["manage.py", "tailwind", "start"],
+        "options": {
+          "env": {
+            "PATH": "${workspaceFolder}\\.venv\\Scripts;${env:PATH}"
+          }
+        },
         "problemMatcher": [],
         "group": "build",
         "presentation": {
@@ -14,8 +20,13 @@
       {
         "label": "Run Django Server",
         "type": "shell",
-        "command": "python manage.py runserver",
-        "problemMatcher": [],
+        "command": "python",
+        "args": ["manage.py", "runserver"],
+        "options": {
+          "env": {
+            "PATH": "${workspaceFolder}\\.venv\\Scripts;${env:PATH}"
+          }
+        },
         "group": "build",
         "presentation": {
           "reveal": "always"
@@ -24,7 +35,13 @@
       {
         "label": "Run Tests",
         "type": "shell",
-        "command": "python manage.py test",
+        "command": "python",
+        "args": ["manage.py", "test"],
+        "options": {
+          "env": {
+            "PATH": "${workspaceFolder}\\.venv\\Scripts;${env:PATH}"
+          }
+        },
         "problemMatcher": [],
         "group": "test",
         "presentation": {
@@ -45,7 +62,13 @@
       {
         "label": "Update model migrations",
         "type": "shell",
-        "command": "python manage.py makemigrations && python manage.py migrate",
+        "command": "python",
+        "args": ["manage.py", "makemigrations"],
+        "options": {
+          "env": {
+            "PATH": "${workspaceFolder}\\.venv\\Scripts;${env:PATH}"
+          }
+        },
         "problemMatcher": [],
         "group": "build",
         "presentation": {
@@ -55,43 +78,71 @@
       {
         "label": "Collect Static",
         "type": "shell",
-        "command": "python manage.py collectstatic",
-        "problemMatcher": [],
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        }
-      },
-      {
-        "label": "Tailwind Build",
-        "type": "shell",
-        "command": "python manage.py tailwind build",
-        "problemMatcher": [],
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        }
-      },
-      {
-        "label": "Migrate Database",
-        "type": "shell",
-        "command": "python manage.py migrate",
-        "problemMatcher": [],
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        }
-      },
-      {
-        "label": "Deployment Commands",
-        "type": "shell",
-        "command": "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py tailwind build",
+        "command": "python",
+        "args": ["manage.py", "collectstatic", "--noinput"],
+        "options": {
+          "env": {
+            "PATH": "${workspaceFolder}\\.venv\\Scripts;${env:PATH}"
+          }
+        },
         "problemMatcher": [],
         "group": "build",
         "presentation": {
           "reveal": "always"
         }
       },
-
+      {
+        "label": "Tailwind Build",
+        "type": "shell",
+        "command": "python",
+        "args": ["manage.py", "tailwind", "build"],
+        "options": {
+          "env": {
+            "PATH": "${workspaceFolder}\\.venv\\Scripts;${env:PATH}"
+          }
+        },
+        "problemMatcher": [],
+        "group": "build",
+        "presentation": {
+          "reveal": "always"
+        }
+      },
+      {
+        "label": "Migrate Database",
+        "type": "shell",
+        "command": "python",
+        "args": ["manage.py", "migrate"],
+        "options": {
+          "env": {
+            "PATH": "${workspaceFolder}\\.venv\\Scripts;${env:PATH}"
+          }
+        },
+        "problemMatcher": [],
+        "group": "build",
+        "presentation": {
+          "reveal": "always"
+        }
+      },
+      {
+        "label": "Deployment Commands",
+        "type": "shell",
+        "command": "python",
+        "args": ["manage.py", "migrate"],
+        "options": {
+          "env": {
+            "PATH": "${workspaceFolder}\\.venv\\Scripts;${env:PATH}"
+          }
+        },
+        "problemMatcher": [],
+        "group": "build",
+        "presentation": {
+          "reveal": "always"
+        },
+        "dependsOn": [
+          "Migrate Database",
+          "Collect Static",
+          "Tailwind Build"
+        ]
+      }
     ]
   }
