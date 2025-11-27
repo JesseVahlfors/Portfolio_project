@@ -4,8 +4,8 @@
 {{ project.title }} | {{ profile.name }} | Software Developer
 {% endblock %}
 
-{% block description %}
-    {{ project.description }} - A project by Jesse Vahlfors.
+{% block detail_description %}
+    {{ project.detail_description }} - A project by Jesse Vahlfors.
 {% endblock %}
 
 {% block content %}
@@ -14,12 +14,15 @@
         <!-- Title and Description Section -->
         <section class="relative w-full md:max-h-120 bg-main_bg bg-cover flex flex-col gap-8 md:gap-4 lg:gap-12 items-center justify-center py-60 md:py-16 lg:py-60">
             <h1 class="text-4xl lg:text-6xl text-center font-bold px-6 uppercase">{{ project.title }}</h1>
-            <p class="text-lg md:text-xl text-center px-8 max-w-60">This page contains the case study of my {{project.title}}, which includes the Project Overview, Technologies Used, and plans for future updates to enhance functionality and features.</p>
+            <p class="text-lg md:text-xl text-center px-8 max-w-60">{{ project.hero_text }}</p>
             <div class="flex gap-8">
                 {% if project.link %}
                     <a href="{{ project.link }}" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">LIVE LINK</a>
                 {% endif %}    
                 <a href="{{ project.project_github }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">GITHUB</a>
+                {% if project.pypi_url %}
+                    <a href="{{ project.pypi_url }}" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">PyPi LINK</a>
+                {% endif %}
                 </div>
         </section>
 
@@ -42,7 +45,7 @@
                     <div>
                         <h2 class="text-2xl font-bold mb-4">Project Overview</h2>
                         <div class="flex flex-col gap-10 text-lg text-sky-800">
-                            {{ project.description|safe }}
+                            {{ project.detail_description|safe }}
                         </div>
                     </div>
 
@@ -65,7 +68,10 @@
                             {% endif %}
                             {% if project.project_github %}
                                 <a href="{{ project.project_github }}" target="_blank" class="bg-navy-blue text-white text-lg font-bold md:px-10 px-4 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">GITHUB</a>
-                            {% endif %}    
+                            {% endif %} 
+                            {% if project.pypi_url %}
+                                <a href="{{ project.pypi_url }}" class="bg-navy-blue text-white text-lg font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">PyPi LINK</a>
+                            {% endif %}   
                                 <a href="{% url 'home/main_page' %}#projects" class="bg-gray-300 text-navy-blue text-lg font-bold md:px-10 px-4 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">Go Back</a>
                         </div>
                     </div>
