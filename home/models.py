@@ -13,15 +13,56 @@ logger.debug("This is a test debug message for file uploads.")
 
 class Profile(models.Model):
     name = models.CharField(max_length=100)
-    bio = models.TextField()
+
+    bio = models.TextField(
+        help_text="Short bio displayed on the portfolio home page."
+    )
+
     email = models.EmailField()
-    phone = models.CharField(max_length=15, blank = True, null=True)
-    profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
-    introduction = models.TextField(null=True)
-    about_me_intro = models.TextField(null=True)
-    skills = models.TextField(null=True)
-    linkedin = models.URLField(null=True)
-    github = models.URLField(null=True)
+
+    phone = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True,
+        help_text="Contact phone number."
+    )
+
+    profile_image = models.ImageField(
+        upload_to='profile_images',
+        blank=True,
+        null=True,
+        help_text="Profile image displayed on the portfolio site."
+    )
+
+    introduction = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Short intro shown at the start of the About Me section."
+    )
+
+    about_me_intro = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Extended introduction for the About Me page."
+    )
+
+    skills = models.TextField(
+        blank=True,
+        null=True,
+        help_text="List of skills or technologies."
+    )
+
+    linkedin = models.URLField(
+        blank=True,
+        null=True,
+        help_text="Link to LinkedIn profile."
+    )
+
+    github = models.URLField(
+        blank=True,
+        null=True,
+        help_text="Link to GitHub profile."
+    )
 
     def clean_html(self, value):
         allowed_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'u', 's', 'a', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'img']
@@ -78,14 +119,66 @@ class Profile(models.Model):
 
 class Project(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField()
-    short_description = models.TextField(null=True)
-    image = models.ImageField(upload_to='project_images', blank=True, null=True)
-    link = models.URLField(blank=True, null=True)
+
+    list_summary = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Short blurb shown in the project list/grid."
+    )
+
+    hero_text = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Hero section intro shown at the top of the project detail page."
+    )
+
+    detail_description = models.TextField(
+        help_text="Full HTML description for the project detail page.",
+        blank=True,
+        null=True,
+    )
+
+    image = models.ImageField(
+        upload_to='project_images',
+        blank=True,
+        null=True,
+        help_text="Optional thumbnail image for the project page or project list."
+    )
+
+    link = models.URLField(
+        blank=True,
+        null=True,
+        help_text="URL to the live website or interactive demo for this project."
+    )
+
     date_completed = models.DateField()
-    slug = models.SlugField(unique=True, null=True, max_length=200)
-    skills = models.TextField(null=True)
-    project_github = models.URLField(null=True)
+
+    slug = models.SlugField(
+        unique=True,
+        max_length=200,
+        blank=True,
+        null=True,
+        help_text="URL slug for the project's detail page (auto-generated if left empty)."
+    )
+
+    skills = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Skills or technologies used in this project."
+    )
+
+    project_github = models.URLField(
+        blank=True,
+        null=True,
+        help_text="Link to the GitHub repository for this project."
+    )
+
+    pypi_url = models.URLField(
+        blank=True,
+        null=True,
+        help_text="Link to the project's PyPI package (if applicable)."
+    )
+
 
     def get_absolute_url(self):
         return reverse('home/project_detail', args=[str(self.id)])
@@ -95,8 +188,8 @@ class Project(models.Model):
         return bleach.clean(value, tags=allowed_tags)
 
     def save(self, *args, **kwargs):
-        if self.description:
-            self.description = self.clean_html(self.description)
+        if self.detail_description:
+            self.detail_description = self.clean_html(self.detail_description)
 
         if not self.slug:
             base_slug = slugify(self.title)
