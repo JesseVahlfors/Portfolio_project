@@ -183,7 +183,7 @@ class ProjectModelTests(BaseTestWithTempMedia):
     def setUp(self):
         self.project = Project.objects.create(
             title = "Project1",
-            description = "Nice project",
+            detail_description = "Nice project",
             image = "",
             link = "www.testi.com",
             date_completed = "2025-01-13",
@@ -191,7 +191,7 @@ class ProjectModelTests(BaseTestWithTempMedia):
 
     def test_project_creation(self):
         self.assertEqual(self.project.title, "Project1")
-        self.assertEqual(self.project.description, "Nice project")
+        self.assertEqual(self.project.detail_description, "Nice project")
         self.assertEqual(self.project.link, "www.testi.com")
         self.assertEqual(self.project.date_completed, "2025-01-13")
 
