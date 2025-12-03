@@ -15,7 +15,7 @@ click==8.1.8
 colorama==0.4.6
 cookiecutter==2.6.0
 dj-database-url==2.3.0
-Django==5.1.4
+Django==5.2.8
 django-browser-reload==1.17.0
 django-cors-headers==4.6.0
 django-debug-toolbar==5.0.1
