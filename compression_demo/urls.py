@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.ParserDemoView.as_view(), name='json_parser'),
-    path('compression_demo/', views.ParseJSONAjaxView.as_view(), name='parse_json'),
+    path('', views.compression_demo_page, name='json_parser'),
+    path('compress/', views.compress_action, name='compress'),
+    path('decompress/', views.decompress_action, name='decompress'),
 ]

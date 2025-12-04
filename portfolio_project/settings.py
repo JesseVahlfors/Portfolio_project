@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'theme',
     'storages',
     'json_parser',
+    'compression_demo',
 ]
 
 
