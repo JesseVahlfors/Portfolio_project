@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}JV Compression Tool{% endblock %}
+{% block content %}
+    <h1>JV Compression Tool</h1>
+    <p>Short description fo the tool</p>
+    <textarea name="input_text"></textarea>
+    <button>Compress</button>
+    <div id="compression-result"></div>
+    <script>
+        const csrfToken = '{{ csrf_token }}';
+    </script>
+{% endblock %}

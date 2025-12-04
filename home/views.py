@@ -3,7 +3,7 @@ from django.views.generic import DetailView, TemplateView, ListView
 from .models import Profile, Project
 from .forms import ContactForm
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.contrib import messages
 from django.conf import settings
 import environ
