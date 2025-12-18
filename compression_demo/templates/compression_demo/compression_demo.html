@@ -3,23 +3,30 @@
 
 {% block title %}JV Compression Tool{% endblock %}
 {% block content %}
-    <h1>JV Compression Tool</h1>
+    <div class="px-4 py-8 pt-24 bg-main_bg bg-cover flex items-center min-h-screen flex-col gap-8">
+        <h1>JV Compression Tool</h1>
 
-    <p>Try compressing text using my Huffman compression library.</p>
+        <p>Try compressing text using my Huffman compression library.</p>
 
-    <form
-        hx-post="{% url 'compress_action' %}"
-        hx-target="#compression-result"
-        hx-swap="innerHTML"
-    >
-        <textarea name="input_text"></textarea>
+        <form
+            {% comment %} hx-post="{% url 'compress_action' %}" {% endcomment %}
+            hx-target="#compression-result"
+            hx-swap="innerHTML"
+        >
+            <textarea
+            name="input_text"
+            class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
+            ></textarea>
 
-        <button>Compress</button>
-    </form>
+            <button
+            class="bg-navy-blue hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300"
+            >Compress</button>
+        </form>
 
-    <div id="compression-result"></div>
+        <div id="compression-result"></div>
 
-    <script>
-        const csrfToken = '{{ csrf_token }}';
-    </script>
+        <script>
+            const csrfToken = '{{ csrf_token }}';
+        </script>
+    </div>
 {% endblock %}
