@@ -184,7 +184,7 @@ class Project(models.Model):
         return reverse('home/project_detail', args=[str(self.id)])
 
     def clean_html(self, value):
-        allowed_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'u', 's', 'a', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'img']
+        allowed_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'strong', 'em', 'u', 's', 'a', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'img', 'hr']
         return bleach.clean(value, tags=allowed_tags)
 
     def save(self, *args, **kwargs):
