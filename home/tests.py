@@ -13,6 +13,10 @@ from botocore.exceptions import NoCredentialsError
 import json
 import environ
 import os
+import unittest
+
+env = environ.Env()
+environ.Env.read_env()
 
 env = environ.Env()
 environ.Env.read_env()
@@ -288,6 +292,10 @@ class ContactFormTests(BaseTestWithTempMedia):
 
 
 # Cloud storage tests
+@unittest.skipIf(
+    'storages.backends.s3boto3' not in str(os.getenv('DEFAULT_FILE_STORAGE', '')),
+    "S3 storage not configured"
+)
 class CloudStorageTests(BaseTestWithTempMedia):
 
     @override_settings(
