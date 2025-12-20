@@ -9,10 +9,11 @@
         <p>Try compressing text using my Huffman compression library.</p>
 
         <form
-            {% comment %} hx-post="{% url 'compress_action' %}" {% endcomment %}
+            hx-post="{% url 'compress' %}"
             hx-target="#compression-result"
             hx-swap="innerHTML"
         >
+        {% csrf_token %}
             <textarea
             name="input_text"
             class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
