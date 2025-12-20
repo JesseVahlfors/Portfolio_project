@@ -9,30 +9,21 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
 
 # Local database: prefer .env Postgres settings, fall back to SQLite for
 # local development and test discovery when DATABASE_* is not provided.
-db_name = env('DATABASE_NAME', default=None)
-if db_name:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': env('DATABASE_NAME'),
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT'),
+        'TEST': {
+            'NAME': env('TEST_DATABASE_NAME'),
             'USER': env('DATABASE_USER'),
             'PASSWORD': env('DATABASE_PASSWORD'),
-            'HOST': env('DATABASE_HOST'),
-            'PORT': env('DATABASE_PORT'),
-            'TEST': {
-                'NAME': env('TEST_DATABASE_NAME'),
-                'USER': env('DATABASE_USER'),
-                'PASSWORD': env('DATABASE_PASSWORD'),
-            },
-        }
+        },
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+}
 
 # Media and storage - local filesystem for development
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
