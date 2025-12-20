@@ -20,12 +20,20 @@ def compress_action(request):
 
     original_size = 0
     compressed_size = 0
-    compression_ratio = 0 if original_size == 0 else round((compressed_size / original_size) * 100, 1)
+    compression_ratio = 0
 
     if not input_text.strip():
         summary = "Please enter some text"
     else:
-        summary = f"Your original file size was {original_size} and compressed file is {compressed_size}."
+        data = input_text.encode("utf-8")
+        original_size = len(data)
+        compressed = compress(data)
+        compressed_size = len(compressed)
+        compression_ratio = 0 if original_size == 0 else round((compressed_size / original_size) * 100, 1)
+        if compression_ratio < 100:
+            summary = f"Compressed to {compressed_size} bytes ({compression_ratio} % of original)."
+        else:
+            summary = "Compressed output is larger than the original (common for small inputs due to header overhead)."
 
     
 

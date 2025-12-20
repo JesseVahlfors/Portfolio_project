@@ -1,7 +1,9 @@
 import pytest
 from django.urls import reverse
 
-@pytest.mark.django_db
+pytestmark = pytest.mark.django_db
+
+
 def test_demo__page_loads(client):
     url = reverse("compression_demo")
     response = client.get(url)
@@ -9,7 +11,11 @@ def test_demo__page_loads(client):
     assert response.status_code == 200
     assert b'JV Compression Tool' in response.content
 
-@pytest.mark.django_db
+def test_compress_action_rejects_get(client):
+    url = reverse("compress")
+    response = client.get(url)
+    assert response.status_code == 405
+
 def test_compress_action_returns_stats(client):
     url = reverse("compress")
 
@@ -18,10 +24,9 @@ def test_compress_action_returns_stats(client):
     })
 
     assert response.status_code == 200
-    assert b"Original size: 11 bytes" in response.content
+    assert b"Original size:</strong> 11 bytes" in response.content
     assert b"Compressed size" in response.content
 
-@pytest.mark.django_db
 def test_compress_action_empty_input(client):
     url = reverse("compress")
 
@@ -32,7 +37,6 @@ def test_compress_action_empty_input(client):
     assert response.status_code == 200
     assert b"Please enter some text" in response.content
 
-@pytest.mark.django_db
 def test_compress_action_compresses_input(client):
     url = reverse("compress")
 
@@ -41,4 +45,5 @@ def test_compress_action_compresses_input(client):
     })
 
     assert response.status_code == 200
+    assert b"630 bytes" in response.content
     assert b"Compressed size:</strong> 0 bytes" not in response.content
