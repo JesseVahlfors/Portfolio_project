@@ -9,7 +9,10 @@
 
     <header class="text-center space-y-2">
       <h1 class="text-3xl font-bold">JV Compression Tool</h1>
-      <p class="text-sm text-gray-700">Try compressing text using my Huffman compression library.</p>
+      <p class="text-sm text-gray-800">Try compressing text using my Huffman compression library.</p>
+      <p class="text-xs text-gray-700">
+        Built from scratch in Python using a custom Huffman tree, heap, and header format.
+      </p>
     </header>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -18,7 +21,7 @@
       <section class="bg-white/90 backdrop-blur rounded-2xl shadow-md p-5 space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-lg font-semibold">Compress</h2>
-          <p class="text-xs text-gray-600">Max ~250 KB</p>
+          <p class="text-xs text-gray-700">Max ~250 KB</p>
         </div>
 
         <form
@@ -30,8 +33,31 @@
         >
           {% csrf_token %}
 
-          <label class="block text-sm font-medium">Input text</label>
+          <div class="flex items-center justify-between">
+            <label class="block text-sm font-medium">
+              Input text
+            </label>
+
+            <div class="flex items-center gap-1 text-xs text-gray-600">
+              <span>or try one of the</span>
+
+              <select
+                id="sample-select"
+                class="border border-gray-300 rounded-md bg-white px-2 py-0.5
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
+              >
+                <option value="">Samples…</option>
+                <option value="tiny">Tiny (size increase)</option>
+                <option value="normal">Normal text</option>
+                <option value="repetitive">Highly repetitive</option>
+                <option value="uniform">Uniform / random</option>
+                <option value="skewed">Large & skewed</option>
+              </select>
+            </div>
+          </div>
+
           <textarea
+            id="compress-input"
             name="input_text"
             class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
             maxlength="250000"
@@ -40,9 +66,18 @@
 
           <button
             type="submit"
-            class="bg-navy-blue hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300"
+            class="bg-navy-blue hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300 active:translate-y-0 active:scale-95 active:shadow-inner"
           >
             Compress
+          </button>
+
+          <button
+            id="copy-btn"
+            type="button"
+            class="px-4 py-2 bg-blue-600 text-white font-medium
+                   hover:bg-blue-700 transition-colors hover:-translate-y-0.5 duration-200 rounded-xl shadow-md shadow-zinc-400 active:translate-y-0 active:scale-95 active:shadow-inner"
+          >
+            Copy
           </button>
         </form>
 
@@ -74,6 +109,7 @@
 
           <label class="block text-sm font-medium">Compressed data (base64)</label>
           <textarea
+            id="decompress-input"
             name="compressed_b64"
             class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
             rows="10"
@@ -81,7 +117,7 @@
 
           <button
             type="submit"
-            class="bg-navy-blue hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300"
+            class="bg-navy-blue hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300 active:translate-y-0 active:scale-95 active:shadow-inner"
           >
             Decompress
           </button>
@@ -96,8 +132,210 @@
           </div>
         </div>
       </section>
-
     </div>
+
+    <!-- Nerd mode: samples -->
+    <details class="mt-6 bg-white/80 backdrop-blur rounded-2xl shadow-md p-5">
+      <summary class="cursor-pointer font-semibold text-sm">
+        Why the samples behave like they do
+      </summary>
+
+      <div class="mt-4 space-y-4 text-sm text-gray-800">
+        <div>
+          <p class="font-semibold">Tiny input → often gets bigger</p>
+          <p class="text-gray-700">
+            Huffman compression always includes a header with padding information and the data needed to rebuild the tree during decompression.
+            For very small inputs, this fixed overhead dominates, so the compressed output can be larger than the original.
+          </p>
+          <p class="text-gray-700 mt-1">
+            <span class="font-medium">Takeaway:</span> Compression has a startup cost.
+          </p>
+        </div>
+
+        <div>
+          <p class="font-semibold">Highly repetitive → big wins</p>
+          <p class="text-gray-700">
+            When one or a few symbols dominate the input, Huffman assigns them very short codes.
+            This lowers the average bits per symbol and results in strong compression.
+          </p>
+          <p class="text-gray-700 mt-1">
+            <span class="font-medium">Takeaway:</span> Skewed frequency distributions work best.
+          </p>
+        </div>
+
+        <div>
+          <p class="font-semibold">Uniform / random → little or no win</p>
+          <p class="text-gray-700">
+            If symbols appear with roughly equal frequency, Huffman codes end up close to fixed-width length.
+            In that case there is little redundancy to remove, and the header overhead can make the result worse.
+          </p>
+          <p class="text-gray-700 mt-1">
+            <span class="font-medium">Takeaway:</span> High entropy resists compression.
+          </p>
+        </div>
+        </div>
+
+        <div>
+          <p class="font-semibold">Large & skewed → best case</p>
+          <p class="text-gray-700">
+            With enough input data, the header cost becomes negligible.
+            Strong frequency imbalance then drives excellent compression ratios.
+          </p>
+          <p class="text-gray-700 mt-1">
+            <span class="font-medium">Takeaway:</span> Size helps, but structure matters more.
+          </p>
+        </div>
+    </details>
+
+    <!-- Nerd mode: implementation notes -->
+    <details class=" bg-white/80 backdrop-blur rounded-2xl shadow-md p-5">
+      <summary class="cursor-pointer font-semibold text-sm">
+        How this implementation works
+      </summary>
+
+      <div class="mt-4 space-y-4 text-sm text-gray-800">
+        <p class="text-gray-700">
+          These notes describe how <span class="font-medium">this implementation</span> of Huffman coding works in practice.
+        </p>
+
+        <div>
+          <p class="font-semibold">Frequency counting</p>
+          <p class="text-gray-700">
+            The compressor starts by counting how often each byte value appears in the input.
+            These frequencies fully determine the structure of the Huffman tree and the final codes.
+          </p>
+          <p class="text-gray-700 mt-1">
+            Common symbols receive shorter codes, while rare symbols receive longer ones.
+          </p>
+        </div>
+
+        <div>
+          <p class="font-semibold">Nodes & tree construction</p>
+          <p class="text-gray-700">
+            Each symbol begins as a leaf node containing its frequency.
+            Nodes are merged using a min-heap, repeatedly combining the two lowest-weight nodes into a new internal node.
+          </p>
+          <p class="text-gray-700 mt-1">
+            This continues until a single Huffman tree remains, defining a prefix-free code for all symbols.
+          </p>
+          <p class="text-gray-700 mt-2">
+            For a visual explanation, see the interactive Huffman tree example on
+            <a
+              href="https://www.w3schools.com/dsa/dsa_ref_huffman_coding.php"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline hover:text-blue-700"
+            >W3Schools</a>.
+          </p>
+        </div>
+
+        <div>
+          <p class="font-semibold">Header structure & overhead</p>
+          <p class="text-gray-700">
+            The compressed output includes a header containing padding length information and the data required to reconstruct the Huffman tree during decompression.
+            This makes decompression deterministic and self-contained, but it also introduces fixed overhead — especially noticeable for small inputs.
+          </p>
+        </div>
+      </div>
+    </details>
+
   </div>
 </div>
+
+<script>
+  const copyBtn = document.getElementById("copy-btn");
+
+  copyBtn.addEventListener("click", () => {
+    const outputEl = document.getElementById("compressed-b64-output");
+    const decompressEl = document.getElementById("decompress-input");
+
+    if (!outputEl || !decompressEl) return;
+
+    const text = (outputEl.value ?? outputEl.textContent ?? "").trim();
+    if (!text) return;
+
+    decompressEl.value = text;
+
+
+    // Focus to decompress textarea if on small screens
+    const isLarge = window.matchMedia("(min-width: 1024px)").matches;
+
+    if (!isLarge) {
+      decompressEl.focus();
+      decompressEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    } else {
+      // Desktop: quick highlight to show where the text went.
+      decompressEl.classList.add("ring-2", "ring-green-500");
+      setTimeout(() => {
+        decompressEl.classList.remove("ring-2", "ring-green-500");
+      }, 700);
+    }
+
+    // Button feedback
+    const originalText = copyBtn.textContent;
+    copyBtn.textContent = "Moved ✓";
+    copyBtn.classList.remove("bg-blue-600", "hover:bg-blue-700");
+    copyBtn.classList.add("bg-green-600");
+
+    setTimeout(() => {
+      copyBtn.textContent = originalText;
+      copyBtn.classList.remove("bg-green-600");
+      copyBtn.textContent = "Copy";
+      copyBtn.classList.add("bg-blue-600", "hover:bg-blue-700");
+    }, 1200);
+  });
+</script>
+<script>
+  // --- Samples: dropdown -> fill compress textarea ---
+  const sampleSelect = document.getElementById("sample-select");
+  const compressInput = document.getElementById("compress-input");
+
+  // Keep samples small enough to stay under your max length.
+  const SAMPLES = {
+    tiny: "Hello world",
+
+    normal:
+    `Huffman coding is a lossless compression method that assigns shorter codes to more frequent symbols.
+    This demo compresses text as raw bytes and includes a header so the data can be decompressed later.
+    Huffman coding is a lossless compression method that assigns shorter codes to more frequent symbols.
+    It works by building a binary tree based on symbol frequencies and encoding the data using that tree.
+    This demo compresses text as raw bytes and includes a header so the data can be decompressed later.
+    `,
+
+    repetitive: "A".repeat(8000),
+
+    // Balanced-ish distribution to demonstrate "no gain" + header overhead.
+    // (Not truly random, but close enough for the point.)
+    uniform: (() => {
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:',.<>/? ";
+      let out = "";
+      for (let i = 0; i < 6000; i++) out += alphabet[i % alphabet.length];
+      return out;
+    })(),
+
+    // Large + skewed: lots of spaces and a few letters dominate.
+    skewed: (() => {
+      const chunk = "     eeeeeeeeeee tttttttttt aaaaaaaa oooooooo nnnnnn rrrrrr ";
+      return chunk.repeat(2000);
+    })(),
+  };
+
+  if (sampleSelect && compressInput) {
+    sampleSelect.addEventListener("change", () => {
+      const key = sampleSelect.value;
+      if (!key || !(key in SAMPLES)) return;
+
+      compressInput.value = SAMPLES[key];
+
+      // Nice UX: focus where the content went (especially on mobile)
+      compressInput.focus();
+
+      // Optional: place cursor at the end
+      compressInput.setSelectionRange(compressInput.value.length, compressInput.value.length);
+
+      // Optional: reset dropdown back to placeholder so user can pick again easily
+      sampleSelect.value = "";
+    });
+  }
+</script>
 {% endblock %}
