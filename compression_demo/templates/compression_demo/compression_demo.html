@@ -2,55 +2,102 @@
 {% load static %}
 
 {% block title %}JV Compression Tool{% endblock %}
-{% block content %}
-    <div class="px-4 py-8 pt-24 bg-main_bg bg-cover flex items-center min-h-screen flex-col gap-8">
-        <h1>JV Compression Tool</h1>
 
-        <p>Try compressing text using my Huffman compression library.</p>
+{% block content %}
+<div class="px-4 py-8 pt-24 bg-main_bg bg-cover min-h-screen">
+  <div class="max-w-6xl mx-auto flex flex-col gap-6">
+
+    <header class="text-center space-y-2">
+      <h1 class="text-3xl font-bold">JV Compression Tool</h1>
+      <p class="text-sm text-gray-700">Try compressing text using my Huffman compression library.</p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- COMPRESS -->
+      <section class="bg-white/90 backdrop-blur rounded-2xl shadow-md p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold">Compress</h2>
+          <p class="text-xs text-gray-600">Max ~250 KB</p>
+        </div>
 
         <form
-            hx-post="{% url 'compress' %}"
-            hx-target="#compression-result"
-            hx-swap="innerHTML"
-            hx-validate="true"
-            class="w-1/2"
+          hx-post="{% url 'compress' %}"
+          hx-target="#compression-result"
+          hx-swap="innerHTML"
+          hx-validate="true"
+          class="space-y-3"
         >
-        {% csrf_token %}
-            <textarea
+          {% csrf_token %}
+
+          <label class="block text-sm font-medium">Input text</label>
+          <textarea
             name="input_text"
             class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
             maxlength="250000"
-            rows="6"
-            ></textarea>
+            rows="10"
+          ></textarea>
 
-            <p>Max character limit 250k</p>
-            <button
-            class="bg-navy-blue hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300"
-            >Compress</button>
-        </form>
-
-        <div id="compression-result"></div>
-        
-        <form
-        hx-post="{% url 'decompress' %}"
-        hx-target="#decompress-result"
-        hx-swap="innerHTML"
-        hx-validate="true"
-        class="w-1/2"
-        >
-            {% csrf_token %}
-            <textarea 
-            name="compressed_b64"
-            class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
-            rows="6"
-            ></textarea>
-            <button 
+          <button
             type="submit"
             class="bg-navy-blue hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300"
-            >
-            Decompress:
-            </button>
+          >
+            Compress
+          </button>
         </form>
-        <div id="decompress-result"></div>
+
+        <!-- Results card: stays visible to avoid layout jumping -->
+        <div class="border border-dashed border-gray-300 rounded-xl p-4 bg-white">
+          <h3 class="text-sm font-semibold mb-2">Results</h3>
+
+          <div id="compression-result" class="text-sm text-gray-500">
+            Compressed output will appear here.
+          </div>
+        </div>
+      </section>
+
+      <!-- DECOMPRESS -->
+      <section class="bg-white/90 backdrop-blur rounded-2xl shadow-md p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold">Decompress</h2>
+          <p class="text-xs text-gray-600">Paste base64</p>
+        </div>
+
+        <form
+          hx-post="{% url 'decompress' %}"
+          hx-target="#decompress-result"
+          hx-swap="innerHTML"
+          hx-validate="true"
+          class="space-y-3"
+        >
+          {% csrf_token %}
+
+          <label class="block text-sm font-medium">Compressed data (base64)</label>
+          <textarea
+            name="compressed_b64"
+            class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
+            rows="10"
+          ></textarea>
+
+          <button
+            type="submit"
+            class="bg-navy-blue hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300"
+          >
+            Decompress
+          </button>
+        </form>
+
+        <!-- Output card -->
+        <div class="border border-dashed border-gray-300 rounded-xl p-4 bg-white">
+          <h3 class="text-sm font-semibold mb-2">Output</h3>
+
+          <div id="decompress-result" class="text-sm text-gray-500">
+            Decompressed text will appear here.
+          </div>
+        </div>
+      </section>
+
     </div>
+  </div>
+</div>
 {% endblock %}

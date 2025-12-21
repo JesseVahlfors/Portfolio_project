@@ -1,18 +1,17 @@
 <div class="space-y-4">
 
   <!-- Compressed output -->
-  {% if compressed_b64 %}
-    <div>
-      <label class="block font-semibold mb-1">
-        Compressed output (base64)
-      </label>
-      <textarea
-        readonly
-        class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 resize-y"
-        rows="6"
-      >{{ compressed_b64 }}</textarea>
-    </div>
-  {% endif %}
+  <div>
+    <label class="block font-semibold mb-1">
+      Compressed output (base64)
+    </label>
+    <textarea
+      id="compressed-b64-output"
+      readonly
+      class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 resize-y"
+      rows="6"
+    >{{ compressed_b64|default:"Compressed output will appear here." }}</textarea>
+  </div>
 
   <!-- Stats -->
   {% if compressed_size is not None %}

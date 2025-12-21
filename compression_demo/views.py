@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 from home.models import Profile
 from binascii import Error as BinasciiError
 
-MAX_TEST_TEXTAREA_BYTES = 250 * 1024 #250 kb
+MAX_TEXTAREA_BYTES = 250 * 1024 #250 kb
 
 
 class CompressionDemoView(TemplateView):
@@ -29,26 +29,30 @@ def compress_action(request):
 
     if not input_text.strip():
         return render(request, compress_url, {
+            "compressed_b64": "",
             "original_size": 0,
-            "compressed_size": 0,
-            "compression_ratio": 0,
+            "compressed_size": None,
+            "compression_ratio": None,
             "summary": "Please enter some text",
         })
 
     input_bytes = input_text.encode("utf-8")
     
-    if len(input_bytes) > MAX_TEST_TEXTAREA_BYTES:
+    if len(input_bytes) > MAX_TEXTAREA_BYTES:
         return render(request, compress_url, {
+            "compressed_b64": "",
             "original_size": len(input_bytes),
-            "compressed_size": 0,
-            "compression_ratio": 0,
-            "summary": "Input is too long (max 250 KB). Please shorten the text.",
+            "compressed_size": None,
+            "compression_ratio": None,
+            "summary": "Input is too long (max 250 KB).",
         })
     
-    data = input_text.encode("utf-8")
-    original_size = len(data)
-    compressed = compress(data)
+    original_size = len(input_bytes)
+    compressed = compress(input_bytes)
     compressed_size = len(compressed)
+    
+    base64_string = base64.b64encode(compressed).decode("ascii")
+    
     compression_ratio = 0 if original_size == 0 else round((compressed_size / original_size) * 100, 1)
     if compression_ratio < 100:
         summary = f"Compressed to {compressed_size} bytes ({compression_ratio} % of original)."
@@ -58,6 +62,7 @@ def compress_action(request):
     
 
     return render(request, compress_url, {
+    "compressed_b64": base64_string,
     "original_size": original_size,
     "compressed_size": compressed_size,
     "compression_ratio": compression_ratio,
