@@ -1,7 +1,31 @@
-<div>
-    <p><strong>Original size:</strong> {{ original_size }} bytes</p>
-    <p><strong>Compressed size:</strong> {{ compressed_size }} bytes</p>
-    <p><strong>Compression ratio:</strong> {{ compression_ratio }}%</p>
+<div class="space-y-4">
 
-    <p>{{ summary }}</p>
+  <!-- Compressed output -->
+  {% if compressed_b64 %}
+    <div>
+      <label class="block font-semibold mb-1">
+        Compressed output (base64)
+      </label>
+      <textarea
+        readonly
+        class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 resize-y"
+        rows="6"
+      >{{ compressed_b64 }}</textarea>
+    </div>
+  {% endif %}
+
+  <!-- Stats -->
+  {% if compressed_size is not None %}
+    <div class="space-y-1 text-sm">
+      <p><strong>Original size:</strong> {{ original_size }} bytes</p>
+      <p><strong>Compressed size:</strong> {{ compressed_size }} bytes</p>
+      <p><strong>Compression ratio:</strong> {{ compression_ratio }}%</p>
+    </div>
+  {% endif %}
+
+  <!-- Summary / error -->
+  {% if summary %}
+    <p class="text-sm">{{ summary }}</p>
+  {% endif %}
+
 </div>

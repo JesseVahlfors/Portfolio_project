@@ -1,0 +1,10 @@
+<div>
+  {% if decompressed_text %}
+    <p><strong>Decompressed text:</strong></p>
+    <pre class="whitespace-pre-wrap">{{ decompressed_text }}</pre>
+  {% endif %}
+
+  {% if error %}
+    <p>{{ error }}</p>
+  {% endif %}
+</div>

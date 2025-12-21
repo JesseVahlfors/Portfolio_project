@@ -1,9 +1,11 @@
+import base64
 from django.shortcuts import render
 from compression_tool.compressor import compress
 from compression_tool.decompressor import decompress
 from django.views.generic import TemplateView
 from django.views.decorators.http import require_POST
 from home.models import Profile
+from binascii import Error as BinasciiError
 
 MAX_TEST_TEXTAREA_BYTES = 250 * 1024 #250 kb
 
@@ -18,6 +20,7 @@ class CompressionDemoView(TemplateView):
 
 @require_POST
 def compress_action(request):
+    compress_url = 'compression_demo/_compress_results.html'  
     input_text = request.POST.get("input_text", "")
 
     original_size = 0
@@ -25,7 +28,7 @@ def compress_action(request):
     compression_ratio = 0
 
     if not input_text.strip():
-        return render(request, 'compression_demo/_compress_results.html', {
+        return render(request, compress_url, {
             "original_size": 0,
             "compressed_size": 0,
             "compression_ratio": 0,
@@ -35,7 +38,7 @@ def compress_action(request):
     input_bytes = input_text.encode("utf-8")
     
     if len(input_bytes) > MAX_TEST_TEXTAREA_BYTES:
-        return render(request, 'compression_demo/_compress_results.html', {
+        return render(request, compress_url, {
             "original_size": len(input_bytes),
             "compressed_size": 0,
             "compression_ratio": 0,
@@ -54,14 +57,45 @@ def compress_action(request):
 
     
 
-    return render(request, 'compression_demo/_compress_results.html', {
+    return render(request, compress_url, {
     "original_size": original_size,
     "compressed_size": compressed_size,
     "compression_ratio": compression_ratio,
     "summary": summary
     })
-    
 
+
+@require_POST
 def decompress_action(request):
-    pass
+    compressed_b64 = request.POST.get("compressed_b64", "")
+    decompress_url = "compression_demo/_decompress_results.html"
+
+    if not compressed_b64 or not compressed_b64.strip():
+        return render(request, decompress_url, {
+        "decompressed_text": "",
+        "error": "Please paste compressed data.",
+        })
+    
+    try:
+        compressed_bytes = base64.b64decode(compressed_b64, validate=True)
+    except (BinasciiError, ValueError):
+        return render(request, decompress_url, {
+            "decompressed_text": "",
+            "error": "Invalid base64 input."
+        })
+    
+    try:
+        raw = decompress(compressed_bytes)
+    except Exception:
+        return render(request, decompress_url, {
+            "decompressed_text": "",
+            "error": "That data doesn't look like a valid JV compressed payload."
+        })
+
+    text = raw.decode("utf-8", errors="replace")
+
+    return render(request, decompress_url, {
+            "decompressed_text": text,
+            "error": "",
+        })
 

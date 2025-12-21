@@ -20,6 +20,7 @@
             name="input_text"
             class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
             maxlength="250000"
+            rows="6"
             ></textarea>
 
             <p>Max character limit 250k</p>
@@ -29,9 +30,27 @@
         </form>
 
         <div id="compression-result"></div>
-
-        <script>
-            const csrfToken = '{{ csrf_token }}';
-        </script>
+        
+        <form
+        hx-post="{% url 'decompress' %}"
+        hx-target="#decompress-result"
+        hx-swap="innerHTML"
+        hx-validate="true"
+        class="w-1/2"
+        >
+            {% csrf_token %}
+            <textarea 
+            name="compressed_b64"
+            class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
+            rows="6"
+            ></textarea>
+            <button 
+            type="submit"
+            class="bg-navy-blue hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300"
+            >
+            Decompress:
+            </button>
+        </form>
+        <div id="decompress-result"></div>
     </div>
 {% endblock %}
