@@ -79,6 +79,13 @@
           >
             Copy
           </button>
+
+          <button 
+            id="clear-compress" 
+            type="button" 
+            class="px-4 py-2 bg-gray-200 text-gray-800 font-medium hover:bg-gray-300 transition-all active:scale-95 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-200">
+            Clear
+          </button>
         </form>
 
         <!-- Results card: stays visible to avoid layout jumping -->
@@ -121,6 +128,14 @@
           >
             Decompress
           </button>
+
+          <button 
+            id="clear-decompress" 
+            type="button" 
+            class="px-4 py-2 bg-gray-200 text-gray-800 font-medium hover:bg-gray-300 transition-all active:scale-95 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-200">
+            Clear
+          </button>
+
         </form>
 
         <!-- Output card -->
@@ -335,6 +350,37 @@
 
       // Optional: reset dropdown back to placeholder so user can pick again easily
       sampleSelect.value = "";
+    });
+  }
+</script>
+<script>
+  // Clear buttons
+  const clearCompressBtn = document.getElementById("clear-compress");
+  const clearDecompressBtn = document.getElementById("clear-decompress");
+
+  if (clearCompressBtn) {
+    clearCompressBtn.addEventListener("click", () => {
+      const input = document.getElementById("compress-input");
+      const result = document.getElementById("compression-result");
+
+      if (input) input.value = "";
+      if (result) {
+        result.innerHTML = "Compressed output will appear here.";
+        result.classList.add("text-gray-500");
+      }
+    });
+  }
+
+  if (clearDecompressBtn) {
+    clearDecompressBtn.addEventListener("click", () => {
+      const input = document.getElementById("decompress-input");
+      const result = document.getElementById("decompress-result");
+
+      if (input) input.value = "";
+      if (result) {
+        result.innerHTML = "Decompressed text will appear here.";
+        result.classList.add("text-gray-500");
+      }
     });
   }
 </script>
