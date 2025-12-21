@@ -83,9 +83,17 @@
         </div>
         <pre
         id="result"
-        class="language-json mt-8 hidden bg-gray-100 border border-gray-300 rounded-xl p-4 text-sm font-mono text-gray-800 whitespace-pre-wrap"
+        class="language-json mt-8 hidden
+                bg-gray-100 border border-gray-300 rounded-xl
+                p-4 text-sm font-mono text-gray-800
+                whitespace-pre-wrap break-words
+                overflow-x-hidden"
         >
-            <code class="language-json"></code>
+            <code
+            class="language-json block
+                    whitespace-pre-wrap break-words
+                    overflow-wrap-anywhere"
+            ></code>
         </pre>
     </div>
     <a href="{% url 'home/project_detail' slug='JSON-Parser' %}" class="bg-gray-300 text-navy-blue text-lg font-bold md:px-10 px-4 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300">Go Back</a>

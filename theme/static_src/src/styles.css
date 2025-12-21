@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Prism override ONLY for JSON parser output */
+@layer utilities {
+  #result {
+    white-space: pre-wrap !important;
+    overflow-x: hidden !important;
+  }
+
+  #result code {
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+    display: block;
+  }
+}
