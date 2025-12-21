@@ -12,13 +12,17 @@
             hx-post="{% url 'compress' %}"
             hx-target="#compression-result"
             hx-swap="innerHTML"
+            hx-validate="true"
+            class="w-1/2"
         >
         {% csrf_token %}
             <textarea
             name="input_text"
             class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
+            maxlength="250000"
             ></textarea>
 
+            <p>Max character limit 250k</p>
             <button
             class="bg-navy-blue hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300"
             >Compress</button>
