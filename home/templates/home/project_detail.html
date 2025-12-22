@@ -13,7 +13,7 @@
 
   <!-- ================= HERO ================= -->
   <section
-    class="relative w-full bg-main_bg bg-cover bg-center
+    class="relative w-full h-[calc(100svh-4rem)] bg-main_bg bg-cover bg-center
            flex flex-col items-center justify-center
            gap-6 px-6 py-24 sm:py-28 md:py-20 lg:py-60"
   >
@@ -69,107 +69,96 @@
     </div>
   </section>
 
-  <!-- ================= CONTENT ================= -->
-  <section class="max-w-5xl mx-auto bg-white px-4 md:px-8 py-20 flex flex-col gap-32">
+<!-- ================= CONTENT ================= -->
+<section class="w-full bg-amber-50/40">
 
-    <!-- Project Image -->
-<div class="flex justify-center w-full">
-  {% if project.image %}
-    <div class="max-w-5xl h-96 bg-white/40 overflow-hidden rounded-xl shadow-[0px_0px_20px_4px] shadow-amber-600/20 flex items-center justify-center">
-      <img
-        src="{{ project.image.url }}"
-        alt="{{ project.title }}"
-        class="block max-h-full w-full object-contain"
-      >
-    </div>
-  {% else %}
-    <div class="w-full max-w-5xl h-96 bg-amber-100 rounded-xl flex items-center justify-center">
-      <p class="text-navy-blue">No Image Available</p>
-    </div>
-  {% endif %}
-</div>
+  <div class="max-w-5xl mx-auto px-4 md:px-8 py-20">
 
-    <!-- Text content -->
-    <div class="md:w-10/12 mx-auto flex flex-col gap-16">
+    <!-- White content panel -->
+    <div
+      class="bg-white rounded-2xl
+             shadow-lg shadow-amber-600/10
+             border border-amber-100/60
+             px-4 md:px-10 py-12 md:py-16
+             flex flex-col gap-32"
+    >
 
-      <!-- Overview -->
-      <div>
-        <h2 class="text-2xl font-bold mb-4">Project Overview</h2>
-        <div class="flex flex-col gap-10 text-lg text-sky-800">
-          {{ project.detail_description|safe }}
+      <!-- Project Image -->
+      <div class="flex justify-center w-full">
+        {% if project.image %}
+          <div class="max-w-5xl bg-white/40 overflow-hidden rounded-xl shadow-[0px_0px_20px_4px] shadow-amber-600/20 flex items-center justify-center">
+            <img
+              src="{{ project.image.url }}"
+              alt="{{ project.title }}"
+              class="block max-h-full w-full object-contain"
+            >
+          </div>
+        {% else %}
+          <div class="w-full max-w-5xl h-96 bg-amber-100 rounded-xl flex items-center justify-center">
+            <p class="text-navy-blue">No Image Available</p>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Text content -->
+      <div class="md:w-10/12 mx-auto flex flex-col gap-16">
+
+        <!-- Overview -->
+        <div>
+          <h2 class="text-2xl font-bold mb-4">Project Overview</h2>
+          <div class="flex flex-col gap-10 text-lg text-sky-800">
+            {{ project.detail_description|safe }}
+          </div>
         </div>
-      </div>
 
-      <!-- Technologies -->
-      <div>
-        <h2 class="text-2xl font-bold mb-4">Technologies Used</h2>
-        <ul class="flex flex-wrap gap-4">
-          {% for skill in skills %}
-            <li class="bg-amber-100 text-navy-blue font-semibold px-4 py-2 rounded-lg">
-              {{ skill }}
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-
-      <!-- See Live -->
-      <div>
-        <h2 class="text-2xl font-bold mb-4">See Live</h2>
-
-        <div
-          class="w-full max-w-md md:max-w-none
-                 grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-row
-                 gap-3 sm:gap-4 md:gap-8"
-        >
-          {% if project.link %}
-            <a href="{{ project.link }}"
-               class="w-full md:w-auto text-center
-                      bg-navy-blue text-white font-bold
-                      rounded-lg shadow-md shadow-zinc-400
-                      hover:-translate-y-0.5 duration-300
-                      px-4 sm:px-6 md:px-10 py-3 sm:py-4
-                      text-base sm:text-lg">
-              LIVE LINK
-            </a>
-          {% endif %}
-
-          {% if project.project_github %}
-            <a href="{{ project.project_github }}" target="_blank"
-               class="w-full md:w-auto text-center
-                      bg-navy-blue text-white font-bold
-                      rounded-lg shadow-md shadow-zinc-400
-                      hover:-translate-y-0.5 duration-300
-                      px-4 sm:px-6 md:px-10 py-3 sm:py-4
-                      text-base sm:text-lg">
-              GITHUB
-            </a>
-          {% endif %}
-
-          {% if project.pypi_url %}
-            <a href="{{ project.pypi_url }}"
-               class="w-full md:w-auto text-center
-                      bg-navy-blue text-white font-bold
-                      rounded-lg shadow-md shadow-zinc-400
-                      hover:-translate-y-0.5 duration-300
-                      px-4 sm:px-6 md:px-10 py-3 sm:py-4
-                      text-base sm:text-lg">
-              PyPi LINK
-            </a>
-          {% endif %}
-
-          <a href="{% url 'home/main_page' %}#projects"
-             class="w-full md:w-auto text-center
-                    bg-gray-300 text-navy-blue font-bold
-                    rounded-lg shadow-md shadow-zinc-400
-                    hover:-translate-y-0.5 duration-300
-                    px-4 sm:px-6 md:px-10 py-3 sm:py-4
-                    text-base sm:text-lg">
-            Go Back
-          </a>
+        <!-- Technologies -->
+        <div>
+          <h2 class="text-2xl font-bold mb-4">Technologies Used</h2>
+          <ul class="flex flex-wrap gap-4">
+            {% for skill in skills %}
+              <li class="bg-amber-100 text-navy-blue font-semibold px-4 py-2 rounded-lg">
+                {{ skill }}
+              </li>
+            {% endfor %}
+          </ul>
         </div>
+
+        <!-- See Live -->
+        <div>
+          <h2 class="text-2xl font-bold mb-4">See Live</h2>
+
+          <div
+            class="w-full max-w-md md:max-w-none
+                   grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-row
+                   gap-3 sm:gap-4 md:gap-8"
+          >
+            {% if project.link %}
+              <a href="{{ project.link }}" class="w-full md:w-auto text-center bg-navy-blue text-white font-bold rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300 px-4 sm:px-6 md:px-10 py-3 sm:py-4 text-base sm:text-lg">
+                LIVE LINK
+              </a>
+            {% endif %}
+
+            {% if project.project_github %}
+              <a href="{{ project.project_github }}" target="_blank" class="w-full md:w-auto text-center bg-navy-blue text-white font-bold rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300 px-4 sm:px-6 md:px-10 py-3 sm:py-4 text-base sm:text-lg">
+                GITHUB
+              </a>
+            {% endif %}
+
+            {% if project.pypi_url %}
+              <a href="{{ project.pypi_url }}" class="w-full md:w-auto text-center bg-navy-blue text-white font-bold rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300 px-4 sm:px-6 md:px-10 py-3 sm:py-4 text-base sm:text-lg">
+                PyPi LINK
+              </a>
+            {% endif %}
+
+            <a href="{% url 'home/main_page' %}#projects" class="w-full md:w-auto text-center bg-gray-300 text-navy-blue font-bold rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300 px-4 sm:px-6 md:px-10 py-3 sm:py-4 text-base sm:text-lg">
+              Go Back
+            </a>
+          </div>
+        </div>
+
       </div>
 
     </div>
-  </section>
+  </div>
 </section>
 {% endblock %}
