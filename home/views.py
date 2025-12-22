@@ -5,11 +5,10 @@ from .forms import ContactForm
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.views.decorators.http import require_POST
-import environ
+import logging
 import requests
 
-env = environ.Env()
-environ.Env.read_env()
+logger = logging.getLogger(__name__)
 
 class MainView(TemplateView):
     template_name = 'home/main_page.html'
@@ -98,26 +97,37 @@ def contact(request):
 
     email_body = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}"
 
-    try:
-        msg = EmailMessage(
-            subject=f"Contact Form Submission from {name}",
-            body=email_body,
-            from_email=env("DEFAULT_FROM_EMAIL"),
-            to=[env("MY_EMAIL")],
-            reply_to=[email],
-        )
-        msg.send(fail_silently=False)
+    from_email = settings.DEFAULT_FROM_EMAIL
+    to_email = getattr(settings, "CONTACT_TO_EMAIL", "")
 
+    if not from_email or not to_email:
+        logger.error(
+            "Email not configured: DEFAULT_FROM_EMAIL=%r CONTACT_TO_EMAIL=%r",
+            from_email,
+            to_email,
+        )
         return render(
             request,
             "home/partials/contact_form.html",
             {
-                "form": ContactForm(),
-                "success": True,
+                "form": form,
+                "email_error": "Email is not configured on the server yet.",
                 "RECAPTCHA_PUBLIC_KEY": settings.RECAPTCHA_PUBLIC_KEY,
             },
+            status=500,
         )
+
+    try:
+        msg = EmailMessage(
+            subject=f"Contact Form Submission from {name}",
+            body=email_body,
+            from_email=from_email,
+            to=[to_email],
+            reply_to=[email],
+        )
+        msg.send(fail_silently=False)
     except Exception:
+        logger.exception("Contact email failed")
         return render(
             request,
             "home/partials/contact_form.html",
@@ -128,3 +138,14 @@ def contact(request):
             },
             status=500,
         )
+
+    return render(
+        request,
+        "home/partials/contact_form.html",
+        {
+            "form": ContactForm(),
+            "success": True,
+            "RECAPTCHA_PUBLIC_KEY": settings.RECAPTCHA_PUBLIC_KEY,
+        },
+        status=200,
+    )
