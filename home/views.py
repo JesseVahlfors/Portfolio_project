@@ -2,11 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, TemplateView, ListView
 from .models import Profile, Project
 from .forms import ContactForm
-from django.core.mail import send_mail
-from django.http import JsonResponse
-from django.contrib import messages
+from django.core.mail import EmailMessage
 from django.conf import settings
+from django.views.decorators.http import require_POST
 import environ
+import requests
 
 env = environ.Env()
 environ.Env.read_env()
@@ -58,32 +58,73 @@ class ProjectDetailView(DetailView):
 
     def get_object(self):
         return get_object_or_404(Project, slug=self.kwargs['slug'])
-    
+
+@require_POST
 def contact(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            message = form.cleaned_data['message']
+    form = ContactForm(request.POST)
 
-            email_body = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}"
+    token = request.POST.get("g-recaptcha-response", "")
+    context_base = {"form": form, "RECAPTCHA_PUBLIC_KEY": settings.RECAPTCHA_PUBLIC_KEY}
 
-            # Send email
-            try:
-                send_mail(
-                    f"Contact Form Submission from {name}",
-                    email_body,
-                    email,  # From email
-                    [env('MY_EMAIL')],  # Replace with your email address or settings
-                    fail_silently=False,
-                ) 
-                return JsonResponse({'message': 'Thanks for contacting me!'})
-            except Exception as e:
-                return JsonResponse({'errors': {'email': str(e)}}, status=500)
-        else:
-            return JsonResponse({'errors': form.errors}, status=400)
+    if not token:
+        context_base["recaptcha_error"] = "Please complete the reCAPTCHA."
+        return render(request, "home/partials/contact_form.html", context_base, status=400)
 
-    form = ContactForm()  
-    return render(request, 'home/main_page.html', {'form': form})
-    
+    # Verify with Google
+    try:
+        verify = requests.post(
+            "https://www.google.com/recaptcha/api/siteverify",
+            data={
+                "secret": settings.RECAPTCHA_PRIVATE_KEY,
+                "response": token,
+                "remoteip": request.META.get("REMOTE_ADDR"),
+            },
+            timeout=10,
+        ).json()
+    except requests.RequestException:
+        context_base["recaptcha_error"] = "Could not verify reCAPTCHA right now. Please try again."
+        return render(request, "home/partials/contact_form.html", context_base, status=502)
+
+    if not verify.get("success"):
+        context_base["recaptcha_error"] = "reCAPTCHA verification failed. Please try again."
+        return render(request, "home/partials/contact_form.html", context_base, status=400)
+
+    if not form.is_valid():
+        return render(request, "home/partials/contact_form.html", context_base, status=400)
+
+    name = form.cleaned_data["name"]
+    email = form.cleaned_data["email"]
+    message = form.cleaned_data["message"]
+
+    email_body = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}"
+
+    try:
+        msg = EmailMessage(
+            subject=f"Contact Form Submission from {name}",
+            body=email_body,
+            from_email=env("DEFAULT_FROM_EMAIL"),
+            to=[env("MY_EMAIL")],
+            reply_to=[email],
+        )
+        msg.send(fail_silently=False)
+
+        return render(
+            request,
+            "home/partials/contact_form.html",
+            {
+                "form": ContactForm(),
+                "success": True,
+                "RECAPTCHA_PUBLIC_KEY": settings.RECAPTCHA_PUBLIC_KEY,
+            },
+        )
+    except Exception:
+        return render(
+            request,
+            "home/partials/contact_form.html",
+            {
+                "form": form,
+                "email_error": "Email sending failed. Please try again.",
+                "RECAPTCHA_PUBLIC_KEY": settings.RECAPTCHA_PUBLIC_KEY,
+            },
+            status=500,
+        )

@@ -1,0 +1,87 @@
+{% load static %}
+
+<form
+  method="post"
+  hx-post="{% url 'contact' %}"
+  hx-target="#contact-form-slot"
+  hx-swap="innerHTML"
+  class="w-full max-w-lg mx-auto shadow-lg p-6 sm:p-8 rounded-lg bg-white text-gray-600 flex flex-col gap-4"
+>
+  {% csrf_token %}
+
+  {% if success %}
+    <div class="rounded-lg bg-green-50 border border-green-200 p-4 text-green-800">
+      Thanks! Your message was sent. I’ll get back to you.
+    </div>
+  {% endif %}
+
+  {% if form.non_field_errors %}
+    <div class="rounded-lg bg-red-50 border border-red-200 p-4 text-red-800">
+      {{ form.non_field_errors }}
+    </div>
+  {% endif %}
+
+  <div class="w-full">
+    <label for="id_name" class="text-sm font-semibold">Name</label>
+    <input
+      id="id_name"
+      name="name"
+      value="{{ form.name.value|default:'' }}"
+      class="w-full h-12 mt-2 px-4 rounded-lg bg-amber-50 border border-amber-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      type="text"
+      required
+    >
+    {% if form.name.errors %}
+      <p class="text-red-600 mt-2 text-sm">{{ form.name.errors|striptags }}</p>
+    {% endif %}
+  </div>
+
+  <div class="w-full">
+    <label for="id_email" class="text-sm font-semibold">Email</label>
+    <input
+      id="id_email"
+      name="email"
+      value="{{ form.email.value|default:'' }}"
+      class="w-full h-12 mt-2 px-4 rounded-lg bg-amber-50 border border-amber-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      type="email"
+      required
+    >
+    {% if form.email.errors %}
+      <p class="text-red-600 mt-2 text-sm">{{ form.email.errors|striptags }}</p>
+    {% endif %}
+  </div>
+
+  <div class="w-full">
+    <label for="id_message" class="text-sm font-semibold">Message</label>
+    <textarea
+      id="id_message"
+      name="message"
+      class="w-full min-h-32 mt-2 px-4 py-3 rounded-lg bg-amber-50 border border-amber-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      required
+    >{{ form.message.value|default:'' }}</textarea>
+    {% if form.message.errors %}
+      <p class="text-red-600 mt-2 text-sm">{{ form.message.errors|striptags }}</p>
+    {% endif %}
+  </div>
+
+  <!-- reCAPTCHA v2 checkbox -->
+  <div class="w-full flex justify-center sm:justify-start">
+    <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_PUBLIC_KEY }}"></div>
+  </div>
+
+  {% if recaptcha_error %}
+    <p class="text-red-600 text-sm">{{ recaptcha_error }}</p>
+  {% endif %}
+  {% if email_error %}
+    <p class="text-red-600 text-sm">{{ email_error }}</p>
+  {% endif %}
+
+  <div class="w-full flex justify-center sm:justify-end">
+    <button
+      type="submit"
+      class="bg-navy-blue text-white font-bold px-10 py-4 rounded-lg shadow-md shadow-zinc-400 hover:-translate-y-0.5 duration-300"
+    >
+      SUBMIT
+    </button>
+  </div>
+</form>
