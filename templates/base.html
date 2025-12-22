@@ -53,12 +53,12 @@
             <!-- Desktop Nav -->
             <nav class="hidden lg:flex gap-16 text-md font-bold tracking-wider">
                 {% if is_main_page %}
-                    <a href="#home">HOME</a>
+                    <a href="#">HOME</a>
                     <a href="#about">ABOUT</a>
                     <a href="#projects">PROJECTS</a>
                     <a href="#contact">CONTACT</a>
                 {% else %}
-                    <a href="{% url 'home/main_page' %}#home">HOME</a>
+                    <a href="{% url 'home/main_page' %}#">HOME</a>
                     <a href="{% url 'home/main_page' %}#about">ABOUT</a>
                     <a href="{% url 'home/main_page' %}#projects">PROJECTS</a>
                     <a href="{% url 'home/main_page' %}#contact">CONTACT</a>
