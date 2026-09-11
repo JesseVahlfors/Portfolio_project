@@ -1,6 +1,6 @@
 from django.urls import path
-from . import views
+from .views import BubbleSortView
 
 urlpatterns = [
-    path('bubble-sort/', views.BubbleSortView.as_view(), name='bubble-sort'),
+    path('bubble-sort/', BubbleSortView.as_view(), name='bubble-sort'),
 ]
