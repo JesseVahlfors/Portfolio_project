@@ -1,9 +1,9 @@
 """Base settings common to all environments."""
 
-from pathlib import Path
 import os
-import environ
+from pathlib import Path
 
+import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = environ.Env()
@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "storages",
     "json_parser",
     "compression_demo",
+    "sorting_api",
 ]
 
 MIDDLEWARE = [

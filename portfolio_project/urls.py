@@ -24,4 +24,5 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path('JSON_parser/', include("json_parser.urls")),
     path('compression_demo/', include("compression_demo.urls")),
+    path('api/sorting', include("sorting_api.urls")),
 ]
