@@ -114,4 +114,5 @@ RECAPTCHA_REQUIRED_SCORE = env.float('RECAPTCHA_REQUIRED_SCORE', default=0.85)
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[
     'http://localhost:8000',
     'http://127.0.0.1:8000',
+    "http://localhost:5173",
 ])
