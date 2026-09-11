@@ -4,7 +4,26 @@ from rest_framework import status
 
 class BubbleSortView(APIView):
     def post(self, request):
+
+        if "array" not in request.data:
+            return Response(
+                {"error": "Missing 'array' field."}, status = status.HTTP_400_BAD_REQUEST
+            )
+                
         inputData = request.data["array"]
+
+        if not isinstance(inputData, list):
+            return Response(
+            {"error": "'array' must be a list."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+        if not all(isinstance(value, (int, float)) for value in inputData):
+            return Response(
+            {"error": "'array' must contain only numbers."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
         n = len(inputData)
         steps = []
 
