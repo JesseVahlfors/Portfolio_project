@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'storages',
     'json_parser',
     'compression_demo',
+    'sorting_api'
 ]
 
 MIDDLEWARE = [
