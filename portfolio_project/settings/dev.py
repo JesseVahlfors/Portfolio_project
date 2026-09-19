@@ -50,11 +50,13 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = env("MY_EMAIL", default="test@example.com")
-EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD", default="test-password")
-DEFAULT_FROM_EMAIL = env("MY_EMAIL", default="test@example.com")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="test@example.com")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="test-password")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="test@example.com")
 EMAIL_TIMEOUT = 30
-ADMINS = [("Admin", env("MY_EMAIL", default="test@example.com"))]
+
+CONTACT_TO_EMAIL = env("CONTACT_TO_EMAIL", default="test@example.com")
+ADMINS = [("Admin", CONTACT_TO_EMAIL)]
 
 # Tailwind NPM path for Windows dev machines
 if DEBUG:

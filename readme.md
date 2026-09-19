@@ -90,21 +90,21 @@ I chose to work on this project because I needed a platform to showcase my work 
    pip install -r requirements.txt
    ```
 
-4. Install the frontend dependencies:
+4.  Configure the environment variables:
+
+   Create a `.env` file based on `.env.example` and fill in the required values. The example file documents the environment variables used by the application.
+
+5. Install the frontend dependencies:
 
    ```bash
    python manage.py tailwind install
    ```
 
-5. Set up the database:
+6. Set up the database:
 
    ```bash
    python manage.py migrate
    ```
-
-6. Configure the environment variables:
-
-   Create a `.env` file based on `.env.example` and fill in the required values. The example file documents the environment variables used by the application.
 
 7. Start the Tailwind CSS development watcher:
 
