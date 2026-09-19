@@ -1,3 +1,5 @@
+// Dropdown menu functionality
+
 document.addEventListener("DOMContentLoaded", () => {
   const menuButton = document.getElementById("menu-button");
   const menuContent = document.getElementById("menu-content");
@@ -40,4 +42,27 @@ document.addEventListener("DOMContentLoaded", () => {
       closeMenu();
     }
   });
+});
+
+// Allow HTMX to display contact form error responses (400/500/etc.)
+// by swapping the returned form HTML into the contact form container.
+
+document.body.addEventListener("htmx:beforeSwap", (event) => {
+  const target = event.detail.target;
+
+  if (target?.id === "contact-form-slot" && event.detail.xhr.status >= 400) {
+    event.detail.shouldSwap = true;
+    event.detail.isError = false;
+  }
+});
+
+// Re-render reCAPTCHA after HTMX replaces the contact form.
+document.body.addEventListener("htmx:afterSwap", (event) => {
+  if (event.detail.target?.id === "contact-form-slot") {
+    const recaptcha = event.detail.target.querySelector(".g-recaptcha");
+
+    if (recaptcha && window.grecaptcha) {
+      grecaptcha.render(recaptcha);
+    }
+  }
 });
