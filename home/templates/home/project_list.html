@@ -11,14 +11,15 @@
         </h1>
 
         <span class="h-1 w-8 rounded-xl bg-navy-blue mb-6"></span>
-    <p class="text-center font-semibold text-base sm:text-lg lg:text-xl mb-12 max-w-prose">
-      A collection of projects I've built while developing my skills in software development, from backend applications and APIs to full-stack web projects and interactive applications.
-    </p>
-    <ul class="flex flex-col gap-20">
-      {% for project in projects %} 
-        {% include "home/components/project_card.html" with project=project %} 
-      {% endfor %}
-    </ul>
-  </div>
+        <p class="text-center font-semibold text-base sm:text-lg lg:text-xl mb-12 max-w-prose">
+        A collection of projects I've built while developing my skills in software development, from backend applications and APIs to full-stack web projects and interactive applications.
+        </p>
+        <ul class="flex flex-col gap-20">
+            {% for project in projects %} 
+                {% include "home/components/project_card.html" with project=project %} 
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 </section>
 {% endblock %}
