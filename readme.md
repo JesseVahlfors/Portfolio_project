@@ -93,7 +93,7 @@ I chose to work on this project because I needed a platform to showcase my work 
 4. Install the frontend dependencies:
 
    ```bash
-   npm install
+   python manage.py tailwind install
    ```
 
 5. Set up the database:
@@ -102,14 +102,9 @@ I chose to work on this project because I needed a platform to showcase my work 
    python manage.py migrate
    ```
 
-6. Configure the required environment variables for Backblaze B2:
+6. Configure the environment variables:
 
-   ```text
-   B2_APPLICATION_KEY_ID=your_application_key_id
-   B2_APPLICATION_KEY=your_application_key
-   B2_BUCKET_NAME=your_bucket_name
-   B2_REGION_NAME=your_region_name
-   ```
+   Create a `.env` file based on `.env.example` and fill in the required values. The example file documents the environment variables used by the application.
 
 7. Start the Tailwind CSS development watcher:
 
