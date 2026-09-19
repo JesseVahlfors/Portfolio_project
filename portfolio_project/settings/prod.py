@@ -3,13 +3,15 @@
 Set DJANGO_SETTINGS_MODULE to portfolio_project.settings.prod in production.
 """
 
-from .base import *
 import os
+
 import dj_database_url
 from boto3 import session
 
+from .base import *
+
 # Production flags
-DEBUG = env.bool("DEBUG", default=False)
+DEBUG = False
 SECRET_KEY = env("SECRET_KEY")
 
 # Allowed hosts can be provided via env or fallback to common host

@@ -5,7 +5,6 @@ import os
 
 # Development flags
 DEBUG = env.bool("DEBUG", default=False)
-DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
 
