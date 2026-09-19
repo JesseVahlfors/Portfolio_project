@@ -205,7 +205,7 @@ class Project(models.Model):
     )
 
     def get_absolute_url(self):
-        return reverse("home/project_detail", args=[str(self.id)])
+        return reverse("home/project_detail", args=[self.slug])
 
     def clean_html(self, value):
         allowed_tags = [

@@ -67,17 +67,17 @@
 
           <!-- Desktop Nav -->
           <nav class="hidden lg:flex gap-16 text-md font-bold tracking-wider">
-            {% if is_main_page %}
-            <a href="#">HOME</a>
-            <a href="#about">ABOUT</a>
-            <a href="#projects">PROJECTS</a>
-            <a href="#contact">CONTACT</a>
-            {% else %}
-            <a href="{% url 'home/main_page' %}#">HOME</a>
-            <a href="{% url 'home/main_page' %}#about">ABOUT</a>
-            <a href="{% url 'home/main_page' %}#projects">PROJECTS</a>
-            <a href="{% url 'home/main_page' %}#contact">CONTACT</a>
-            {% endif %}
+              {% if is_main_page %}
+                  <a href="#">HOME</a>
+                  <a href="#about">ABOUT</a>
+                  <a href="#projects">PROJECTS</a>
+                  <a href="#contact">CONTACT</a>
+              {% else %}
+                  <a href="{% url 'home/main_page' %}#">HOME</a>
+                  <a href="{% url 'home/main_page' %}#about">ABOUT</a>
+                  <a href="{% url 'home/projects' %}">PROJECTS</a>
+                  <a href="{% url 'home/main_page' %}#contact">CONTACT</a>
+              {% endif %}
           </nav>
 
           <!-- Mobile Menu Button -->
@@ -135,7 +135,7 @@
                 >About</a
               >
               <a
-                href="{% url 'home/main_page' %}#projects"
+                href="{% url 'home/projects' %}"
                 class="block px-6 py-3 text-sm font-bold tracking-wider text-gray-700 text-right hover:bg-gray-50 border-t"
                 >Projects</a
               >

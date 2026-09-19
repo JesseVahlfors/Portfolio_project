@@ -1,23 +1,26 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
+
 from .models import Project
 
+
 class MainViewSitemap(Sitemap):
-    changefreq = 'daily'
+    changefreq = "weekly"
     priority = 1.0
 
     def items(self):
-        return ['home/main_page']
-    
+        return ["home/main_page", "home/projects"]
+
     def location(self, item):
         return reverse(item)
-    
+
+
 class ProjectsViewSitemap(Sitemap):
-    changefreq = 'monthly'
+    changefreq = "monthly"
     priority = 0.8
 
     def items(self):
         return Project.objects.all()
-    
+
     def lastmod(self, obj):
         return obj.date_completed
