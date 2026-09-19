@@ -1,7 +1,7 @@
 # Portfolio Website
 
 This project is a personal portfolio website built to showcase my past and current projects. It provides an accessible and easy-to-navigate platform where visitors can explore my work and understand my development skills.  
-The design is heavily inspired by Ram Maheshwari's Dopefolio project. Check him out at https://www.rammaheshwari.com/
+The design is heavily inspired by Ram Maheshwari's Dopefolio project. Check him out at `https://www.rammaheshwari.com/`
 
 ## Table of Contents
 
@@ -68,34 +68,65 @@ I chose to work on this project because I needed a platform to showcase my work 
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/JesseVahlfors/portfolio-website.git
+   git clone https://github.com/JesseVahlfors/Portfolio_project.git
+   cd Portfolio_project
+   ```
 
-2. Navigate to the project directory:
+2. Create and activate a virtual environment:
 
-    cd portfolio-website
+   ```bash
+   python -m venv venv
+   ```
 
-3. Install the required dependencies:
+   On Windows:
 
-    pip install -r requirements.txt
+   ```bash
+   venv\Scripts\activate
+   ```
 
-4. Set up the database:
+3. Install the Python dependencies:
 
-    python manage.py migrate
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-5. Configure environment variables for Backblaze B2:
-    export B2_APPLICATION_KEY_ID=your_application_key_id
-    export B2_APPLICATION_KEY=your_application_key
-    export B2_BUCKET_NAME=your_bucket_name
-    export B2_REGION_NAME=your_region_name
+4. Install the frontend dependencies:
 
-6. Start the development server:
+   ```bash
+   npm install
+   ```
 
-    python manage.py runserver
+5. Set up the database:
 
-7. Visit http://127.0.0.1:8000/ in your browser to view the portfolio.
+   ```bash
+   python manage.py migrate
+   ```
+
+6. Configure the required environment variables for Backblaze B2:
+
+   ```text
+   B2_APPLICATION_KEY_ID=your_application_key_id
+   B2_APPLICATION_KEY=your_application_key
+   B2_BUCKET_NAME=your_bucket_name
+   B2_REGION_NAME=your_region_name
+   ```
+
+7. Start the Tailwind CSS development watcher:
+
+   ```bash
+   python manage.py tailwind start
+   ```
+
+8. In a separate terminal, start the Django development server:
+
+   ```bash
+   python manage.py runserver
+   ```
+
+9. Visit `http://127.0.0.1:8000/` in your browser to view the portfolio.
 
 ## Usage
 
 This portfolio website will automatically display your projects in a grid layout, showcasing each project with basic descriptions. You can add or modify your projects through Django’s admin panel after setting up the database.
 
-To add a new project, log into the admin panel at http://127.0.0.1:8000/admin/ and add the project details.
+To add a new project, log into the admin panel at `http://127.0.0.1:8000/admin/` and add the project details.
