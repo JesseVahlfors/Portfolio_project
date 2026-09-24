@@ -3,11 +3,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .algorithms.bubble_sort import bubble_sort
+from .algorithms.insertion_sort import insertion_sort
 from .algorithms.selection_sort import selection_sort
 
 SORTING_ALGORITHMS = {
     "bubble": bubble_sort,
     "selection": selection_sort,
+    "insertion": insertion_sort,
 }
 
 
