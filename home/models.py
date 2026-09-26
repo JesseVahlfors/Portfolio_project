@@ -237,7 +237,7 @@ class Project(models.Model):
             self.detail_description = self.clean_html(self.detail_description)
 
         if not self.slug:
-            base_slug = slugify(self.title)
+            base_slug = slugify(self.title) or "project"
             slug = base_slug
             counter = 1
             while Project.objects.filter(slug=slug).exists():

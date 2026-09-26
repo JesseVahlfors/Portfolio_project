@@ -290,6 +290,35 @@ class ProjectModelTests(BaseTestWithTempMedia):
             f"/projects/{self.project.slug}/",
         )
 
+    def test_titles_without_slug_characters_have_working_card_links(self):
+        Project.objects.create(title="Project", date_completed="2025-01-01")
+        projects = []
+        for title, expected_slug in [("!!!", "project-1"), ("你好", "project-2")]:
+            with self.subTest(title=title):
+                project = Project.objects.create(
+                    title=title,
+                    date_completed="2025-01-01",
+                    is_featured=True,
+                )
+                project.refresh_from_db()
+                self.assertEqual(project.slug, expected_slug)
+                project.save()
+                project.refresh_from_db()
+                self.assertEqual(project.slug, expected_slug)
+                detail_response = self.client.get(project.get_absolute_url())
+                self.assertEqual(detail_response.status_code, 200)
+                self.assertEqual(detail_response.context["project"], project)
+                projects.append(project)
+
+        for route in ["home/main_page", "home/projects"]:
+            with self.subTest(route=route):
+                response = self.client.get(reverse(route))
+                self.assertEqual(response.status_code, 200)
+                for project in projects:
+                    self.assertContains(
+                        response, f'href="{project.get_absolute_url()}"'
+                    )
+
 
 # ContactForm
 
