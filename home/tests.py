@@ -10,7 +10,8 @@ from botocore.exceptions import NoCredentialsError
 from django.core import mail
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase, override_settings
+from django.template.loader import render_to_string
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
 from PIL import Image
 
@@ -143,20 +144,22 @@ class ProjectViewTests(BaseTestWithTempMedia):
         self.assertNotIn(self.unfeatured, projects)
 
     def test_main_page_limits_featured_projects_to_three(self):
-        Project.objects.create(
+        third = Project.objects.create(
             title="Featured Three",
-            date_completed="2025-02-01",
+            date_completed="2025-01-01",
             is_featured=True,
         )
-        Project.objects.create(
+        fourth = Project.objects.create(
             title="Featured Four",
-            date_completed="2024-12-01",
+            date_completed="2025-01-01",
             is_featured=True,
         )
 
         response = self.client.get(reverse("home/main_page"))
 
-        self.assertEqual(len(response.context["projects"]), 3)
+        self.assertEqual(
+            list(response.context["projects"]), [self.featured_new, fourth, third]
+        )
 
     def test_main_page_orders_featured_projects_newest_first(self):
         response = self.client.get(reverse("home/main_page"))
@@ -176,13 +179,33 @@ class ProjectViewTests(BaseTestWithTempMedia):
         self.assertTemplateUsed(response, "home/project_list.html")
 
     def test_projects_page_contains_featured_and_unfeatured_projects(self):
+        extra = Project.objects.create(title="Extra", date_completed="2024-01-01")
         response = self.client.get(reverse("home/projects"))
 
-        projects = list(response.context["projects"])
+        self.assertCountEqual(
+            response.context["projects"],
+            [self.featured_old, self.featured_new, self.unfeatured, extra],
+        )
 
-        self.assertIn(self.featured_old, projects)
-        self.assertIn(self.featured_new, projects)
-        self.assertIn(self.unfeatured, projects)
+    def test_featured_toggle_changes_homepage_but_not_project_list(self):
+        project = Project.objects.create(title="Toggle", date_completed="2026-01-01")
+        project.refresh_from_db()
+        self.assertFalse(project.is_featured)
+        for featured in (False, True, False):
+            with self.subTest(featured=featured):
+                project.is_featured = featured
+                project.save(update_fields=["is_featured"])
+                homepage = self.client.get(reverse("home/main_page"))
+                listing = self.client.get(reverse("home/projects"))
+                link = f'href="{project.get_absolute_url()}"'
+                if featured:
+                    self.assertContains(homepage, link)
+                else:
+                    self.assertNotContains(homepage, link)
+                self.assertContains(listing, link)
+        detail = self.client.get(project.get_absolute_url())
+        self.assertEqual(detail.status_code, 200)
+        self.assertEqual(detail.context["project"], project)
 
     def test_projects_page_orders_projects_newest_first(self):
         response = self.client.get(reverse("home/projects"))
@@ -208,6 +231,17 @@ class ProjectViewTests(BaseTestWithTempMedia):
         projects = list(response.context["projects"])
 
         self.assertLess(projects.index(second), projects.index(first))
+
+
+class ProjectCardTests(SimpleTestCase):
+    def test_missing_summary_omits_paragraph(self):
+        for summary in (None, ""):
+            with self.subTest(summary=summary):
+                project = Project(title="Example", slug="example", list_summary=summary)
+                html = render_to_string(
+                    "home/components/project_card.html", {"project": project}
+                )
+                self.assertNotIn("<p", html)
 
 
 # ProfileModel
