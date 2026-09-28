@@ -9,10 +9,10 @@ def insertion_sort(input_data):
         steps.append(
             {
                 "type": "hold",
-                "index": i,
                 "value": key,
             }
         )
+        steps.append({"type": "gap", "index": i})
 
         while j >= 0:
             steps.append(
@@ -27,18 +27,19 @@ def insertion_sort(input_data):
             steps.append(
                 {
                     "type": "write",
-                    "index": [j + 1],
+                    "index": j + 1,
                     "value": input_data[j],
-                    "gap": j,
                 }
             )
+            steps.append({"type": "gap", "index": j})
             j -= 1
         input_data[j + 1] = key
-        steps.append({"type": "write", "index": [j + 1], "value": key})
+        steps.append({"type": "write", "index": j + 1, "value": key})
         steps.append(
             {
                 "type": "release",
             }
         )
+        steps.append({"type": "ungap"})
     steps.append({"type": "sorted", "indices": list(range(n))})
     return input_data, steps
