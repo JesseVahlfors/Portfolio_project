@@ -41,6 +41,8 @@ Swaps two values in the displayed array.
 
 Used when two existing array positions directly exchange values.
 
+A `swap` should not be emitted when both indices refer to the same position.
+
 ---
 
 ## `write`
@@ -55,34 +57,22 @@ Writes a value directly into an array position.
 }
 ```
 
-May optionally include a new gap position:
-
-```json
-{
-  "type": "write",
-  "index": 3,
-  "value": 8,
-  "gap": 2
-}
-```
-
-The optional `gap` is currently used by Insertion Sort when shifting values while a key is being held.
+`write` only changes the displayed value at the specified position. Other visualization state, such as a held value or gap, is controlled by separate operations.
 
 ---
 
 ## `hold`
 
-Removes a value conceptually from normal array processing and displays it as a held value.
+Displays a value separately from the normal array positions.
 
 ```json
 {
   "type": "hold",
-  "value": 5,
-  "index": 3
+  "value": 5
 }
 ```
 
-`index` identifies the initial gap position.
+The held value remains active until a `release` operation is received.
 
 Currently used by Insertion Sort.
 
@@ -90,13 +80,52 @@ Currently used by Insertion Sort.
 
 ## `release`
 
-Releases the currently held value and clears the held/gap visualization.
+Releases the currently held value.
 
 ```json
 {
   "type": "release"
 }
 ```
+
+`release` only controls the held-value visualization. It does not modify gap state.
+
+Currently used by Insertion Sort.
+
+---
+
+## `gap`
+
+Marks one array position as the current visual gap.
+
+```json
+{
+  "type": "gap",
+  "index": 3
+}
+```
+
+A new `gap` operation replaces the previous gap position.
+
+This allows the gap to move independently as values are shifted or written.
+
+Currently used by Insertion Sort.
+
+---
+
+## `ungap`
+
+Clears the current visual gap.
+
+```json
+{
+  "type": "ungap"
+}
+```
+
+`ungap` only controls gap visualization and does not release a held value.
+
+Currently used by Insertion Sort.
 
 ---
 
@@ -157,52 +186,88 @@ For the example above:
 
 `depth` represents the group's current recursive visualization level.
 
-Currently used by Merge Sort to show recursive subdivision.
+A later `group` operation may return the same range to a shallower depth as recursion unwinds.
 
-Single-element groups are not emitted because a single value requires no sorting.
+Currently used by Merge Sort and Quick Sort to visually separate recursive subproblems.
+
+Single-element groups are not emitted because a single value does not require recursion-depth visualization.
+
+---
+
+## `pivot`
+
+Marks one array position as the currently active pivot.
+
+```json
+{
+  "type": "pivot",
+  "index": 6
+}
+```
+
+React should visually distinguish the pivot from ordinary active comparison positions.
+
+A new `pivot` operation replaces the previously active pivot position. This allows the pivot visualization to follow the pivot value if it moves to another position.
+
+A `swap` does not implicitly update the pivot position. If a swap moves the pivot, the backend must emit a new `pivot` operation with its new index.
+
+Currently used by Quick Sort.
+
+---
+
+## `unpivot`
+
+Clears the currently active pivot.
+
+```json
+{
+  "type": "unpivot"
+}
+```
+
+`unpivot` only controls pivot visualization. It does not modify array values or finalized positions.
+
+A `sorted` operation does not implicitly clear the pivot. The backend must emit `unpivot` explicitly.
+
+When a pivot reaches its final position, Quick Sort may emit:
+
+```text
+pivot
+...
+swap
+pivot
+sorted
+unpivot
+```
+
+This allows the pivot to transition directly from its pivot visualization to its finalized visualization without requiring React to infer pivot behavior from `swap` or `sorted`.
+
+Currently used by Quick Sort.
 
 ---
 
 ## `sorted`
 
-Marks one or more positions as finalized.
+Marks one or more array positions as finalized.
 
 ```json
 {
   "type": "sorted",
-  "indices": [4]
+  "indices": [3]
 }
 ```
 
-Multiple positions may be finalized at once:
+Multiple positions may be finalized by one operation:
 
 ```json
 {
   "type": "sorted",
-  "indices": [0, 1, 2, 3, 4]
+  "indices": [0, 1, 2, 3]
 }
 ```
 
-`sorted` means the positions are in their final sorted state, not merely sorted relative to a temporary subarray.
+A finalized position has reached its final location in the sorted result and should remain visually marked as sorted.
 
----
+`sorted` means finalized, not merely that the values currently appear in sorted order.
 
-# Design Rules
-
-Operations describe visualization events rather than implementing sorting logic in React.
-
-The backend decides **what happened**. React decides **how that operation is displayed**.
-
-Avoid emitting operations that represent no visible change, such as:
-
-```json
-{
-  "type": "move",
-  "from": 2,
-  "to": 2
-}
-```
-
-or a same-position swap.
-
-This keeps the operation stream meaningful and prevents misleading animations.
+Other visualization state, such as a pivot, held value, gap, or recursion depth, is controlled by its own operation.
