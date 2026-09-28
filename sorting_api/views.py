@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from .algorithms.bubble_sort import bubble_sort
 from .algorithms.insertion_sort import insertion_sort
 from .algorithms.merge_sort import merge_sort
+from .algorithms.quick_sort import quick_sort
 from .algorithms.selection_sort import selection_sort
 
 SORTING_ALGORITHMS = {
@@ -12,6 +13,7 @@ SORTING_ALGORITHMS = {
     "selection": selection_sort,
     "insertion": insertion_sort,
     "merge": merge_sort,
+    "quick": quick_sort,
 }
 
 
@@ -68,6 +70,26 @@ class SortingView(APIView):
 
         sorted_array, steps = algorithm_function(input_data)
 
-        responseJson = {"sorted": sorted_array, "steps": steps}
+        stats = {
+            "comparisons": 0,
+            "writes": 0,
+            "swaps": 0,
+            "moves": 0,
+        }
+
+        operation_mapping = {
+            "compare": "comparisons",
+            "write": "writes",
+            "swap": "swaps",
+            "move": "moves",
+        }
+
+        for step in steps:
+            stats_key = operation_mapping.get(step["type"])
+
+            if stats_key:
+                stats[stats_key] += 1
+
+        responseJson = {"sorted": sorted_array, "steps": steps, "stats": stats}
 
         return Response(responseJson, status=status.HTTP_200_OK)
